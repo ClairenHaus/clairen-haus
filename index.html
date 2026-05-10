@@ -597,7 +597,7 @@ mobileMenu.addEventListener("keydown",e=>{if(e.key!=="Tab")return;const f=[...mo
 
 // ─── ZAPIER WEBHOOK ───────────────────────────────────────────────
 // Replace the URL below with your Zapier Catch Hook URL
-const ZAPIER_WEBHOOK = 'YOUR_ZAPIER_WEBHOOK_URL_HERE';
+const ZAPIER_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/26774884/u7l63og/';
 // ─────────────────────────────────────────────────────────────────
 
 const contactForm = document.getElementById('contact-form');
@@ -650,7 +650,7 @@ contactForm.addEventListener('submit', async function(e) {
   submitBtn.textContent = 'Sending…';
 
   try {
-    if (ZAPIER_WEBHOOK === https://hooks.zapier.com/hooks/catch/26774884/u7l63og/ {
+    if (ZAPIER_WEBHOOK === 'YOUR_ZAPIER_WEBHOOK_URL_HERE') {
       // Dev mode — simulate success so you can test the UI
       await new Promise(r => setTimeout(r, 800));
       showStatus('success', "Got it — we'll be in touch within 48 hours.");

@@ -35,11 +35,15 @@
       position: relative;
       width: 100%;
       max-width: var(--max-width);
-      aspect-ratio: 1024 / 1536;
-      background-image: url("michelle-card-bg.png");
-      background-size: contain;
-      background-position: top center;
-      background-repeat: no-repeat;
+    }
+
+    .card-art {
+      display: block;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     .hotspot {
@@ -94,6 +98,7 @@
 
 <body>
   <main class="card" aria-label="Michelle Robinson link page">
+    <img class="card-art" src="michelle-card-bg.png" alt="" width="1024" height="1536" decoding="async" fetchpriority="high" />
     <a class="hotspot btn-1" href="https://clairenhaus.com" target="_blank" rel="noopener">Clairen Haus</a>
     <a class="hotspot btn-2" href="https://clockoutcashin.com" target="_blank" rel="noopener">Clock Out Cash In</a>
 

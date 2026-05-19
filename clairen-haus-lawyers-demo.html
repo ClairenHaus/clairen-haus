@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clairen Haus — Law Firm Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0f1e36;--navy2:#162944;--navy3:#1d3a60;
+  --amber:#e8a435;--amber2:#f5c060;--amber3:#fad48a;
+  --green:#22c97a;--red:#e05555;--blue:#4a9eff;
+  --white:#fff;--muted:rgba(255,255,255,0.5);--muted2:rgba(255,255,255,0.78);
+  --border:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);
+}
+html,body{height:100%;background:var(--navy);font-family:'DM Sans',sans-serif;color:var(--white)}
+.dash{min-height:100vh;display:flex;flex-direction:column}
+
+/* TOP BAR */
+.topbar{background:var(--navy2);border-bottom:1px solid var(--border);padding:.75rem 1.75rem;display:flex;justify-content:space-between;align-items:center}
+.topbar-left{display:flex;align-items:center;gap:1rem}
+.logo{font-family:'DM Serif Display',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber)}
+.client-label{font-size:13px;color:var(--muted2);border-left:1px solid var(--border);padding-left:1rem}
+.client-label span{color:var(--white);font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.status-label{font-size:12px;color:var(--green)}
+.clock{font-size:11px;color:var(--muted)}
+
+/* NAV */
+.nav{background:var(--navy2);border-bottom:1px solid var(--border);padding:0 1.75rem;display:flex;gap:0}
+.nav-btn{background:none;border:none;color:var(--muted);font-size:12.5px;padding:.65rem 1.1rem;cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
+.nav-btn:hover{color:var(--muted2)}
+.nav-btn.active{color:var(--amber);border-bottom-color:var(--amber)}
+
+/* MAIN */
+.main{flex:1;padding:1.5rem 1.75rem;max-width:1400px;width:100%}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem}
+.kpi{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+.kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.4rem}
+.kpi-val{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;margin-bottom:.3rem}
+.amber{color:var(--amber)}.green{color:var(--green)}.blue{color:var(--blue)}.white{color:var(--white)}
+.kpi-delta{font-size:11px;color:var(--muted)}
+.kpi-delta.up{color:var(--green)}.kpi-delta.dn{color:var(--red)}
+
+/* LAYOUT */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.card-head{padding:.75rem 1.1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.card-title{font-size:12.5px;font-weight:500;color:var(--muted2)}
+.tag{font-size:10px;padding:2px 9px;border-radius:10px;background:rgba(232,164,53,.15);color:var(--amber);border:1px solid rgba(232,164,53,.2)}
+.tag.green{background:rgba(34,201,122,.12);color:var(--green);border-color:rgba(34,201,122,.2)}
+.tag.blue{background:rgba(74,158,255,.12);color:var(--blue);border-color:rgba(74,158,255,.2)}
+.card-body{padding:.75rem 1.1rem}
+
+/* FEED */
+.feed{max-height:248px;overflow-y:auto}
+.feed-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
+.feed-item:last-child{border-bottom:none}
+.feed-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:1px}
+.fi-g{background:rgba(34,201,122,.15);color:var(--green)}
+.fi-a{background:rgba(232,164,53,.15);color:var(--amber)}
+.fi-b{background:rgba(74,158,255,.15);color:var(--blue)}
+.fi-r{background:rgba(224,85,85,.15);color:var(--red)}
+.feed-content{flex:1;min-width:0}
+.feed-title{font-size:12.5px;color:var(--muted2);line-height:1.4}
+.feed-title strong{color:var(--white);font-weight:500}
+.feed-time{font-size:10.5px;color:var(--muted);margin-top:1px}
+
+/* AUTO LIST */
+.auto-list{max-height:248px;overflow-y:auto}
+.auto-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);gap:8px}
+.auto-item:last-child{border-bottom:none}
+.auto-name{font-size:12px;color:var(--muted2);flex:1;line-height:1.4}
+.auto-name small{font-size:10px;color:var(--muted);display:block}
+.auto-count{font-size:11px;color:var(--muted);min-width:40px;text-align:right;flex-shrink:0}
+.pill{font-size:10px;padding:2px 8px;border-radius:8px;white-space:nowrap;flex-shrink:0}
+.pill-active{background:rgba(34,201,122,.12);color:var(--green);border:1px solid rgba(34,201,122,.2)}
+.pill-alert{background:rgba(224,85,85,.12);color:var(--red);border:1px solid rgba(224,85,85,.2)}
+.pill-idle{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
+
+/* PIPELINE */
+.pipeline{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.pipe-col{flex:0 0 180px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:.65rem}
+.pipe-col-head{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:.5rem;display:flex;justify-content:space-between}
+.pipe-card{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:.5rem .65rem;margin-bottom:6px;font-size:11.5px;color:var(--muted2)}
+.pipe-card:last-child{margin-bottom:0}
+.pipe-card strong{color:var(--white);display:block;font-size:12px;margin-bottom:1px}
+.pipe-card .ptag{font-size:10px;color:var(--muted)}
+.pipe-more{color:var(--muted);font-size:11px;text-align:center;padding:4px 0}
+
+/* BILLING */
+.billing-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;gap:8px}
+.billing-row:last-child{border-bottom:none}
+.b-name{color:var(--muted2);flex:1}
+.b-amt{color:var(--white);font-weight:500;min-width:64px;text-align:right}
+.b-status{font-size:10px;padding:2px 8px;border-radius:8px;min-width:52px;text-align:center}
+.bs-paid{background:rgba(34,201,122,.12);color:var(--green);border:1px solid rgba(34,201,122,.2)}
+.bs-pend{background:rgba(232,164,53,.12);color:var(--amber);border:1px solid rgba(232,164,53,.2)}
+.bs-over{background:rgba(224,85,85,.12);color:var(--red);border:1px solid rgba(224,85,85,.2)}
+
+/* METER */
+.meter-row{margin-bottom:.65rem}
+.meter-label{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+.meter-label span:last-child{color:var(--muted2)}
+.meter-track{height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.meter-fill{height:100%;border-radius:3px}
+
+/* STAT PAIR */
+.stat-pair{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem}
+.stat-pair span:first-child{font-size:12px;color:var(--muted)}
+.stat-pair span:last-child{font-size:17px;font-weight:500}
+
+/* IMPACT BOX */
+.impact{margin-top:.75rem;padding:.65rem .85rem;background:rgba(34,201,122,.07);border:1px solid rgba(34,201,122,.15);border-radius:8px}
+.impact-title{font-size:12px;color:var(--green);margin-bottom:3px;font-weight:500}
+.impact-body{font-size:11.5px;color:var(--muted2)}
+
+/* VIEWS */
+.view{display:none}.view.active{display:block}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="dash">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo">Clairen Haus</div>
+      <div class="client-label">Client: <span id="clientName">Meridian Law Group</span> &nbsp;·&nbsp; Law Firm Automation</div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-dot"></div>
+      <div class="status-label">System Active</div>
+      <div class="clock" id="clockEl">—</div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="showView('overview',this)">Overview</button>
+    <button class="nav-btn" onclick="showView('intake',this)">Intake Pipeline</button>
+    <button class="nav-btn" onclick="showView('billing',this)">Billing & Collections</button>
+    <button class="nav-btn" onclick="showView('automations',this)">Automations</button>
+  </div>
+
+  <div class="main">
+
+    <!-- OVERVIEW -->
+    <div class="view active" id="view-overview">
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-label">Leads Captured (30 days)</div>
+          <div class="kpi-val amber" id="kLeads">47</div>
+          <div class="kpi-delta up">↑ 12 vs prior month</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Revenue Collected</div>
+          <div class="kpi-val green">$38,420</div>
+          <div class="kpi-delta up">↑ 18% vs prior month</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Automations Fired Today</div>
+          <div class="kpi-val white" id="kFired">124</div>
+          <div class="kpi-delta">across 7 categories</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Avg. Response Time</div>
+          <div class="kpi-val blue">2 min</div>
+          <div class="kpi-delta up">↓ from 6+ hrs manually</div>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Live Activity Feed</span><span class="tag green">Live</span></div>
+          <div class="card-body"><div class="feed" id="activityFeed"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Collections Performance</span><span class="tag">This Month</span></div>
+          <div class="card-body">
+            <div style="margin-bottom:.85rem">
+              <div class="stat-pair"><span>Collected</span><span style="color:var(--green)">$38,420</span></div>
+              <div class="stat-pair"><span>Outstanding</span><span style="color:var(--amber)">$11,250</span></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>Collection rate</span><span>77%</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:77%;background:var(--green)"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>Invoices delivered</span><span>34/34</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:100%;background:var(--blue)"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>Reminders sent</span><span>89</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:65%;background:var(--amber)"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Intake Conversion</span><span class="tag">30 days</span></div>
+          <div class="card-body">
+            <div style="margin-bottom:.85rem">
+              <div class="stat-pair"><span>Inquiries received</span><span>47</span></div>
+              <div class="stat-pair"><span>Consultations booked</span><span>31</span></div>
+              <div class="stat-pair"><span>Retained as clients</span><span style="color:var(--green)">22</span></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>Inquiry → consult</span><span>66%</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:66%;background:var(--amber)"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>Consult → retained</span><span>71%</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:71%;background:var(--green)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Automation Health</span><span class="tag green">39 Active</span></div>
+          <div class="card-body"><div class="auto-list" id="autoHealthList"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Needs Your Attention</span><span class="tag" style="background:rgba(224,85,85,.12);color:var(--red);border-color:rgba(224,85,85,.2)">3 items</span></div>
+          <div class="card-body">
+            <div class="auto-list">
+              <div class="auto-item">
+                <div class="auto-name"><strong style="color:var(--white);display:block">Conflict check — Thompson matter</strong>Flagged for attorney review before proceeding</div>
+                <span class="pill pill-alert">Review</span>
+              </div>
+              <div class="auto-item">
+                <div class="auto-name"><strong style="color:var(--white);display:block">Collections escalation — Harrison invoice</strong>$4,200 outstanding 62 days — ready to escalate</div>
+                <span class="pill pill-alert">Action</span>
+              </div>
+              <div class="auto-item">
+                <div class="auto-name"><strong style="color:var(--white);display:block">Urgent matter — Reyes inquiry</strong>Escalation protocol triggered 11:42 PM last night</div>
+                <span class="pill pill-alert">Follow up</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTAKE PIPELINE -->
+    <div class="view" id="view-intake">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">New Inquiries</div><div class="kpi-val amber">47</div><div class="kpi-delta">last 30 days</div></div>
+        <div class="kpi"><div class="kpi-label">Awaiting Consult</div><div class="kpi-val white">8</div><div class="kpi-delta">scheduled this week</div></div>
+        <div class="kpi"><div class="kpi-label">Conflict Checks</div><div class="kpi-val white">3</div><div class="kpi-delta up">1 pending review</div></div>
+        <div class="kpi"><div class="kpi-label">Retainers Collected</div><div class="kpi-val green">$19,500</div><div class="kpi-delta">this month</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Active Intake Pipeline</span><span class="tag green">Live</span></div>
+        <div class="card-body">
+          <div class="pipeline">
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>New Inquiry</span><span>5</span></div>
+              <div class="pipe-card"><strong>Sarah M.</strong><span class="ptag">Family law · 9 min ago</span></div>
+              <div class="pipe-card"><strong>James P.</strong><span class="ptag">Personal injury · 42 min ago</span></div>
+              <div class="pipe-card"><strong>Linda K.</strong><span class="ptag">Estate planning · 1h ago</span></div>
+              <div class="pipe-card"><strong>Marcus D.</strong><span class="ptag">Business law · 2h ago</span></div>
+              <div class="pipe-card"><strong>Priya N.</strong><span class="ptag">Employment · 3h ago</span></div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>Intake Sent</span><span>4</span></div>
+              <div class="pipe-card"><strong>Tom R.</strong><span class="ptag">Forms sent · awaiting</span></div>
+              <div class="pipe-card"><strong>Angela W.</strong><span class="ptag">2/5 docs received</span></div>
+              <div class="pipe-card"><strong>Derek O.</strong><span class="ptag">Reminder #2 sent</span></div>
+              <div class="pipe-card"><strong>Fiona B.</strong><span class="ptag">Complete · conflict pending</span></div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>Consult Booked</span><span>5</span></div>
+              <div class="pipe-card"><strong>Carlos V.</strong><span class="ptag">Tomorrow 10:00 AM</span></div>
+              <div class="pipe-card"><strong>Nina H.</strong><span class="ptag">Thu 2:00 PM</span></div>
+              <div class="pipe-card"><strong>Robert T.</strong><span class="ptag">Thu 4:30 PM</span></div>
+              <div class="pipe-card"><strong>Mei L.</strong><span class="ptag">Fri 11:00 AM</span></div>
+              <div class="pipe-card"><strong>David S.</strong><span class="ptag">Mon 9:00 AM</span></div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>Retainer Sent</span><span>3</span></div>
+              <div class="pipe-card"><strong>Susan A.</strong><span class="ptag">$3,500 · awaiting sig</span></div>
+              <div class="pipe-card"><strong>Paul M.</strong><span class="ptag">$5,000 · reminder sent</span></div>
+              <div class="pipe-card"><strong>Grace E.</strong><span class="ptag">$2,500 · 2nd reminder</span></div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>Active Client</span><span>22</span></div>
+              <div class="pipe-card"><strong>Jennifer R.</strong><span class="ptag">Matter open · billing</span></div>
+              <div class="pipe-card"><strong>Marcus T.</strong><span class="ptag">Discovery phase</span></div>
+              <div class="pipe-card"><strong>Priya S.</strong><span class="ptag">Filing prep</span></div>
+              <div class="pipe-more">+ 19 more active matters</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BILLING -->
+    <div class="view" id="view-billing">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">Collected This Month</div><div class="kpi-val green">$38,420</div><div class="kpi-delta up">↑ 18% vs prior</div></div>
+        <div class="kpi"><div class="kpi-label">Outstanding</div><div class="kpi-val amber">$11,250</div><div class="kpi-delta">across 6 matters</div></div>
+        <div class="kpi"><div class="kpi-label">Overdue 60+ Days</div><div class="kpi-val white">$4,200</div><div class="kpi-delta dn">1 matter — flagged</div></div>
+        <div class="kpi"><div class="kpi-label">Avg Days to Pay</div><div class="kpi-val blue">11</div><div class="kpi-delta up">↓ from 34 days</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Recent Invoices</span><span class="tag">Auto-delivered</span></div>
+          <div class="card-body">
+            <div class="billing-row"><span class="b-name">Jennifer R. — Matter #1042</span><span class="b-amt">$4,800</span><span class="b-status bs-paid">Paid</span></div>
+            <div class="billing-row"><span class="b-name">Marcus T. — Matter #1038</span><span class="b-amt">$7,200</span><span class="b-status bs-paid">Paid</span></div>
+            <div class="billing-row"><span class="b-name">Carlos V. — Matter #1051</span><span class="b-amt">$3,500</span><span class="b-status bs-pend">Pending</span></div>
+            <div class="billing-row"><span class="b-name">Susan A. — Matter #1047</span><span class="b-amt">$2,100</span><span class="b-status bs-pend">Day 7</span></div>
+            <div class="billing-row"><span class="b-name">Paul M. — Matter #1033</span><span class="b-amt">$5,500</span><span class="b-status bs-pend">Day 14</span></div>
+            <div class="billing-row"><span class="b-name">Harrison — Matter #1019</span><span class="b-amt">$4,200</span><span class="b-status bs-over">62 days</span></div>
+            <div class="billing-row"><span class="b-name">Priya S. — Matter #1044</span><span class="b-amt">$6,100</span><span class="b-status bs-paid">Paid</span></div>
+            <div class="billing-row"><span class="b-name">Robert T. — Matter #1049</span><span class="b-amt">$3,800</span><span class="b-status bs-paid">Paid</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Reminder Sequences Active</span><span class="tag green">Automated</span></div>
+          <div class="card-body">
+            <div class="auto-item"><div class="auto-name">Carlos V. — Day 7 reminder sent today</div><span class="pill pill-active">Running</span></div>
+            <div class="auto-item"><div class="auto-name">Susan A. — Day 7 reminder scheduled tomorrow</div><span class="pill pill-active">Running</span></div>
+            <div class="auto-item"><div class="auto-name">Paul M. — Day 14 reminder sent 6 days ago</div><span class="pill pill-active">Running</span></div>
+            <div class="auto-item"><div class="auto-name">Harrison — Day 60 escalation flag raised</div><span class="pill pill-alert">Flagged</span></div>
+            <div class="auto-item"><div class="auto-name">Fiona B. — Payment plan active · auto-billing</div><span class="pill pill-active">Running</span></div>
+            <div class="impact">
+              <div class="impact-title">Automation impact this month</div>
+              <div class="impact-body">89 reminders sent automatically · $14,100 collected without manual follow-up · 0 invoices missed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTOMATIONS -->
+    <div class="view" id="view-automations">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">Total Automations</div><div class="kpi-val white">42</div><div class="kpi-delta">across 7 categories</div></div>
+        <div class="kpi"><div class="kpi-label">Active Right Now</div><div class="kpi-val green">39</div><div class="kpi-delta up">fully autonomous</div></div>
+        <div class="kpi"><div class="kpi-label">Fired Today</div><div class="kpi-val amber" id="kFired2">124</div><div class="kpi-delta">and counting</div></div>
+        <div class="kpi"><div class="kpi-label">Needs Attention</div><div class="kpi-val white">3</div><div class="kpi-delta dn">assisted items</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">All Automations — Live Status</span><span class="tag green">System Active</span></div>
+        <div class="card-body">
+          <div id="fullAutoList" style="display:grid;grid-template-columns:1fr 1fr;gap:0 2.5rem"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── Client name from URL ──────────────────────────────────────────────
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('client');
+  if(name) document.getElementById('clientName').textContent = decodeURIComponent(name);
+})();
+
+// ── Data ──────────────────────────────────────────────────────────────
+const AUTOS = [
+  {cat:"Intake & Onboarding",items:[
+    {n:"New inquiry response, 24/7",fired:47,s:"active"},
+    {n:"Intake questionnaire delivery",fired:41,s:"active"},
+    {n:"Conflict check workflow",fired:8,s:"alert"},
+    {n:"Engagement letter & e-signature",fired:22,s:"active"},
+    {n:"Retainer invoice & payment",fired:19,s:"active"},
+    {n:"Document upload sequences",fired:38,s:"active"},
+    {n:"New client welcome sequence",fired:22,s:"active"},
+  ]},
+  {cat:"Scheduling",items:[
+    {n:"Consultation booking — online",fired:31,s:"active"},
+    {n:"Multi-channel appointment reminders",fired:58,s:"active"},
+    {n:"Cancellation & rescheduling",fired:7,s:"active"},
+    {n:"Court date & deadline reminders",fired:14,s:"active"},
+    {n:"Post-consultation follow-up",fired:28,s:"active"},
+  ]},
+  {cat:"Billing & Collections",items:[
+    {n:"Invoice delivery — secure link",fired:34,s:"active"},
+    {n:"Reminder sequences (7/14/30 day)",fired:89,s:"active"},
+    {n:"Payment plan setup & billing",fired:3,s:"active"},
+    {n:"Real-time collections dashboard",fired:null,s:"active"},
+    {n:"Payment receipt & close confirmation",fired:26,s:"active"},
+    {n:"Collections escalation — 60/90 days",fired:1,s:"alert"},
+  ]},
+  {cat:"Document Management",items:[
+    {n:"Outstanding document sequences",fired:38,s:"active"},
+    {n:"Document receipt confirmation",fired:29,s:"active"},
+    {n:"Deadline-triggered reminders",fired:12,s:"active"},
+    {n:"Secure portal access & instructions",fired:22,s:"active"},
+    {n:"Signature follow-up",fired:15,s:"active"},
+  ]},
+  {cat:"After-Hours & Calls",items:[
+    {n:"AI voice agent — all inbound",fired:63,s:"active"},
+    {n:"After-hours intake & routing",fired:11,s:"active"},
+    {n:"Missed call text follow-up",fired:18,s:"active"},
+    {n:"Voicemail transcription & alert",fired:9,s:"active"},
+    {n:"Urgent matter escalation",fired:1,s:"alert"},
+  ]},
+  {cat:"Communication & Reputation",items:[
+    {n:"Post-matter satisfaction survey",fired:5,s:"active"},
+    {n:"Google & Avvo review requests",fired:5,s:"active"},
+    {n:"Referral request campaigns",fired:12,s:"active"},
+    {n:"Matter status updates",fired:44,s:"active"},
+    {n:"Lapsed client reactivation",fired:7,s:"active"},
+  ]},
+  {cat:"Operations & Staff",items:[
+    {n:"Daily matter briefing",fired:20,s:"active"},
+    {n:"New inquiry alert & routing",fired:47,s:"active"},
+    {n:"Weekly production summary",fired:4,s:"active"},
+    {n:"Real-time KPI dashboard",fired:null,s:"active"},
+    {n:"Staff task & deadline follow-up",fired:16,s:"active"},
+  ]},
+];
+
+const FEED = [
+  {icon:"📞",cls:"fi-g",title:"<strong>AI voice agent</strong> answered call from new inquiry — Sarah M.",time:"2 min ago"},
+  {icon:"📋",cls:"fi-a",title:"<strong>Intake questionnaire</strong> sent to James P. automatically",time:"9 min ago"},
+  {icon:"💳",cls:"fi-g",title:"<strong>Payment received</strong> — Marcus T., Matter #1038 · $7,200",time:"14 min ago"},
+  {icon:"📅",cls:"fi-b",title:"<strong>Appointment reminder</strong> sent to Carlos V. (tomorrow 10 AM)",time:"22 min ago"},
+  {icon:"✍️",cls:"fi-a",title:"<strong>Engagement letter</strong> e-signed by Grace E.",time:"31 min ago"},
+  {icon:"📬",cls:"fi-g",title:"<strong>New inquiry routed</strong> to you — Linda K., estate planning",time:"1h ago"},
+  {icon:"⚠️",cls:"fi-r",title:"<strong>Conflict check flagged</strong> — Thompson matter, awaiting review",time:"1h ago"},
+  {icon:"💬",cls:"fi-b",title:"<strong>Matter status update</strong> sent to 8 active clients",time:"1h ago"},
+  {icon:"📄",cls:"fi-a",title:"<strong>Document reminder #2</strong> sent to Derek O.",time:"2h ago"},
+  {icon:"⭐",cls:"fi-g",title:"<strong>Google review request</strong> sent to Jennifer R. (matter closed)",time:"2h ago"},
+  {icon:"💳",cls:"fi-a",title:"<strong>Invoice delivered</strong> to Susan A. — $2,100 · secure link",time:"3h ago"},
+  {icon:"📞",cls:"fi-g",title:"<strong>Voicemail transcribed</strong> and routed — Fiona B.",time:"3h ago"},
+];
+
+// ── Render ─────────────────────────────────────────────────────────────
+function renderFeed(){
+  document.getElementById('activityFeed').innerHTML = FEED.map(e =>
+    `<div class="feed-item"><div class="feed-icon ${e.cls}">${e.icon}</div><div class="feed-content"><div class="feed-title">${e.title}</div><div class="feed-time">${e.time}</div></div></div>`
+  ).join('');
+}
+
+function renderAutoHealth(){
+  const flat = AUTOS.flatMap(c => c.items).slice(0, 12);
+  document.getElementById('autoHealthList').innerHTML = flat.map(a =>
+    `<div class="auto-item"><div class="auto-name">${a.n}</div><div class="auto-count">${a.fired != null ? a.fired+'x' : ''}</div><span class="pill ${a.s==='alert'?'pill-alert':'pill-active'}">${a.s==='alert'?'Review':'Active'}</span></div>`
+  ).join('');
+}
+
+function renderFullAutos(){
+  const items = AUTOS.flatMap(c => c.items.map(i => ({...i, cat: c.cat})));
+  document.getElementById('fullAutoList').innerHTML = items.map(a =>
+    `<div class="auto-item"><div class="auto-name"><small>${a.cat}</small>${a.n}</div><div class="auto-count">${a.fired != null ? a.fired+'x today' : ''}</div><span class="pill ${a.s==='alert'?'pill-alert':'pill-active'}">${a.s==='alert'?'Review':'Active'}</span></div>`
+  ).join('');
+}
+
+// ── Nav ────────────────────────────────────────────────────────────────
+function showView(id, btn){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Clock & live counter ───────────────────────────────────────────────
+function updateClock(){
+  const now = new Date();
+  document.getElementById('clockEl').textContent = 'Updated ' + now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+let fired = 124;
+setInterval(() => {
+  if(Math.random() > .6){ fired++; }
+  document.getElementById('kFired').textContent = fired;
+  const el2 = document.getElementById('kFired2');
+  if(el2) el2.textContent = fired;
+}, 4000);
+
+renderFeed(); renderAutoHealth(); renderFullAutos(); updateClock();
+setInterval(updateClock, 30000);
+</script>
+</body>
+</html>

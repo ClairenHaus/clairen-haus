@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clairen Haus — Dental Practice Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#0a3e3e;--teal2:#0f5555;--teal3:#165f5f;
+  --mint:#22c9a9;--mint2:#5de0c8;
+  --amber:#f5c060;--red:#e05555;--blue:#4a9eff;
+  --white:#fff;--muted:rgba(255,255,255,0.5);--muted2:rgba(255,255,255,0.78);
+  --border:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);
+}
+html,body{height:100%;background:var(--teal);font-family:'Inter',sans-serif;color:var(--white)}
+.dash{min-height:100vh;display:flex;flex-direction:column}
+
+.topbar{background:var(--teal2);border-bottom:1px solid var(--border);padding:.75rem 1.75rem;display:flex;justify-content:space-between;align-items:center}
+.topbar-left{display:flex;align-items:center;gap:1rem}
+.logo{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--mint);font-weight:500}
+.client-label{font-size:13px;color:var(--muted2);border-left:1px solid var(--border);padding-left:1rem}
+.client-label span{color:var(--white);font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 6px var(--mint);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.status-label{font-size:12px;color:var(--mint)}
+.clock{font-size:11px;color:var(--muted)}
+
+.nav{background:var(--teal2);border-bottom:1px solid var(--border);padding:0 1.75rem;display:flex}
+.nav-btn{background:none;border:none;color:var(--muted);font-size:12.5px;padding:.65rem 1.1rem;cursor:pointer;border-bottom:2px solid transparent;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
+.nav-btn:hover{color:var(--muted2)}
+.nav-btn.active{color:var(--mint);border-bottom-color:var(--mint)}
+
+.main{flex:1;padding:1.5rem 1.75rem;max-width:1400px;width:100%}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem}
+.kpi{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+.kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.4rem}
+.kpi-val{font-family:'Playfair Display',serif;font-size:30px;line-height:1;margin-bottom:.3rem}
+.mint{color:var(--mint)}.amber{color:var(--amber)}.blue{color:var(--blue)}.white{color:var(--white)}
+.kpi-delta{font-size:11px;color:var(--muted)}
+.kpi-delta.up{color:var(--mint)}.kpi-delta.dn{color:var(--red)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.card-head{padding:.75rem 1.1rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.card-title{font-size:12.5px;font-weight:500;color:var(--muted2)}
+.tag{font-size:10px;padding:2px 9px;border-radius:10px;background:rgba(34,201,169,.15);color:var(--mint);border:1px solid rgba(34,201,169,.2)}
+.tag.amber{background:rgba(245,192,96,.12);color:var(--amber);border-color:rgba(245,192,96,.2)}
+.tag.blue{background:rgba(74,158,255,.12);color:var(--blue);border-color:rgba(74,158,255,.2)}
+.card-body{padding:.75rem 1.1rem}
+
+.feed{max-height:248px;overflow-y:auto}
+.feed-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
+.feed-item:last-child{border-bottom:none}
+.feed-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:1px}
+.fi-m{background:rgba(34,201,169,.15);color:var(--mint)}
+.fi-a{background:rgba(245,192,96,.15);color:var(--amber)}
+.fi-b{background:rgba(74,158,255,.15);color:var(--blue)}
+.fi-r{background:rgba(224,85,85,.15);color:var(--red)}
+.feed-content{flex:1;min-width:0}
+.feed-title{font-size:12.5px;color:var(--muted2);line-height:1.4}
+.feed-title strong{color:var(--white);font-weight:500}
+.feed-time{font-size:10.5px;color:var(--muted);margin-top:1px}
+
+.auto-list{max-height:248px;overflow-y:auto}
+.auto-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);gap:8px}
+.auto-item:last-child{border-bottom:none}
+.auto-name{font-size:12px;color:var(--muted2);flex:1;line-height:1.4}
+.auto-name small{font-size:10px;color:var(--muted);display:block}
+.auto-count{font-size:11px;color:var(--muted);min-width:40px;text-align:right;flex-shrink:0}
+.pill{font-size:10px;padding:2px 8px;border-radius:8px;white-space:nowrap;flex-shrink:0}
+.pill-active{background:rgba(34,201,169,.12);color:var(--mint);border:1px solid rgba(34,201,169,.2)}
+.pill-alert{background:rgba(224,85,85,.12);color:var(--red);border:1px solid rgba(224,85,85,.2)}
+
+.pipeline{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.pipe-col{flex:0 0 180px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:.65rem}
+.pipe-col-head{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:.5rem;display:flex;justify-content:space-between}
+.pipe-card{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:.5rem .65rem;margin-bottom:6px;font-size:11.5px;color:var(--muted2)}
+.pipe-card:last-child{margin-bottom:0}
+.pipe-card strong{color:var(--white);display:block;font-size:12px;margin-bottom:1px}
+.pipe-card .ptag{font-size:10px;color:var(--muted)}
+.pipe-more{color:var(--muted);font-size:11px;text-align:center;padding:4px 0}
+
+.billing-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;gap:8px}
+.billing-row:last-child{border-bottom:none}
+.b-name{color:var(--muted2);flex:1}
+.b-amt{color:var(--white);font-weight:500;min-width:64px;text-align:right}
+.b-status{font-size:10px;padding:2px 8px;border-radius:8px;min-width:52px;text-align:center}
+.bs-paid{background:rgba(34,201,169,.12);color:var(--mint);border:1px solid rgba(34,201,169,.2)}
+.bs-pend{background:rgba(245,192,96,.12);color:var(--amber);border:1px solid rgba(245,192,96,.2)}
+.bs-over{background:rgba(224,85,85,.12);color:var(--red);border:1px solid rgba(224,85,85,.2)}
+
+.meter-row{margin-bottom:.65rem}
+.meter-label{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+.meter-label span:last-child{color:var(--muted2)}
+.meter-track{height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.meter-fill{height:100%;border-radius:3px}
+
+.stat-pair{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem}
+.stat-pair span:first-child{font-size:12px;color:var(--muted)}
+.stat-pair span:last-child{font-size:17px;font-weight:500}
+
+.impact{margin-top:.75rem;padding:.65rem .85rem;background:rgba(34,201,169,.07);border:1px solid rgba(34,201,169,.15);border-radius:8px}
+.impact-title{font-size:12px;color:var(--mint);margin-bottom:3px;font-weight:500}
+.impact-body{font-size:11.5px;color:var(--muted2)}
+
+.view{display:none}.view.active{display:block}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="dash">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo">Clairen Haus</div>
+      <div class="client-label">Client: <span id="clientName">Brightside Family Dental</span> &nbsp;·&nbsp; Dental Practice Automation</div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-dot"></div>
+      <div class="status-label">System Active</div>
+      <div class="clock" id="clockEl">—</div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="showView('overview',this)">Overview</button>
+    <button class="nav-btn" onclick="showView('schedule',this)">Schedule & Recalls</button>
+    <button class="nav-btn" onclick="showView('billing',this)">Billing & Insurance</button>
+    <button class="nav-btn" onclick="showView('automations',this)">Automations</button>
+  </div>
+
+  <div class="main">
+
+    <!-- OVERVIEW -->
+    <div class="view active" id="view-overview">
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-label">New Patients (30 days)</div>
+          <div class="kpi-val mint">38</div>
+          <div class="kpi-delta up">↑ 9 vs prior month</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Production This Month</div>
+          <div class="kpi-val mint">$62,840</div>
+          <div class="kpi-delta up">↑ 14% vs prior month</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Automations Fired Today</div>
+          <div class="kpi-val white" id="kFired">187</div>
+          <div class="kpi-delta">across 9 categories</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Chair Utilization</div>
+          <div class="kpi-val blue">91%</div>
+          <div class="kpi-delta up">↑ from 74% pre-system</div>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Live Activity Feed</span><span class="tag">Live</span></div>
+          <div class="card-body"><div class="feed" id="activityFeed"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Collections Performance</span><span class="tag amber">This Month</span></div>
+          <div class="card-body">
+            <div style="margin-bottom:.85rem">
+              <div class="stat-pair"><span>Collected</span><span style="color:var(--mint)">$58,210</span></div>
+              <div class="stat-pair"><span>Outstanding</span><span style="color:var(--amber)">$4,630</span></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>Collection rate</span><span>92%</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:92%;background:var(--mint)"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>Claims submitted</span><span>74/74</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:100%;background:var(--blue)"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>Pre-visit co-pays collected</span><span>81%</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:81%;background:var(--amber)"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Recall & Reactivation</span><span class="tag">Automated</span></div>
+          <div class="card-body">
+            <div style="margin-bottom:.85rem">
+              <div class="stat-pair"><span>Recalls due this month</span><span>64</span></div>
+              <div class="stat-pair"><span>Booked from recall</span><span style="color:var(--mint)">51</span></div>
+              <div class="stat-pair"><span>Lapsed reactivated</span><span style="color:var(--mint)">7</span></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>Recall conversion</span><span>80%</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:80%;background:var(--mint)"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label"><span>No-show rate</span><span>4%</span></div>
+              <div class="meter-track"><div class="meter-fill" style="width:4%;background:var(--red)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Automation Health</span><span class="tag">55 Active</span></div>
+          <div class="card-body"><div class="auto-list" id="autoHealthList"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Needs Your Attention</span><span class="tag" style="background:rgba(224,85,85,.12);color:var(--red);border-color:rgba(224,85,85,.2)">4 items</span></div>
+          <div class="card-body">
+            <div class="auto-list">
+              <div class="auto-item">
+                <div class="auto-name"><strong style="color:var(--white);display:block">Prior auth — Martinez ortho case</strong>Prepared and ready for your submission</div>
+                <span class="pill pill-alert">Submit</span>
+              </div>
+              <div class="auto-item">
+                <div class="auto-name"><strong style="color:var(--white);display:block">Claim denial — Chen, United Healthcare</strong>Appeal drafted and ready for review</div>
+                <span class="pill pill-alert">Review</span>
+              </div>
+              <div class="auto-item">
+                <div class="auto-name"><strong style="color:var(--white);display:block">Dual insurance — Thompson family</strong>Coordination flag — confirm primary carrier</div>
+                <span class="pill pill-alert">Confirm</span>
+              </div>
+              <div class="auto-item">
+                <div class="auto-name"><strong style="color:var(--white);display:block">Collections escalation — Patel balance</strong>$780 outstanding 68 days — ready to escalate</div>
+                <span class="pill pill-alert">Action</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE & RECALLS -->
+    <div class="view" id="view-schedule">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">Today's Appointments</div><div class="kpi-val white">18</div><div class="kpi-delta">confirmed</div></div>
+        <div class="kpi"><div class="kpi-label">Waitlist</div><div class="kpi-val mint">6</div><div class="kpi-delta up">auto-filled 2 today</div></div>
+        <div class="kpi"><div class="kpi-label">Recalls This Month</div><div class="kpi-val white">64</div><div class="kpi-delta">51 booked automatically</div></div>
+        <div class="kpi"><div class="kpi-label">Unscheduled Tx Plans</div><div class="kpi-val amber">11</div><div class="kpi-delta">follow-ups running</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Appointment Pipeline</span><span class="tag">Live</span></div>
+        <div class="card-body">
+          <div class="pipeline">
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>New Patient</span><span>5</span></div>
+              <div class="pipe-card"><strong>Ashley R.</strong><span class="ptag">Forms sent · awaiting</span></div>
+              <div class="pipe-card"><strong>Kevin L.</strong><span class="ptag">2/4 docs received</span></div>
+              <div class="pipe-card"><strong>Maria G.</strong><span class="ptag">HIPAA pending sig</span></div>
+              <div class="pipe-card"><strong>James W.</strong><span class="ptag">Complete · Thu 9AM</span></div>
+              <div class="pipe-card"><strong>Diane H.</strong><span class="ptag">Ins. verification pending</span></div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>Confirmed Today</span><span>18</span></div>
+              <div class="pipe-card"><strong>9:00 AM</strong><span class="ptag">Chen, David — cleaning</span></div>
+              <div class="pipe-card"><strong>9:30 AM</strong><span class="ptag">Patel, Anita — crown prep</span></div>
+              <div class="pipe-card"><strong>10:00 AM</strong><span class="ptag">Thompson, J. — exam</span></div>
+              <div class="pipe-card"><strong>10:30 AM</strong><span class="ptag">Martinez, L. — ortho</span></div>
+              <div class="pipe-more">+ 14 more today</div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>Recall Due</span><span>13</span></div>
+              <div class="pipe-card"><strong>Sandra B.</strong><span class="ptag">6mo recall · reminder sent</span></div>
+              <div class="pipe-card"><strong>Tom K.</strong><span class="ptag">Reminder #2 sent</span></div>
+              <div class="pipe-card"><strong>Alice M.</strong><span class="ptag">Booked — next Tue</span></div>
+              <div class="pipe-card"><strong>Greg P.</strong><span class="ptag">No response · call queued</span></div>
+              <div class="pipe-more">+ 9 more in sequence</div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>Tx Plan Follow-up</span><span>11</span></div>
+              <div class="pipe-card"><strong>Brian C.</strong><span class="ptag">Crown · follow-up #1 sent</span></div>
+              <div class="pipe-card"><strong>Yolanda F.</strong><span class="ptag">Implant · follow-up #2</span></div>
+              <div class="pipe-card"><strong>Marcus D.</strong><span class="ptag">Invisalign · booked</span></div>
+              <div class="pipe-more">+ 8 more in sequence</div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-head"><span>Lapsed (12mo+)</span><span>7</span></div>
+              <div class="pipe-card"><strong>Nina A.</strong><span class="ptag">18mo lapsed · re-engaged</span></div>
+              <div class="pipe-card"><strong>Carl R.</strong><span class="ptag">24mo · sequence running</span></div>
+              <div class="pipe-card"><strong>Faye T.</strong><span class="ptag">Booked — next week</span></div>
+              <div class="pipe-more">+ 4 more in sequence</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BILLING & INSURANCE -->
+    <div class="view" id="view-billing">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">Production This Month</div><div class="kpi-val mint">$62,840</div><div class="kpi-delta up">↑ 14% vs prior</div></div>
+        <div class="kpi"><div class="kpi-label">Claims Submitted</div><div class="kpi-val white">74</div><div class="kpi-delta up">all auto-submitted</div></div>
+        <div class="kpi"><div class="kpi-label">Claim Denials</div><div class="kpi-val amber">3</div><div class="kpi-delta">appeals drafted</div></div>
+        <div class="kpi"><div class="kpi-label">Pre-Visit Co-Pays</div><div class="kpi-val mint">$8,340</div><div class="kpi-delta up">collected in advance</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Recent Patient Balances</span><span class="tag">Auto-delivered</span></div>
+          <div class="card-body">
+            <div class="billing-row"><span class="b-name">Chen, David</span><span class="b-amt">$320</span><span class="b-status bs-paid">Paid</span></div>
+            <div class="billing-row"><span class="b-name">Martinez, Laura</span><span class="b-amt">$1,200</span><span class="b-status bs-paid">Paid</span></div>
+            <div class="billing-row"><span class="b-name">Thompson, James</span><span class="b-amt">$180</span><span class="b-status bs-pend">Pending</span></div>
+            <div class="billing-row"><span class="b-name">Sanders, Kim</span><span class="b-amt">$540</span><span class="b-status bs-pend">Day 7</span></div>
+            <div class="billing-row"><span class="b-name">Anderson, Beth</span><span class="b-amt">$890</span><span class="b-status bs-pend">Day 14</span></div>
+            <div class="billing-row"><span class="b-name">Patel, Anita</span><span class="b-amt">$780</span><span class="b-status bs-over">68 days</span></div>
+            <div class="billing-row"><span class="b-name">Garcia, Miguel</span><span class="b-amt">$2,400</span><span class="b-status bs-paid">Plan active</span></div>
+            <div class="billing-row"><span class="b-name">Williams, Sara</span><span class="b-amt">$260</span><span class="b-status bs-paid">Paid</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Insurance Pipeline</span><span class="tag">Automated</span></div>
+          <div class="card-body">
+            <div class="auto-item"><div class="auto-name">Eligibility verifications — today's schedule</div><span class="auto-count">18/18</span><span class="pill pill-active">Done</span></div>
+            <div class="auto-item"><div class="auto-name">Claims submitted this week</div><span class="auto-count">22</span><span class="pill pill-active">Sent</span></div>
+            <div class="auto-item"><div class="auto-name">Benefits breakdowns sent to patients</div><span class="auto-count">18</span><span class="pill pill-active">Sent</span></div>
+            <div class="auto-item"><div class="auto-name">Denial — Chen appeal drafted</div><span class="auto-count"></span><span class="pill pill-alert">Review</span></div>
+            <div class="auto-item"><div class="auto-name">Denial — Kim appeal drafted</div><span class="auto-count"></span><span class="pill pill-alert">Review</span></div>
+            <div class="auto-item"><div class="auto-name">Prior auth — Martinez ortho</div><span class="auto-count"></span><span class="pill pill-alert">Submit</span></div>
+            <div class="impact">
+              <div class="impact-title">Insurance automation impact</div>
+              <div class="impact-body">74 claims submitted without staff involvement · 0 missed eligibility checks · $8,340 co-pay collected before chair time</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTOMATIONS -->
+    <div class="view" id="view-automations">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">Total Automations</div><div class="kpi-val white">62</div><div class="kpi-delta">across 9 categories</div></div>
+        <div class="kpi"><div class="kpi-label">Active Right Now</div><div class="kpi-val mint">55</div><div class="kpi-delta up">fully autonomous</div></div>
+        <div class="kpi"><div class="kpi-label">Fired Today</div><div class="kpi-val amber" id="kFired2">187</div><div class="kpi-delta">and counting</div></div>
+        <div class="kpi"><div class="kpi-label">Needs Attention</div><div class="kpi-val white">4</div><div class="kpi-delta dn">assisted items</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">All Automations — Live Status</span><span class="tag">System Active</span></div>
+        <div class="card-body">
+          <div id="fullAutoList" style="display:grid;grid-template-columns:1fr 1fr;gap:0 2.5rem"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── Client name from URL ──────────────────────────────────────────────
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('client');
+  if(name) document.getElementById('clientName').textContent = decodeURIComponent(name);
+})();
+
+// ── Data ──────────────────────────────────────────────────────────────
+const AUTOS = [
+  {cat:"Front Desk & Calls",items:[
+    {n:"AI voice agent — all inbound",fired:74,s:"active"},{n:"New patient intake by phone",fired:38,s:"active"},
+    {n:"Appointment booking & rescheduling",fired:52,s:"active"},{n:"After-hours call handling",fired:11,s:"active"},
+    {n:"Intelligent call routing",fired:74,s:"active"},{n:"Voicemail transcription & routing",fired:9,s:"active"},
+    {n:"Missed call text follow-up",fired:14,s:"active"},{n:"Outbound reminder calls",fired:18,s:"active"},
+  ]},
+  {cat:"Patient Intake",items:[
+    {n:"Digital new patient forms",fired:38,s:"active"},{n:"Medical history questionnaire",fired:38,s:"active"},
+    {n:"HIPAA consent e-signatures",fired:38,s:"active"},{n:"ID & insurance card upload",fired:38,s:"active"},
+    {n:"Patient portal account creation",fired:38,s:"active"},{n:"Pre-visit instructions",fired:52,s:"active"},
+  ]},
+  {cat:"Insurance & Eligibility",items:[
+    {n:"Real-time eligibility verification",fired:74,s:"active"},{n:"Benefits breakdown to patient",fired:74,s:"active"},
+    {n:"Co-pay & deductible calculation",fired:74,s:"active"},{n:"Dual insurance coordination flag",fired:2,s:"alert"},
+    {n:"Prior auth prep & submission",fired:3,s:"alert"},{n:"Claim submission — clearinghouse",fired:74,s:"active"},
+    {n:"Denial management & appeal draft",fired:3,s:"alert"},
+  ]},
+  {cat:"Payment Collection",items:[
+    {n:"Pre-visit co-pay via secure link",fired:60,s:"active"},{n:"Post-visit balance notification",fired:74,s:"active"},
+    {n:"Reminder sequences (1/7/14/30 day)",fired:112,s:"active"},{n:"Recurring payment plan billing",fired:4,s:"active"},
+    {n:"Payment receipt delivery",fired:68,s:"active"},{n:"Real-time balance dashboard",fired:null,s:"active"},
+    {n:"Collections escalation — 60/90 days",fired:1,s:"alert"},
+  ]},
+  {cat:"Appointment Management",items:[
+    {n:"Multi-channel appointment reminders",fired:54,s:"active"},{n:"Cancellation & reschedule handling",fired:8,s:"active"},
+    {n:"Waitlist — auto-fills cancelled slots",fired:6,s:"active"},{n:"Hygiene recall at 5.5 months",fired:64,s:"active"},
+    {n:"Lapsed patient reactivation",fired:21,s:"active"},{n:"No-show follow-up within 60 min",fired:4,s:"active"},
+    {n:"Unscheduled tx plan follow-ups",fired:11,s:"active"},
+  ]},
+  {cat:"Communication & Reputation",items:[
+    {n:"Post-visit satisfaction survey",fired:18,s:"active"},{n:"Google & Yelp review requests",fired:18,s:"active"},
+    {n:"Birthday & anniversary messages",fired:7,s:"active"},{n:"Referral request campaigns",fired:12,s:"active"},
+    {n:"New patient welcome sequence",fired:38,s:"active"},{n:"Educational content drip",fired:24,s:"active"},
+    {n:"Newsletter campaigns",fired:3,s:"active"},
+  ]},
+  {cat:"Clinical Ops Support",items:[
+    {n:"Pre-op instructions by procedure",fired:28,s:"active"},{n:"Post-op care instructions",fired:28,s:"active"},
+    {n:"Medication reminder sequences",fired:14,s:"active"},{n:"Post-procedure check-in (24/72hr)",fired:28,s:"active"},
+    {n:"Lab case tracking & alerts",fired:6,s:"alert"},{n:"Specialist referral coordination",fired:4,s:"alert"},
+  ]},
+  {cat:"Staff & Practice Ops",items:[
+    {n:"Daily schedule briefing — all staff",fired:1,s:"active"},{n:"New patient alert & portal link",fired:38,s:"active"},
+    {n:"End-of-day production report",fired:1,s:"active"},{n:"Real-time KPI dashboard",fired:null,s:"active"},
+    {n:"Staff shift reminders",fired:3,s:"active"},{n:"Low supply alerts",fired:2,s:"alert"},
+  ]},
+  {cat:"Compliance & Documentation",items:[
+    {n:"HIPAA consent tracking",fired:38,s:"active"},{n:"Financial policy e-signature",fired:38,s:"active"},
+    {n:"Treatment plan e-signature",fired:21,s:"active"},{n:"Annual medical history refresh",fired:8,s:"active"},
+  ]},
+];
+
+const FEED = [
+  {icon:"📞",cls:"fi-m",title:"<strong>AI voice agent</strong> answered call — new patient inquiry, Ashley R.",time:"3 min ago"},
+  {icon:"🦷",cls:"fi-m",title:"<strong>Hygiene recall</strong> sent to Sandra B. — 5.5 month sequence",time:"11 min ago"},
+  {icon:"✅",cls:"fi-m",title:"<strong>Eligibility verified</strong> for all 18 patients on today's schedule",time:"18 min ago"},
+  {icon:"💳",cls:"fi-m",title:"<strong>Co-pay collected</strong> — Martinez, Laura · $120 before chair time",time:"24 min ago"},
+  {icon:"📋",cls:"fi-b",title:"<strong>New patient forms</strong> sent to Kevin L. after booking",time:"35 min ago"},
+  {icon:"⭐",cls:"fi-m",title:"<strong>Google review request</strong> sent to Chen, David (post-visit)",time:"48 min ago"},
+  {icon:"📅",cls:"fi-b",title:"<strong>Waitlist auto-fill</strong> — cancelled 10AM slot filled by Marcus D.",time:"1h ago"},
+  {icon:"⚠️",cls:"fi-r",title:"<strong>Claim denial flagged</strong> — Chen, United Healthcare · appeal drafted",time:"1h ago"},
+  {icon:"💊",cls:"fi-b",title:"<strong>Post-op instructions</strong> sent to Thompson, James (crown procedure)",time:"2h ago"},
+  {icon:"🔄",cls:"fi-a",title:"<strong>Lapsed patient reactivated</strong> — Nina A., 18 months — booked next week",time:"2h ago"},
+  {icon:"📊",cls:"fi-m",title:"<strong>Daily schedule briefing</strong> sent to all 4 staff members",time:"7:00 AM"},
+  {icon:"💳",cls:"fi-a",title:"<strong>Balance reminder #2</strong> sent to Anderson, Beth — $890 outstanding",time:"8:12 AM"},
+];
+
+// ── Render ─────────────────────────────────────────────────────────────
+function renderFeed(){
+  document.getElementById('activityFeed').innerHTML = FEED.map(e =>
+    `<div class="feed-item"><div class="feed-icon ${e.cls}">${e.icon}</div><div class="feed-content"><div class="feed-title">${e.title}</div><div class="feed-time">${e.time}</div></div></div>`
+  ).join('');
+}
+
+function renderAutoHealth(){
+  const flat = AUTOS.flatMap(c => c.items).slice(0, 12);
+  document.getElementById('autoHealthList').innerHTML = flat.map(a =>
+    `<div class="auto-item"><div class="auto-name">${a.n}</div><div class="auto-count">${a.fired != null ? a.fired+'x' : ''}</div><span class="pill ${a.s==='alert'?'pill-alert':'pill-active'}">${a.s==='alert'?'Review':'Active'}</span></div>`
+  ).join('');
+}
+
+function renderFullAutos(){
+  const items = AUTOS.flatMap(c => c.items.map(i => ({...i, cat: c.cat})));
+  document.getElementById('fullAutoList').innerHTML = items.map(a =>
+    `<div class="auto-item"><div class="auto-name"><small>${a.cat}</small>${a.n}</div><div class="auto-count">${a.fired != null ? a.fired+'x today' : ''}</div><span class="pill ${a.s==='alert'?'pill-alert':'pill-active'}">${a.s==='alert'?'Review':'Active'}</span></div>`
+  ).join('');
+}
+
+// ── Nav ────────────────────────────────────────────────────────────────
+function showView(id, btn){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Clock & live counter ───────────────────────────────────────────────
+function updateClock(){
+  const now = new Date();
+  document.getElementById('clockEl').textContent = 'Updated ' + now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+let fired = 187;
+setInterval(() => {
+  if(Math.random() > .55){ fired++; }
+  document.getElementById('kFired').textContent = fired;
+  const el2 = document.getElementById('kFired2');
+  if(el2) el2.textContent = fired;
+}, 3500);
+
+renderFeed(); renderAutoHealth(); renderFullAutos(); updateClock();
+setInterval(updateClock, 30000);
+</script>
+</body>
+</html>

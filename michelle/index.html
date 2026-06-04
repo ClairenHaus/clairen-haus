@@ -194,10 +194,8 @@
       color: var(--muted);
     }
 
-    #qrcode {
+    #qrcode img {
       border-radius: 6px;
-      overflow: hidden;
-      line-height: 0;
     }
   </style>
 </head>
@@ -233,20 +231,9 @@
 
     <div class="qr-section">
       <p class="qr-label">Scan to visit this page</p>
-      <div id="qrcode"></div>
+      <img src="/michelle/qr.png" alt="QR code for clairenhaus.com/michelle" width="200" height="200" style="border-radius:6px;" />
     </div>
 
   </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script>
-    QRCode.toCanvas(document.createElement('canvas'), 'https://clairenhaus.com/michelle', {
-      width: 160,
-      margin: 2,
-      color: { dark: '#F7F2EC', light: '#0A0806' }
-    }, function(err, canvas) {
-      if (!err) document.getElementById('qrcode').appendChild(canvas);
-    });
-  </script>
 </body>
 </html>

@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ops Audit — Clairen Haus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0D1117;
+      --bg-card:     #161C26;
+      --bg-card2:    #1E2633;
+      --border:      rgba(255,255,255,0.08);
+      --border-accent: rgba(249,115,22,0.35);
+      --text:        #F0F4F8;
+      --text-muted:  #8B97A8;
+      --orange:      #F97316;
+      --orange-light:#FBA96C;
+      --orange-dim:  rgba(249,115,22,0.15);
+      --red:         #EF4444;
+      --red-dim:     rgba(239,68,68,0.15);
+      --yellow:      #EAB308;
+      --yellow-dim:  rgba(234,179,8,0.15);
+      --green:       #22C55E;
+      --green-dim:   rgba(34,197,94,0.15);
+      --green-dark:  #16A34A;
+      --green-dark-dim: rgba(22,163,74,0.15);
+      --radius:      12px;
+      --radius-lg:   20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Layout Shell ─── */
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── Progress Bar ─── */
+    .progress-bar-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      z-index: 100;
+      display: none;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange), var(--orange-light));
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+      border-radius: 0 2px 2px 0;
+    }
+    .progress-bar-wrap.visible { display: block; }
+
+    /* ─── Screens ─── */
+    .screen {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+    .screen.active {
+      display: flex;
+      opacity: 1;
+    }
+    .screen.fade-in { animation: fadeIn 0.4s ease forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Welcome Screen ─── */
+    #screen-welcome {
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    .welcome-inner {
+      max-width: 560px;
+      width: 100%;
+    }
+
+    .brand-mark {
+      font-family: 'DM Serif Display', serif;
+      font-size: 15px;
+      color: var(--orange);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+      opacity: 0.9;
+    }
+
+    .welcome-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(38px, 6vw, 58px);
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .welcome-headline em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .welcome-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 44px;
+      max-width: 480px;
+    }
+
+    .welcome-form { display: flex; flex-direction: column; gap: 16px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+
+    .field-group { display: flex; flex-direction: column; gap: 7px; }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    input[type="text"], select {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input[type="text"]::placeholder { color: var(--text-muted); opacity: 0.6; }
+    input[type="text"]:focus,
+    select:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px var(--orange-dim);
+    }
+
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 14px; top: 50%;
+      transform: translateY(-50%);
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--text-muted);
+      pointer-events: none;
+    }
+    select option { background: #1a2030; }
+
+    /* ─── Buttons ─── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--orange);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 15px 28px;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 18px rgba(249,115,22,0.3);
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: #ea6a0a;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(249,115,22,0.4);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary.full-width { width: 100%; }
+    .btn-primary.large { padding: 18px 32px; font-size: 16px; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(255,255,255,0.2);
+      color: var(--text);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .btn-ghost:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+
+    /* ─── Lens Screens ─── */
+    #screen-lens {
+      padding: 80px 20px 40px;
+      align-items: center;
+    }
+
+    .lens-inner {
+      max-width: 640px;
+      width: 100%;
+    }
+
+    .lens-header {
+      margin-bottom: 40px;
+    }
+
+    .lens-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--orange-dim);
+      border: 1px solid var(--border-accent);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--orange-light);
+      margin-bottom: 20px;
+    }
+    .lens-tag .step-num {
+      background: var(--orange);
+      color: #fff;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .lens-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(26px, 4vw, 36px);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .lens-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ─── Question Cards ─── */
+    .question-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .question-card.answered { border-color: rgba(249,115,22,0.2); }
+
+    .q-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+    .q-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+
+    .rating-group {
+      display: flex;
+      gap: 8px;
+    }
+    @media (max-width: 480px) {
+      .rating-group { flex-wrap: wrap; }
+      .rating-btn { flex: 1 1 calc(20% - 7px); }
+    }
+
+    .rating-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 6px 8px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-muted);
+      font-size: 11px;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .rating-btn:hover {
+      border-color: var(--orange);
+      color: var(--text);
+      background: var(--orange-dim);
+    }
+    .rating-btn.selected {
+      border-color: var(--orange);
+      background: var(--orange-dim);
+      color: var(--text);
+    }
+    .rating-btn .r-num {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text);
+    }
+    .rating-btn.selected .r-num { color: var(--orange); }
+
+    /* ─── Lens Navigation ─── */
+    .lens-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 28px;
+      gap: 12px;
+    }
+
+    .lens-nav-right { display: flex; gap: 10px; align-items: center; }
+
+    .unanswered-warning {
+      font-size: 13px;
+      color: var(--yellow);
+      display: none;
+      text-align: center;
+      margin-top: 12px;
+    }
+    .unanswered-warning.visible { display: block; }
+
+    /* ─── Results Screen ─── */
+    #screen-results {
+      padding: 80px 20px 60px;
+      align-items: center;
+    }
+
+    .results-inner {
+      max-width: 760px;
+      width: 100%;
+    }
+
+    .results-brand {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 6px;
+    }
+
+    .results-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .results-subline {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+    }
+    .results-name-highlight { color: var(--orange-light); font-weight: 600; }
+
+    /* ─── Section titles ─── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 16px;
+    }
+
+    /* ─── Score Section ─── */
+    .score-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .score-display {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .score-big {
+      font-family: 'DM Serif Display', serif;
+      font-size: 72px;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .score-meta {
+      padding-bottom: 10px;
+    }
+    .score-denom {
+      font-size: 20px;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+    .score-label-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    .gauge-track {
+      width: 100%;
+      height: 12px;
+      background: var(--bg-card2);
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .gauge-fill {
+      height: 100%;
+      border-radius: 100px;
+      transition: width 0.8s cubic-bezier(0.4,0,0.2,1) 0.2s;
+    }
+
+    .lens-scores-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 560px) {
+      .lens-scores-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 360px) {
+      .lens-scores-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .lens-score-card {
+      background: var(--bg-card2);
+      border-radius: var(--radius);
+      padding: 14px 10px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .lsc-name {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .lsc-score {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .lsc-bar {
+      height: 4px;
+      border-radius: 100px;
+      width: 100%;
+    }
+
+    /* ─── Score color helpers ─── */
+    .score-critical  { color: var(--red); }
+    .score-needs     { color: var(--yellow); }
+    .score-functional{ color: var(--green); }
+    .score-strong    { color: var(--green-dark); }
+    .bg-critical     { background: var(--red); }
+    .bg-needs        { background: var(--yellow); }
+    .bg-functional   { background: var(--green); }
+    .bg-strong       { background: var(--green-dark); }
+    .dim-critical    { background: var(--red-dim); border-color: rgba(239,68,68,0.25); }
+    .dim-needs       { background: var(--yellow-dim); border-color: rgba(234,179,8,0.25); }
+    .dim-functional  { background: var(--green-dim); border-color: rgba(34,197,94,0.25); }
+    .dim-strong      { background: var(--green-dark-dim); border-color: rgba(22,163,74,0.25); }
+    .badge-critical  { background: var(--red-dim); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+    .badge-needs     { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(234,179,8,0.3); }
+    .badge-functional{ background: var(--green-dim); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+    .badge-strong    { background: var(--green-dark-dim); color: var(--green-dark); border: 1px solid rgba(22,163,74,0.3); }
+
+    /* ─── Problem Section ─── */
+    .problem-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .problem-text {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+    .problem-text strong { color: var(--orange-light); }
+
+    /* ─── Priority List ─── */
+    .priorities-section { margin-bottom: 24px; }
+
+    .priority-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .priority-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--orange);
+      border-radius: 4px 0 0 4px;
+    }
+    .priority-card.p2::before { background: var(--yellow); }
+    .priority-card.p3::before { background: var(--text-muted); }
+
+    .priority-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .priority-num {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+    .priority-card.p2 .priority-num { color: var(--yellow); }
+    .priority-card.p3 .priority-num { color: var(--text-muted); }
+
+    .priority-lens-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .time-tag {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .time-tag::before {
+      content: '⏱';
+      font-size: 12px;
+    }
+
+    .priority-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .priority-broken {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .priority-action {
+      background: var(--bg-card2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text);
+      border-left: 3px solid var(--orange);
+      margin-bottom: 12px;
+      line-height: 1.55;
+    }
+    .priority-action strong { color: var(--orange-light); }
+
+    .automation-tag {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(249,115,22,0.07);
+      border: 1px solid rgba(249,115,22,0.2);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--orange-light);
+      line-height: 1.5;
+    }
+    .automation-tag .auto-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ─── Roadmap ─── */
+    .roadmap-section { margin-bottom: 24px; }
+
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 600px) {
+      .roadmap-grid { grid-template-columns: 1fr; }
+    }
+
+    .roadmap-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+    }
+
+    .rm-month {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+    .roadmap-card:nth-child(2) .rm-month { color: var(--yellow); }
+    .roadmap-card:nth-child(3) .rm-month { color: var(--green); }
+
+    .rm-theme {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    .rm-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .rm-items li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .rm-items li::before {
+      content: '→';
+      color: var(--orange);
+      flex-shrink: 0;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+    .roadmap-card:nth-child(2) .rm-items li::before { color: var(--yellow); }
+    .roadmap-card:nth-child(3) .rm-items li::before { color: var(--green); }
+
+    /* ─── Automation Table ─── */
+    .automation-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .auto-intro {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.65;
+    }
+
+    .auto-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .auto-table th {
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 12px 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .auto-table td {
+      padding: 14px 12px 14px 0;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .auto-table tr:last-child td { border-bottom: none; }
+    .auto-table .td-process { font-weight: 600; color: var(--text); }
+    .auto-table .td-manual  { color: var(--text-muted); }
+    .auto-table .td-tool    { color: var(--text-muted); }
+    .auto-table .td-saved   { color: var(--orange-light); font-weight: 700; white-space: nowrap; }
+    @media (max-width: 560px) {
+      .auto-table th:nth-child(2),
+      .auto-table td:nth-child(2),
+      .auto-table th:nth-child(3),
+      .auto-table td:nth-child(3) { display: none; }
+    }
+
+    .auto-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding: 16px 0 0;
+      border-top: 1px solid var(--border);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .auto-total-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .auto-total-hours {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: var(--orange);
+    }
+    .auto-total-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+
+    /* ─── CTA Section ─── */
+    .cta-section {
+      background: linear-gradient(135deg, #1a2235 0%, #1e1528 100%);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(24px, 4vw, 36px);
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    .cta-body {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cta-secondary-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .cta-print-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ─── Footer ─── */
+    .results-footer {
+      margin-top: 48px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    /* ─── Divider ─── */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    /* ─── Print styles ─── */
+    @media print {
+      body { background: #fff; color: #111; }
+      .progress-bar-wrap, #screen-welcome, #screen-lens { display: none !important; }
+      #screen-results { display: flex !important; opacity: 1 !important; padding: 20px; }
+      .cta-buttons a.btn-primary::after { content: " — clairen.haus"; }
+      .btn-primary, .btn-secondary, .btn-ghost { box-shadow: none; }
+      .cta-section,
+      .score-section,
+      .problem-section,
+      .priority-card,
+      .roadmap-card,
+      .automation-section {
+        border: 1px solid #ccc;
+        background: #fafafa;
+        break-inside: avoid;
+      }
+      .score-big, .auto-total-hours, .results-headline, .cta-headline,
+      .lens-title, .rm-theme, .priority-title { color: #111; }
+      .score-critical  { color: #dc2626; }
+      .score-needs     { color: #ca8a04; }
+      .score-functional{ color: #16a34a; }
+      .score-strong    { color: #15803d; }
+      :root {
+        --text: #111;
+        --text-muted: #555;
+        --bg-card: #fafafa;
+        --bg-card2: #f0f0f0;
+        --border: #ddd;
+      }
+      .cta-print-row { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar-wrap" id="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progress-bar-fill"></div>
+</div>
+
+<div class="app-shell">
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 1 — WELCOME
+  ══════════════════════════════════════════ -->
+  <div class="screen active fade-in" id="screen-welcome">
+    <div class="welcome-inner">
+      <div class="brand-mark">Clairen Haus</div>
+
+      <h1 class="welcome-headline">
+        Is your business<br><em>running you?</em>
+      </h1>
+
+      <p class="welcome-sub">
+        Find out in 10 minutes. This diagnostic maps your operations across 5 critical areas and tells you exactly what to fix first.
+      </p>
+
+      <div class="welcome-form">
+        <div class="form-row">
+          <div class="field-group">
+            <label for="business-name">Business name</label>
+            <input type="text" id="business-name" placeholder="e.g. Bright Edge Studio" />
+          </div>
+          <div class="field-group">
+            <label for="your-name">Your name</label>
+            <input type="text" id="your-name" placeholder="e.g. Jordan Lee" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="business-type">Business type</label>
+          <div class="select-wrap">
+            <select id="business-type">
+              <option value="" disabled selected>Select one…</option>
+              <option value="Consultant">Consultant</option>
+              <option value="Agency Owner">Agency Owner</option>
+              <option value="Coach">Coach</option>
+              <option value="Service Provider">Service Provider</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="revenue-range">Revenue range</label>
+          <div class="select-wrap">
+            <select id="revenue-range">
+              <option value="" disabled selected>Select one…</option>
+              <option value="Pre-revenue">Pre-revenue</option>
+              <option value="Under $50K">Under $50K</option>
+              <option value="$50K–$150K">$50K–$150K</option>
+              <option value="$150K–$500K">$150K–$500K</option>
+              <option value="$500K+">$500K+</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn-primary full-width" id="start-btn" style="margin-top:8px;">
+          Start the Diagnostic →
+        </button>
+      </div>
+    </div>
+  </div><!-- /screen-welcome -->
+
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 2–6 — LENS QUESTIONS
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="screen-lens" style="display:none;">
+    <div class="lens-inner">
+
+      <div class="lens-header">
+        <div class="lens-tag">
+          <span class="step-num" id="lens-step-num">1</span>
+          <span id="lens-tag-label">Lens 1 of 5</span>
+        </div>
+        <h2 class="lens-title" id="lens-title">Capture</h2>
+        <p class="lens-desc" id="lens-desc">Are leads finding you — and are you catching them?</p>
+      </div>
+
+      <div id="questions-container"></div>
+
+      <p class="unanswered-warning" id="unanswered-warning">
+        ⚠ Please answer all questions before continuing.
+      </p>
+
+      <div class="lens-nav">
+        <button class="btn-ghost" id="lens-back-btn">← Back</button>
+        <div class="lens-nav-right">
+          <button class="btn-primary" id="lens-next-btn">Continue →</button>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /screen-lens -->
+
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 7 — RESULTS
+  ══════════════════════════════════════════ -->
+  <div class="screen" id="screen-results" style="display:none;">
+    <div class="results-inner" id="results-inner">
+      <!-- dynamically populated -->
+    </div>
+  </div><!-- /screen-results -->
+
+</div><!-- /app-shell -->
+
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════ */
+const LENSES = [
+  {
+    name: 'Capture',
+    desc: 'Are leads finding you — and are you catching them?',
+    questions: [
+      {
+        q: 'How do new leads come in? Are all your lead sources tracked?',
+        options: ['Leads come in randomly — nothing is tracked','I know roughly where leads come from but it\'s not documented','Some channels are tracked, others aren\'t','Most channels are tracked with occasional gaps','Every lead source is tracked and documented consistently']
+      },
+      {
+        q: 'What happens in the first hour after someone expresses interest?',
+        options: ['Nothing — I get to it when I can','I try to respond but it\'s inconsistent','I usually respond within a few hours','I respond within an hour most of the time','There\'s a defined response sequence that fires immediately']
+      },
+      {
+        q: 'Do you have a CRM, or do contacts live in email / DMs / your head?',
+        options: ['Contacts live in my head and scattered messages','I have a spreadsheet I don\'t consistently update','I use a CRM sometimes but it\'s not complete','I have a CRM with most contacts in it','Every contact is in a CRM with full history and status']
+      },
+      {
+        q: 'How often do leads go cold because follow-up was late or missed?',
+        options: ['Regularly — I know I\'m losing people this way','Often — follow-up happens when I remember','Sometimes — I catch most but miss a few','Rarely — I have a basic follow-up process','Almost never — follow-up is systematized']
+      },
+    ]
+  },
+  {
+    name: 'Conversion',
+    desc: 'Is the path from interest to paid client clear and repeatable?',
+    questions: [
+      {
+        q: 'How consistent is your sales process from first contact to signed deal?',
+        options: ['Every deal is handled completely differently','I have a rough approach but it varies a lot','The general steps are the same but details vary','My process is fairly consistent with some adjustments','Every deal follows the same clear documented process']
+      },
+      {
+        q: 'Do you have a follow-up sequence, or does it depend on your energy?',
+        options: ['It completely depends on how I\'m feeling that day','I have intentions but no actual system','I follow up but timing and frequency is inconsistent','I have a loose sequence I follow most of the time','There\'s a defined follow-up sequence that runs consistently']
+      },
+      {
+        q: 'How often do you follow up on proposals you\'ve sent?',
+        options: ['Rarely — I send and hope','Sometimes — when I remember','I follow up once or twice','I follow up on most proposals consistently','Every proposal has a structured follow-up sequence']
+      },
+      {
+        q: 'Do you know your close rate, or is it a rough guess?',
+        options: ['I have no idea','It\'s a very rough guess','I have a general sense but don\'t track it','I track it loosely','I know my exact close rate and track it consistently']
+      },
+    ]
+  },
+  {
+    name: 'Delivery',
+    desc: 'Is your client work systematized, or does it live in your head?',
+    questions: [
+      {
+        q: 'How consistent is your client onboarding process?',
+        options: ['Every client onboards differently — I wing it each time','I have a rough checklist but it changes every time','The basics are the same but a lot is improvised','My onboarding is mostly consistent with small variations','Every client goes through the same documented process']
+      },
+      {
+        q: 'Do you have SOPs or templates for your core deliverables?',
+        options: ['Nothing documented — it all lives in my head','A few notes but nothing usable by anyone else','Some templates exist but they\'re incomplete','Most deliverables have templates or SOPs','Every core deliverable has a documented SOP or template']
+      },
+      {
+        q: 'How is client communication managed — proactively or reactively?',
+        options: ['Entirely reactive — I respond when clients reach out','Mostly reactive with occasional check-ins','Mix of both — no consistent rhythm','Mostly proactive with a loose schedule','Fully proactive — clients always know what\'s happening']
+      },
+      {
+        q: 'What happens to active projects when you\'re unavailable?',
+        options: ['Everything stops — I\'m the only one who knows anything','Projects stall and clients get anxious','Some things continue but there are gaps','Most things continue with minor disruptions','Projects run smoothly — everything is documented and delegatable']
+      },
+    ]
+  },
+  {
+    name: 'Retention',
+    desc: 'Are you keeping clients, expanding them, and turning them into referrers?',
+    questions: [
+      {
+        q: 'Is there a structured process after a project ends?',
+        options: ['Projects just end — no formal close','I send a final email but there\'s no real process','I do some offboarding but it\'s inconsistent','I have a basic offboarding flow I follow most of the time','Every project closes with the same documented process']
+      },
+      {
+        q: 'Do you proactively check in with active clients on a schedule?',
+        options: ['I wait for clients to reach out','I check in occasionally when I think of it','I try to check in but it\'s not on a schedule','I have a loose check-in cadence I follow','Check-ins are scheduled and consistent for all active clients']
+      },
+      {
+        q: 'Do you have a systematic way to ask for referrals?',
+        options: ['I never ask — referrals just happen (or don\'t)','I ask sometimes but there\'s no system','I ask at the end of projects inconsistently','I have a referral ask in my process but it\'s not automated','Referral requests are systematic and built into my close process']
+      },
+      {
+        q: 'What percentage of your revenue comes from repeat or referred clients?',
+        options: ['Almost none — I\'m constantly finding new clients','A small amount — maybe 10–20%','About a third — it\'s growing but slowly','More than half — I have good retention','The majority — my business runs on repeat and referral']
+      },
+    ]
+  },
+  {
+    name: 'Infrastructure',
+    desc: 'Does your business have the systems to scale without you doing more hours?',
+    questions: [
+      {
+        q: 'Are your tools connected, or are you manually transferring data between them?',
+        options: ['Everything is siloed — I manually move data constantly','A few things connect but most is manual','Some integrations exist but there are big gaps','Most tools are connected with a few manual steps remaining','Tools are fully integrated — data flows automatically']
+      },
+      {
+        q: 'How much time per week do you spend on tasks that could be automated?',
+        options: ['10+ hours — I\'m buried in manual work','6–10 hours — it\'s a significant drain','3–5 hours — noticeable but manageable','1–3 hours — mostly optimized','Under an hour — almost everything automatable is automated']
+      },
+      {
+        q: 'Do you have a consistent weekly operating rhythm, or is it reactive?',
+        options: ['Completely reactive — I just respond to what comes up','Mostly reactive with occasional planned time','Some structure but it breaks down regularly','A loose rhythm I follow most weeks','Clear weekly rhythm — same blocks, same reviews, same cadence']
+      },
+      {
+        q: 'If your volume doubled tomorrow, what would break first?',
+        options: ['Everything — I\'m already at capacity','Delivery — I can\'t take on more without dropping things','Onboarding — new clients would get a worse experience','Communication — I\'d struggle to keep everyone informed','Nothing critical — my systems can handle the growth']
+      },
+    ]
+  }
+];
+
+const RATING_LABELS = [
+  { val: 1, short: "Doesn't exist" },
+  { val: 2, short: 'Barely works' },
+  { val: 3, short: 'Sometimes' },
+  { val: 4, short: 'Mostly solid' },
+  { val: 5, short: 'Tight & consistent' },
+];
+
+const PROBLEM_COPY = {
+  Capture: `Your business has a <strong>lead tracking problem.</strong> Opportunities are coming in but not being caught — and the ones that slip through early never make it to revenue. Before you build anything else, you need a reliable system to capture and follow up on every inquiry. The work you're losing isn't going to a competitor. It's just disappearing.`,
+  Conversion: `The gap isn't leads — it's <strong>what happens after.</strong> Your sales process is inconsistent, which means your close rate is unpredictable. You're leaving money on the table not because you can't close, but because the path from interest to paid isn't clear or repeatable. A tighter process here doesn't just improve revenue — it removes the anxiety of every sales conversation.`,
+  Delivery: `Your operational bottleneck is in <strong>the work itself.</strong> Every engagement starts from scratch, which means you're spending time rebuilding what should already exist. This is what keeps you in execution mode and prevents you from scaling. The fix isn't working more hours — it's capturing what you already know and turning it into reusable systems.`,
+  Retention: `You're working harder to get new clients than you need to. Your past clients are an <strong>underutilized asset</strong> — with no systematic process to re-engage, expand, or activate them as referrers, you're treating every client as a one-time transaction. The most efficient revenue in your business is already sitting in your contact list.`,
+  Infrastructure: `Your tools and systems aren't working for you — <strong>you're working for them.</strong> Manual processes, siloed tools, and no operating rhythm means you're the system. And a system that requires you to be present for everything has a ceiling. This is the piece that, once fixed, makes every other area of your business easier to run.`,
+};
+
+const AUTOMATION_MAP = {
+  Capture: {
+    label: 'Lead capture → CRM → nurture trigger',
+    tool: 'CRM + Zapier / Make',
+    savings: '3–5 hrs/week',
+    savingsLow: 3, savingsHigh: 5,
+  },
+  Conversion: {
+    label: 'Proposal follow-up sequence',
+    tool: 'CRM + email automation',
+    savings: '2–3 hrs/week',
+    savingsLow: 2, savingsHigh: 3,
+  },
+  Delivery: {
+    label: 'Client onboarding sequence',
+    tool: 'Dubsado / HoneyBook / Notion',
+    savings: '4–6 hrs/week',
+    savingsLow: 4, savingsHigh: 6,
+  },
+  Retention: {
+    label: 'Re-engagement + referral request',
+    tool: 'Email automation + CRM',
+    savings: '2–4 hrs/week',
+    savingsLow: 2, savingsHigh: 4,
+  },
+  Infrastructure: {
+    label: 'Tool integration + data sync',
+    tool: 'Zapier / Make / native APIs',
+    savings: '5–8 hrs/week',
+    savingsLow: 5, savingsHigh: 8,
+  },
+};
+
+const PRIORITY_DATA = {
+  Capture: {
+    broken: "Lead sources aren't being tracked consistently, and there's no clear process for what happens after someone reaches out. Interested prospects are falling through the cracks before they ever get a chance to become clients.",
+    action: "<strong>Build a lead intake system:</strong> Pick one CRM (even a simple one), add every lead source to it, and create a 3-step follow-up sequence that triggers within 1 hour of new contact. Document it so it runs without you.",
+    time: '1–2 weeks',
+  },
+  Conversion: {
+    broken: "The sales path from first conversation to signed agreement isn't consistent. Follow-up is happening when you remember to do it — not on a system — which means warm leads are going cold.",
+    action: "<strong>Standardize your sales flow:</strong> Map your current process, identify where deals stall, and build a 5-touch follow-up sequence for every proposal sent. Add a simple close-rate tracker so you can improve what you measure.",
+    time: '1–2 weeks',
+  },
+  Delivery: {
+    broken: "Each client engagement requires you to rebuild from scratch — onboarding, communication, deliverables. This isn't a capacity problem yet, but it will be. It's also where quality inconsistency creeps in.",
+    action: "<strong>Build your delivery toolkit:</strong> Document your core onboarding steps, create templates for your top 3 deliverable types, and set up a project tracker so nothing lives only in your head.",
+    time: '2–3 weeks',
+  },
+  Retention: {
+    broken: "There's no structured process after a project closes. Past clients aren't being nurtured, check-ins aren't happening on a schedule, and referrals are only coming in when someone happens to remember you.",
+    action: "<strong>Create a post-project system:</strong> Build a 30/60/90-day check-in sequence, add a referral ask to your project close flow, and segment your past clients for a re-engagement campaign.",
+    time: '1–2 weeks',
+  },
+  Infrastructure: {
+    broken: "Your tools aren't talking to each other, which means you're the connection. Manual data entry, reactive scheduling, and no clear operating rhythm are costing you hours every week that compound over time.",
+    action: "<strong>Audit and connect your stack:</strong> List every tool you use, identify the 3 biggest manual handoffs, and automate them with a no-code integration tool. Then build a weekly operating cadence — same meeting times, same review rhythm.",
+    time: '2–4 weeks',
+  },
+};
+
+const CALENDLY = 'https://calendly.com/clairenhaus/operations-diagnostic';
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════ */
+const state = {
+  userName: '',
+  businessName: '',
+  businessType: '',
+  revenueRange: '',
+  currentLens: 0,
+  answers: [
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+  ],
+};
+
+/* ═══════════════════════════════════════════════════════════
+   NAVIGATION HELPERS
+═══════════════════════════════════════════════════════════ */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  const target = document.getElementById(id);
+  target.style.display = 'flex';
+  requestAnimationFrame(() => {
+    target.classList.add('active', 'fade-in');
+    // remove fade-in after animation to allow re-trigger
+    target.addEventListener('animationend', () => target.classList.remove('fade-in'), { once: true });
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  const wrap = document.getElementById('progress-bar-wrap');
+  const fill = document.getElementById('progress-bar-fill');
+  if (state.currentLens < 0) { wrap.classList.remove('visible'); return; }
+  wrap.classList.add('visible');
+  const pct = ((state.currentLens + 1) / LENSES.length) * 100;
+  fill.style.width = pct + '%';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   WELCOME → LENS
+═══════════════════════════════════════════════════════════ */
+document.getElementById('start-btn').addEventListener('click', () => {
+  const bn = document.getElementById('business-name').value.trim();
+  const yn = document.getElementById('your-name').value.trim();
+  const bt = document.getElementById('business-type').value;
+  const rr = document.getElementById('revenue-range').value;
+
+  if (!yn || !bt || !rr) {
+    alert('Please fill in your name, business type, and revenue range to continue.');
+    return;
+  }
+
+  state.userName = yn;
+  state.businessName = bn || 'your business';
+  state.businessType = bt;
+  state.revenueRange = rr;
+  state.currentLens = 0;
+
+  updateProgress();
+  renderLens(0);
+  showScreen('screen-lens');
+});
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER LENS SCREEN
+═══════════════════════════════════════════════════════════ */
+function renderLens(idx) {
+  const lens = LENSES[idx];
+
+  document.getElementById('lens-step-num').textContent = idx + 1;
+  document.getElementById('lens-tag-label').textContent = `Lens ${idx + 1} of ${LENSES.length}`;
+  document.getElementById('lens-title').textContent = lens.name;
+  document.getElementById('lens-desc').textContent = lens.desc;
+  document.getElementById('unanswered-warning').classList.remove('visible');
+
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+
+  lens.questions.forEach((qObj, qi) => {
+    const saved = state.answers[idx][qi];
+    const card = document.createElement('div');
+    card.className = 'question-card' + (saved !== null ? ' answered' : '');
+    card.innerHTML = `
+      <div class="q-num">Question ${qi + 1}</div>
+      <div class="q-text">${qObj.q}</div>
+      <div class="rating-group" id="rg-${idx}-${qi}">
+        ${qObj.options.map((label, i) => `
+          <button class="rating-btn${saved === (i + 1) ? ' selected' : ''}"
+            data-lens="${idx}" data-q="${qi}" data-val="${i + 1}">
+            <span class="r-num">${i + 1}</span>
+            <span>${label}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  // Attach click handlers
+  container.querySelectorAll('.rating-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const l = +btn.dataset.lens;
+      const q = +btn.dataset.q;
+      const v = +btn.dataset.val;
+      state.answers[l][q] = v;
+
+      // Update selection UI
+      document.querySelectorAll(`#rg-${l}-${q} .rating-btn`).forEach(b => {
+        b.classList.toggle('selected', +b.dataset.val === v);
+      });
+
+      // Mark card answered
+      btn.closest('.question-card').classList.add('answered');
+      document.getElementById('unanswered-warning').classList.remove('visible');
+    });
+  });
+
+  // Back button visibility
+  document.getElementById('lens-back-btn').style.visibility = idx === 0 ? 'hidden' : 'visible';
+
+  // Next button label
+  const nextBtn = document.getElementById('lens-next-btn');
+  nextBtn.textContent = idx === LENSES.length - 1 ? 'See My Results →' : 'Continue →';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LENS NAVIGATION
+═══════════════════════════════════════════════════════════ */
+document.getElementById('lens-next-btn').addEventListener('click', () => {
+  const idx = state.currentLens;
+  const unanswered = state.answers[idx].some(a => a === null);
+
+  if (unanswered) {
+    document.getElementById('unanswered-warning').classList.add('visible');
+    return;
+  }
+
+  if (idx < LENSES.length - 1) {
+    state.currentLens++;
+    updateProgress();
+    renderLens(state.currentLens);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    // All done — render results
+    document.getElementById('progress-bar-fill').style.width = '100%';
+    buildResults();
+    showScreen('screen-results');
+  }
+});
+
+document.getElementById('lens-back-btn').addEventListener('click', () => {
+  if (state.currentLens > 0) {
+    state.currentLens--;
+    updateProgress();
+    renderLens(state.currentLens);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    document.getElementById('progress-bar-wrap').classList.remove('visible');
+    showScreen('screen-welcome');
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   SCORE HELPERS
+═══════════════════════════════════════════════════════════ */
+function lensScore(idx) {
+  return state.answers[idx].reduce((s, v) => s + (v || 0), 0);
+}
+
+function lensAvg(idx) {
+  return lensScore(idx) / 4;
+}
+
+function totalScore() {
+  let t = 0;
+  for (let i = 0; i < LENSES.length; i++) t += lensAvg(i);
+  return Math.round(t * 10) / 10; // out of 25
+}
+
+function scoreClass(avg) {
+  if (avg <= 2)  return 'critical';
+  if (avg <= 3)  return 'needs';
+  if (avg < 4.5) return 'functional';
+  return 'strong';
+}
+
+function scoreLabel(total) {
+  if (total <= 10) return 'Critical';
+  if (total <= 15) return 'Needs Work';
+  if (total <= 20) return 'Functional';
+  return 'Strong';
+}
+
+function gaugeColor(total) {
+  if (total <= 10) return 'var(--red)';
+  if (total <= 15) return 'var(--yellow)';
+  if (total <= 20) return 'var(--green)';
+  return 'var(--green-dark)';
+}
+
+function lensMinAnswer(idx) {
+  // returns the lowest single answer in this lens (used as tie-breaker)
+  return Math.min(...state.answers[idx]);
+}
+
+function lensOnesCount(idx) {
+  // count how many "1" answers in this lens (used as secondary tie-breaker)
+  return state.answers[idx].filter(a => a === 1).length;
+}
+
+function sortedLenses() {
+  // Sort by avg score ascending.
+  // Ties broken by: (1) lowest single answer, then (2) most "1" answers, then (3) index
+  return [0,1,2,3,4].sort((a,b) => {
+    const avgDiff = lensAvg(a) - lensAvg(b);
+    if (Math.abs(avgDiff) > 0.01) return avgDiff;
+    // Tie: lens with a lower minimum answer ranks worse (more critical)
+    const minDiff = lensMinAnswer(a) - lensMinAnswer(b);
+    if (minDiff !== 0) return minDiff;
+    // Still tied: more "1" answers = more critical
+    return lensOnesCount(b) - lensOnesCount(a);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REAL PROBLEM COPY — context-aware
+═══════════════════════════════════════════════════════════ */
+function getRealProblemCopy(sorted) {
+  const weakestName = LENSES[sorted[0]].name;
+  const secondName  = LENSES[sorted[1]].name;
+  const weakestAvg  = lensAvg(sorted[0]);
+  const secondAvg   = lensAvg(sorted[1]);
+  const gap = secondAvg - weakestAvg;
+
+  // If top two lenses are within 0.75 of each other, show a combined diagnosis
+  const COMBINED = {
+    'Capture+Conversion': `You don't have a lead problem — you have a <strong>pipeline problem.</strong> Leads aren't being caught reliably, and the ones that do make it in aren't converting consistently. These two gaps compound each other: a leaky capture system feeds an inconsistent sales process, and the result is unpredictable revenue that depends entirely on your attention and energy.`,
+    'Conversion+Capture': `You don't have a lead problem — you have a <strong>pipeline problem.</strong> Leads aren't being caught reliably, and the ones that do make it in aren't converting consistently. These two gaps compound each other: a leaky capture system feeds an inconsistent sales process, and the result is unpredictable revenue that depends entirely on your attention and energy.`,
+    'Capture+Delivery': `Your business is leaking on both ends. <strong>Leads aren't being caught reliably on the front end</strong>, and <strong>delivery isn't systematized on the back end.</strong> The result is a business that's hard to grow and hard to run — new opportunities slip through while existing clients get an inconsistent experience.`,
+    'Delivery+Capture': `Your business is leaking on both ends. <strong>Leads aren't being caught reliably on the front end</strong>, and <strong>delivery isn't systematized on the back end.</strong> The result is a business that's hard to grow and hard to run — new opportunities slip through while existing clients get an inconsistent experience.`,
+    'Conversion+Delivery': `The gap is in the <strong>middle of the business.</strong> Deals are closing inconsistently, and when they do close, delivery starts from scratch each time. This is the pattern that keeps service businesses stuck — inconsistent sales feeding inconsistent delivery, with no systems to break the cycle.`,
+    'Delivery+Conversion': `The gap is in the <strong>middle of the business.</strong> Deals are closing inconsistently, and when they do close, delivery starts from scratch each time. This is the pattern that keeps service businesses stuck — inconsistent sales feeding inconsistent delivery, with no systems to break the cycle.`,
+    'Delivery+Retention': `You're delivering the work — but not building on it. <strong>Delivery isn't systematized</strong>, and <strong>there's no process after a project ends.</strong> That means every engagement costs more effort than it should, and most clients disappear when it's over rather than coming back or referring others.`,
+    'Retention+Delivery': `You're delivering the work — but not building on it. <strong>Delivery isn't systematized</strong>, and <strong>there's no process after a project ends.</strong> That means every engagement costs more effort than it should, and most clients disappear when it's over rather than coming back or referring others.`,
+    'Retention+Infrastructure': `You have a <strong>compound infrastructure problem.</strong> Your tools aren't supporting your operations, and there's no system to keep clients engaged after a project closes. These two gaps feed each other — without the right infrastructure, you can't run retention systematically, and without retention, you're always starting from zero.`,
+    'Infrastructure+Retention': `You have a <strong>compound infrastructure problem.</strong> Your tools aren't supporting your operations, and there's no system to keep clients engaged after a project closes. These two gaps feed each other — without the right infrastructure, you can't run retention systematically, and without retention, you're always starting from zero.`,
+  };
+
+  const comboKey = `${weakestName}+${secondName}`;
+  if (gap <= 0.75 && COMBINED[comboKey]) {
+    return COMBINED[comboKey];
+  }
+
+  // Otherwise use single-lens copy
+  return PROBLEM_COPY[weakestName];
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUILD RESULTS PAGE
+═══════════════════════════════════════════════════════════ */
+function buildResults() {
+  const container = document.getElementById('results-inner');
+  const total = totalScore();
+  const label = scoreLabel(total);
+  const color = gaugeColor(total);
+  const gaugePct = (total / 25) * 100;
+  const sorted = sortedLenses(); // weakest first
+  const weakest = sorted[0];
+  const top3 = sorted.slice(0, 3);
+  const firstName = state.userName.split(' ')[0];
+
+  // ── Automation table rows (weakest 3 lenses)
+  let totalSavingsLow = 0, totalSavingsHigh = 0;
+  const autoRows = top3.map(i => {
+    const a = AUTOMATION_MAP[LENSES[i].name];
+    totalSavingsLow  += a.savingsLow;
+    totalSavingsHigh += a.savingsHigh;
+    return `
+      <tr>
+        <td class="td-process">${a.label}</td>
+        <td class="td-manual">Currently manual</td>
+        <td class="td-tool">${a.tool}</td>
+        <td class="td-saved">${a.savings}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // ── Priority cards (top 3 weakest)
+  const priorityCards = top3.map((lensIdx, rank) => {
+    const lens = LENSES[lensIdx];
+    const pd = PRIORITY_DATA[lens.name];
+    const am = AUTOMATION_MAP[lens.name];
+    const pClass = rank === 0 ? '' : rank === 1 ? ' p2' : ' p3';
+    const pLabel = rank === 0 ? '🔴 Priority 1 — Fix First' : rank === 1 ? '🟡 Priority 2 — Fix Next' : '⚪ Priority 3 — Build Toward';
+
+    return `
+      <div class="priority-card${pClass}">
+        <div class="priority-meta">
+          <span class="priority-num">${pLabel}</span>
+          <span class="priority-lens-tag">${lens.name}</span>
+          <span class="time-tag">${pd.time}</span>
+        </div>
+        <div class="priority-title">${lens.name} isn't working yet</div>
+        <p class="priority-broken">${pd.broken}</p>
+        <div class="priority-action">${pd.action}</div>
+        <div class="automation-tag">
+          <span class="auto-icon">⚡</span>
+          <span><strong>This can be automated.</strong> ${am.label} automation. Estimated time saved: <strong>${am.savings}</strong></span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // ── Roadmap (dynamic)
+  const m1Lens = LENSES[top3[0]].name;
+  const m2Lens = top3[1] !== undefined ? LENSES[top3[1]].name : 'Delivery';
+  const roadmapMonth1 = getRoadmapMonth1(m1Lens);
+  const roadmapMonth2 = getRoadmapMonth2(m2Lens);
+  const roadmapMonth3 = [
+    'Launch retention + referral system',
+    'Activate past clients with re-engagement sequence',
+    'Build infrastructure for predictable growth',
+    'Review and optimize automation stack',
+    'Set 90-day operating KPIs',
+  ];
+
+  const html = `
+    <!-- Header -->
+    <div class="results-brand">Clairen Haus — Ops Audit</div>
+    <h1 class="results-headline">Here's what we found,<br><span style="color:var(--orange-light);font-style:italic;">and what to do about it.</span></h1>
+    <p class="results-subline">
+      Audit for <span class="results-name-highlight">${escHtml(firstName)}</span>
+      ${state.businessName !== 'your business' ? `at <span class="results-name-highlight">${escHtml(state.businessName)}</span>` : ''}
+      &nbsp;·&nbsp; ${escHtml(state.businessType)} &nbsp;·&nbsp; ${escHtml(state.revenueRange)}
+    </p>
+
+    <!-- Section 1: Score -->
+    <div class="section-label">01 — Ops Health Score</div>
+    <div class="score-section">
+      <div class="score-display">
+        <div class="score-big">${total}</div>
+        <div class="score-meta">
+          <div class="score-denom">/ 25</div>
+          <div class="score-label-badge ${getBadgeClass(label)}">${label}</div>
+        </div>
+      </div>
+
+      <div class="gauge-track">
+        <div class="gauge-fill" style="width:0%;background:${color};" id="gauge-fill-anim"></div>
+      </div>
+
+      <div class="lens-scores-grid">
+        ${LENSES.map((lens, i) => {
+          const avg = lensAvg(i);
+          const sc = scoreClass(avg);
+          return `
+            <div class="lens-score-card">
+              <div class="lsc-name">${lens.name}</div>
+              <div class="lsc-score score-${sc}">${avg.toFixed(1)}</div>
+              <div class="lsc-bar bg-${sc}"></div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Section 2: Real Problem -->
+    <div class="section-label">02 — The Real Problem</div>
+    <div class="problem-section">
+      <p class="problem-text">${getRealProblemCopy(sorted)}</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Section 3: Priority Fix List -->
+    <div class="section-label">03 — Priority Fix List</div>
+    <div class="priorities-section">
+      ${priorityCards}
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Section 4: 90-Day Roadmap -->
+    <div class="section-label">04 — Your 90-Day Roadmap</div>
+    <div class="roadmap-section">
+      <div class="roadmap-grid">
+        <div class="roadmap-card">
+          <div class="rm-month">Month 1</div>
+          <div class="rm-theme">Stabilize</div>
+          <ul class="rm-items">
+            ${roadmapMonth1.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="roadmap-card">
+          <div class="rm-month">Month 2</div>
+          <div class="rm-theme">Systematize</div>
+          <ul class="rm-items">
+            ${roadmapMonth2.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="roadmap-card">
+          <div class="rm-month">Month 3</div>
+          <div class="rm-theme">Scale</div>
+          <ul class="rm-items">
+            ${roadmapMonth3.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Section 5: Automation Summary -->
+    <div class="section-label">05 — Automation Time Savings</div>
+    <div class="automation-section">
+      <p class="auto-intro">If you automated the right processes in your business, here's what you'd get back — based on your specific weak areas:</p>
+      <table class="auto-table">
+        <thead>
+          <tr>
+            <th>Process</th>
+            <th>Status</th>
+            <th>Automatable With</th>
+            <th>Time Saved</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${autoRows}
+        </tbody>
+      </table>
+      <div class="auto-total">
+        <span class="auto-total-label">Total estimated time recovered</span>
+        <span>
+          <span class="auto-total-hours">${totalSavingsLow}–${totalSavingsHigh}</span>
+          <span class="auto-total-sub">hrs/week</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Section 6: CTA -->
+    <div class="cta-section">
+      <h2 class="cta-headline">Want us to build<br>this for you?</h2>
+      <p class="cta-body">We just showed you what's broken. We build the systems, automations, and AI infrastructure that fix it — so you stop being the bottleneck in your own business.</p>
+      <div class="cta-buttons">
+        <a href="${CALENDLY}" target="_blank" class="btn-primary large">
+          Book Your Free Operations Diagnostic →
+        </a>
+        <span class="cta-secondary-text">30 minutes. No pitch. Just clarity.</span>
+      </div>
+
+      <div class="cta-print-row">
+        <span>Want a copy of this report?</span>
+        <button class="btn-secondary" onclick="window.print()">
+          🖨 Print / Save as PDF
+        </button>
+      </div>
+    </div>
+
+    <div class="results-footer">
+      Clairen Haus Ops Audit &nbsp;·&nbsp; Powered by Clairen Haus
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  // Animate gauge
+  setTimeout(() => {
+    const gf = document.getElementById('gauge-fill-anim');
+    if (gf) gf.style.width = gaugePct + '%';
+  }, 200);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ROADMAP CONTENT (DYNAMIC)
+═══════════════════════════════════════════════════════════ */
+function getRoadmapMonth1(weakestLens) {
+  const map = {
+    Capture: [
+      'Set up or clean up your CRM',
+      'Map and tag all active lead sources',
+      'Build a 3-step follow-up sequence',
+      'Test lead intake flow end-to-end',
+    ],
+    Conversion: [
+      'Document your current sales steps',
+      'Build a 5-touch proposal follow-up sequence',
+      'Add a close-rate tracker',
+      'Identify top 3 deal stall points',
+    ],
+    Delivery: [
+      'Document your onboarding process',
+      'Build templates for top 3 deliverables',
+      'Set up a project tracker',
+      'Define communication cadence with clients',
+    ],
+    Retention: [
+      'Build a post-project check-in sequence',
+      'Add referral ask to close flow',
+      'Segment past clients for re-engagement',
+      'Set quarterly client review touchpoints',
+    ],
+    Infrastructure: [
+      'Audit your current tool stack',
+      'Identify 3 biggest manual handoffs',
+      'Automate at least one key workflow',
+      'Build a weekly operating cadence',
+    ],
+  };
+  return map[weakestLens] || map['Delivery'];
+}
+
+function getRoadmapMonth2(secondLens) {
+  const map = {
+    Capture: [
+      'Add lead scoring to your CRM',
+      'Build nurture email sequence',
+      'Automate lead source tracking',
+      'Review and tighten follow-up cadence',
+    ],
+    Conversion: [
+      'Build out full sales playbook',
+      'Automate proposal follow-up',
+      'Add contract and payment automation',
+      'Review and improve close rate monthly',
+    ],
+    Delivery: [
+      'Build SOP library for delivery',
+      'Automate onboarding sequence',
+      'Create client-facing project portal',
+      'Install proactive communication triggers',
+    ],
+    Retention: [
+      'Launch 90-day check-in automation',
+      'Build referral program',
+      'Send re-engagement campaign to past clients',
+      'Track repeat revenue as a KPI',
+    ],
+    Infrastructure: [
+      'Connect all key tools via automation',
+      'Eliminate manual data entry tasks',
+      'Set up reporting dashboard',
+      'Review weekly operating rhythm',
+    ],
+  };
+  return map[secondLens] || map['Delivery'];
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════════════════ */
+function getBadgeClass(label) {
+  if (label === 'Critical')  return 'badge-critical';
+  if (label === 'Needs Work') return 'badge-needs';
+  if (label === 'Functional') return 'badge-functional';
+  return 'badge-strong';
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>

@@ -5,118 +5,248 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Michelle Robinson | Clairen Haus</title>
   <meta name="description" content="Michelle Robinson — Systems, Strategy, Structure. Built to Run." />
-
-  <!--
-    EDIT THESE LINKS:
-    Replace the # values below with your real URLs.
-  -->
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --page-bg: #000;
-      --max-width: 1024px;
+      --bg: #0A0806;
+      --s1: #141009;
+      --orange: #FF6B2B;
+      --orange2: #FF9A5C;
+      --gold: #FFB830;
+      --white: #F7F2EC;
+      --muted: #A89F94;
+      --faint: rgba(247,242,236,0.08);
+      --display: 'Plus Jakarta Sans', sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      margin: 0;
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--display);
       min-height: 100vh;
-      background: var(--page-bg);
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      font-family: Arial, Helvetica, sans-serif;
     }
 
-    .card {
-      position: relative;
+    .page {
       width: 100%;
-      max-width: var(--max-width);
+      max-width: 480px;
+      padding-bottom: 56px;
     }
 
-    .card-art {
-      display: block;
+    /* Photo */
+    .hero {
       width: 100%;
-      height: auto;
-      pointer-events: none;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    .hotspot {
-      position: absolute;
-      display: block;
-      border-radius: 999px;
-      text-indent: -9999px;
+      aspect-ratio: 3 / 4;
       overflow: hidden;
-      z-index: 2;
+      position: relative;
     }
 
-    .hotspot:focus-visible {
-      outline: 3px solid #ff9700;
-      outline-offset: 3px;
-      text-indent: 0;
-      color: #fff;
-      background: rgba(255,151,0,.25);
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+    }
+
+    /* Profile */
+    .profile {
+      padding: 0 24px 8px;
+      margin-top: -64px;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .profile h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .profile .tagline {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--orange2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      font-weight: 700;
+      gap: 0.5rem;
     }
 
-    /* Button link areas — based on the 1024 x 1536 graphic */
-    .btn-1  { left: 4.9%; top: 31.6%; width: 31.7%; height: 3.6%; }
-    .btn-2  { left: 4.9%; top: 35.9%; width: 31.7%; height: 3.6%; }
-    .btn-3  { left: 4.9%; top: 40.2%; width: 31.7%; height: 3.6%; }
-    .btn-4  { left: 4.9%; top: 44.5%; width: 31.7%; height: 3.6%; }
-    .btn-5  { left: 4.9%; top: 48.8%; width: 31.7%; height: 3.6%; }
-    .btn-6  { left: 4.9%; top: 53.1%; width: 31.7%; height: 3.6%; }
-    .btn-7  { left: 4.9%; top: 57.4%; width: 31.7%; height: 3.6%; }
-    .btn-8  { left: 4.9%; top: 61.7%; width: 31.7%; height: 3.6%; }
-    .btn-9  { left: 4.9%; top: 66.0%; width: 31.7%; height: 3.6%; }
-    .btn-10 { left: 4.9%; top: 70.3%; width: 31.7%; height: 3.6%; }
-    .btn-11 { left: 4.9%; top: 74.6%; width: 31.7%; height: 3.6%; }
-    .btn-12 { left: 4.9%; top: 78.9%; width: 31.7%; height: 3.6%; }
+    .profile .tagline::before,
+    .profile .tagline::after {
+      content: '';
+      width: 18px;
+      height: 1.5px;
+      background: var(--orange2);
+    }
 
-    .qr { left: 66.5%; top: 84.9%; width: 26.4%; height: 8.0%; border-radius: 18px; }
+    /* Links */
+    .links {
+      padding: 28px 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-    @media (max-width: 640px) {
-      body {
-        align-items: flex-start;
-      }
+    .btn {
+      display: block;
+      padding: 15px 20px;
+      border-radius: 2px;
+      text-decoration: none;
+      text-align: center;
+      font-family: var(--display);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: opacity 0.2s, border-color 0.2s;
+    }
 
-      .card {
-        width: 100vw;
-      }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--orange), var(--orange2));
+      color: #fff;
+      box-shadow: 0 0 28px rgba(255,107,43,0.22);
+    }
+
+    .btn-primary:hover { opacity: 0.88; }
+
+    .btn-ghost {
+      border: 1.5px solid var(--faint);
+      color: var(--white);
+      background: transparent;
+    }
+
+    .btn-ghost:hover { border-color: rgba(247,242,236,0.35); }
+
+    /* Divider */
+    .divider {
+      margin: 20px 24px 0;
+      height: 1px;
+      background: var(--faint);
+    }
+
+    /* Socials */
+    .socials {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 20px 24px 0;
+    }
+
+    .btn-social {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 8px;
+      border: 1px solid var(--faint);
+      border-radius: 2px;
+      color: var(--muted);
+      text-decoration: none;
+      text-align: center;
+      font-family: var(--display);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      background: var(--s1);
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-social:hover {
+      color: var(--white);
+      border-color: rgba(247,242,236,0.3);
+    }
+
+    /* QR */
+    .qr-section {
+      padding: 32px 24px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .qr-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    #qrcode {
+      border-radius: 6px;
+      overflow: hidden;
+      line-height: 0;
     }
   </style>
 </head>
-
 <body>
-  <main class="card" aria-label="Michelle Robinson link page">
-    <img class="card-art" src="/michelle/michelle-card-bg.png" alt="" width="1024" height="1536" decoding="async" fetchpriority="high" />
-    <a class="hotspot btn-1" href="https://clairenhaus.com" target="_blank" rel="noopener">Clairen Haus</a>
-    <a class="hotspot btn-2" href="https://clockoutcashin.com" target="_blank" rel="noopener">Clock Out Cash In</a>
+  <main class="page">
 
-    <a class="hotspot btn-3" href="https://calendly.com/clairenhaus/operations-diagnostic" target="_blank" rel="noopener">Book a Call</a>
+    <div class="hero">
+      <img src="/michelle/michelle-photo.png" alt="Michelle Robinson" width="480" height="640" />
+    </div>
 
-    <a class="hotspot btn-4" href="/michelle/Michelle-Robinson.vcf" download="Michelle-Robinson.vcf">Add Me to Your Phone</a>
+    <div class="profile">
+      <h1>Michelle Robinson</h1>
+      <p class="tagline">Systems · Strategy · Structure</p>
+    </div>
 
-    <a class="hotspot btn-5" href="https://clairenhaus.com/starter" target="_blank" rel="noopener">Free Resource</a>
+    <div class="links">
+      <a class="btn btn-primary" href="https://calendly.com/clairenhaus/operations-diagnostic" target="_blank" rel="noopener">Book a Call</a>
+      <a class="btn btn-primary" href="https://clairenhaus.com/starter" target="_blank" rel="noopener">Free Resource</a>
+      <a class="btn btn-ghost" href="https://clairenhaus.com" target="_blank" rel="noopener">Clairen Haus</a>
+      <a class="btn btn-ghost" href="https://clockoutcashin.com" target="_blank" rel="noopener">Clock Out Cash In</a>
+      <a class="btn btn-ghost" href="/michelle/Michelle-Robinson.vcf" download="Michelle-Robinson.vcf">Add Me to Your Phone</a>
+      <a class="btn btn-ghost" href="tel:+17708788966">Call Michelle</a>
+      <a class="btn btn-ghost" href="mailto:mnicolerobinsonis@gmail.com">Email Michelle</a>
+    </div>
 
-    <a class="hotspot btn-6" href="tel:+17708788966">Call Michelle</a>
+    <div class="divider"></div>
 
-    <a class="hotspot btn-7" href="https://www.instagram.com/clairenhaus" target="_blank" rel="noopener">Instagram</a>
-    <a class="hotspot btn-8" href="https://www.threads.com/@clairenhaus?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener">Threads</a>
-    <a class="hotspot btn-9" href="https://www.linkedin.com/in/michelle-clairenhaus/" target="_blank" rel="noopener">LinkedIn</a>
+    <div class="socials">
+      <a class="btn-social" href="https://www.instagram.com/clairenhaus" target="_blank" rel="noopener">Instagram</a>
+      <a class="btn-social" href="https://www.threads.com/@clairenhaus?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener">Threads</a>
+      <a class="btn-social" href="https://www.linkedin.com/in/michelle-clairenhaus/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
 
-    <a class="hotspot btn-12" href="mailto:mnicolerobinsonis@gmail.com">Email Michelle</a>
+    <div class="qr-section">
+      <p class="qr-label">Scan to visit this page</p>
+      <div id="qrcode"></div>
+    </div>
 
-    <a class="hotspot qr" href="/michelle/Michelle-Robinson.vcf" download="Michelle-Robinson.vcf">Scan and Save</a>
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script>
+    QRCode.toCanvas(document.createElement('canvas'), 'https://clairenhaus.com/michelle', {
+      width: 160,
+      margin: 2,
+      color: { dark: '#F7F2EC', light: '#0A0806' }
+    }, function(err, canvas) {
+      if (!err) document.getElementById('qrcode').appendChild(canvas);
+    });
+  </script>
 </body>
 </html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Diagnostic: Modern Roofing | Clairen Haus</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: #FAFAFA; color: #1A1A1A; line-height: 1.6; }
+.report { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+/* Header */
+.rpt-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+.rpt-brand { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: #080C14; letter-spacing: 0.5px; }
+.rpt-date { font-size: 13px; color: #888; }
+.rpt-hero { margin-bottom: 2.5rem; }
+.rpt-hero h1 { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; color: #080C14; line-height: 1.2; margin-bottom: 6px; }
+.rpt-hero .rpt-for { font-size: 18px; color: #00B8D4; font-weight: 500; margin-bottom: 4px; }
+.rpt-hero .rpt-url { font-size: 14px; color: #888; }
+
+/* Divider */
+.div { height: 1px; background: #E8E8E8; margin: 2rem 0; }
+
+/* Scores */
+.scores-label { font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+.scores { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
+.sc { text-align: center; padding: 20px 12px; border-radius: 12px; }
+.sc-bad { background: #FEF2F2; }
+.sc-mid { background: #FFFBEB; }
+.sc-good { background: #F0FDF4; }
+.sc .sc-val { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 700; line-height: 1; }
+.sc-bad .sc-val { color: #DC2626; }
+.sc-mid .sc-val { color: #D97706; }
+.sc-good .sc-val { color: #16A34A; }
+.sc .sc-label { font-size: 12px; color: #666; margin-top: 6px; }
+.sc .sc-grade { font-size: 11px; font-weight: 600; margin-top: 2px; }
+.sc-bad .sc-grade { color: #DC2626; }
+.sc-mid .sc-grade { color: #D97706; }
+.sc-good .sc-grade { color: #16A34A; }
+.scores-note { font-size: 12px; color: #AAA; margin-bottom: 0; }
+
+/* Headline stat */
+.headline { background: #FEF2F2; border-left: 4px solid #DC2626; border-radius: 0 12px 12px 0; padding: 20px 24px; margin: 2rem 0; }
+.headline .hl-number { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 700; color: #DC2626; line-height: 1; }
+.headline .hl-unit { font-size: 18px; color: #DC2626; font-weight: 500; }
+.headline .hl-desc { font-size: 15px; color: #7F1D1D; margin-top: 6px; line-height: 1.5; }
+
+/* Metrics strip */
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 1.5rem 0; }
+.metric { background: #F5F5F5; border-radius: 10px; padding: 14px; text-align: center; }
+.metric .m-val { font-size: 18px; font-weight: 600; }
+.metric .m-val.m-bad { color: #DC2626; }
+.metric .m-val.m-mid { color: #D97706; }
+.metric .m-label { font-size: 11px; color: #888; margin-top: 2px; }
+
+/* Issues */
+.issues-header { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 600; color: #080C14; margin-bottom: 16px; }
+.issue { border-bottom: 1px solid #F0F0F0; padding: 16px 0; }
+.issue:last-child { border-bottom: none; }
+.issue-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.sev { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px; }
+.sev-high { background: #FEF2F2; color: #991B1B; }
+.sev-med { background: #FFFBEB; color: #92400E; }
+.issue h3 { font-size: 15px; font-weight: 600; color: #1A1A1A; }
+.issue p { font-size: 14px; color: #555; line-height: 1.6; }
+
+/* Revenue box */
+.rev { background: #080C14; border-radius: 16px; padding: 28px; margin: 2rem 0; color: #EEF0F5; }
+.rev h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #EEF0F5; }
+.rev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.rev-item .rev-label { font-size: 13px; color: #8892A4; margin-bottom: 4px; }
+.rev-item .rev-val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; color: #00E5FF; }
+.rev-item .rev-note { font-size: 12px; color: #4A5568; margin-top: 4px; }
+
+/* Fixed section */
+.fixed h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 600; color: #080C14; margin-bottom: 16px; }
+.fix-item { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+.fix-check { width: 22px; height: 22px; background: #F0FDF4; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.fix-check svg { width: 12px; height: 12px; }
+.fix-text { font-size: 14px; color: #555; line-height: 1.5; }
+
+/* CTAs */
+.ctas { margin: 2.5rem 0; }
+.cta { border: 1px solid #E8E8E8; border-radius: 14px; padding: 24px; margin-bottom: 14px; transition: border-color 0.2s; }
+.cta:hover { border-color: #CCC; }
+.cta.featured { border: 2px solid #00B8D4; background: #F8FFFE; }
+.cta .cta-tag { font-size: 11px; font-weight: 600; color: #00B8D4; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.cta h3 { font-size: 16px; font-weight: 600; color: #080C14; margin-bottom: 6px; }
+.cta p { font-size: 14px; color: #666; line-height: 1.5; margin-bottom: 14px; }
+.cta-btn { display: inline-block; padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+.cta-btn-primary { background: #080C14; color: #EEF0F5; }
+.cta-btn-primary:hover { background: #1A2236; }
+.cta-btn-secondary { background: #F5F5F5; color: #1A1A1A; }
+.cta-btn-secondary:hover { background: #EBEBEB; }
+
+/* Footer */
+.rpt-footer { text-align: center; padding: 2rem 0; border-top: 1px solid #E8E8E8; margin-top: 2rem; }
+.rpt-footer .f-brand { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: #080C14; }
+.rpt-footer .f-sub { font-size: 13px; color: #888; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="report">
+
+<div class="rpt-bar">
+  <span class="rpt-brand">CLAIREN HAUS</span>
+  <span class="rpt-date">June 9, 2026</span>
+</div>
+
+<div class="rpt-hero">
+  <div class="rpt-for">Modern Roofing</div>
+  <h1>Your website is losing you customers.</h1>
+  <div class="rpt-url">modernroofingusa.com &middot; Marietta, GA</div>
+</div>
+
+<p style="font-size: 15px; color: #555; margin-bottom: 0;">We ran a full diagnostic on your website using the same tools Google uses to evaluate your site for search rankings. Here is what we found.</p>
+
+<div class="div"></div>
+
+<div class="scores-label">Overall scores (mobile)</div>
+<div class="scores">
+  <div class="sc sc-bad">
+    <div class="sc-val">40</div>
+    <div class="sc-label">Performance</div>
+    <div class="sc-grade">Poor</div>
+  </div>
+  <div class="sc sc-good">
+    <div class="sc-val">100</div>
+    <div class="sc-label">SEO</div>
+    <div class="sc-grade">Good</div>
+  </div>
+  <div class="sc sc-mid">
+    <div class="sc-val">85</div>
+    <div class="sc-label">Accessibility</div>
+    <div class="sc-grade">Needs work</div>
+  </div>
+  <div class="sc sc-good">
+    <div class="sc-val">96</div>
+    <div class="sc-label">Best practices</div>
+    <div class="sc-grade">Good</div>
+  </div>
+</div>
+<p class="scores-note">Scores from Google PageSpeed Insights (Lighthouse). Scale: 0-49 poor, 50-89 needs work, 90-100 good.</p>
+
+<div class="headline">
+  <span class="hl-number">15.5</span><span class="hl-unit"> seconds</span>
+  <p class="hl-desc">That is how long your website takes to show its main content to a visitor on a mobile phone. The industry benchmark is under 2.5 seconds. Yours is over six times that.</p>
+</div>
+
+<div class="metrics">
+  <div class="metric">
+    <div class="m-val m-bad">6.6s</div>
+    <div class="m-label">First paint</div>
+  </div>
+  <div class="metric">
+    <div class="m-val m-bad">15.5s</div>
+    <div class="m-label">Main content</div>
+  </div>
+  <div class="metric">
+    <div class="m-val m-bad">16.8s</div>
+    <div class="m-label">Interactive</div>
+  </div>
+  <div class="metric">
+    <div class="m-val m-bad">8.1 MB</div>
+    <div class="m-label">Page weight</div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<div class="issues-header">What is actually wrong</div>
+
+<div class="issue">
+  <div class="issue-top">
+    <span class="sev sev-high">Critical</span>
+    <h3>Your site takes 15.5 seconds to show content on mobile</h3>
+  </div>
+  <p>When a homeowner searches "roofing company near me" after a storm, they are on their phone. Google's data shows 53% of mobile visitors leave after 3 seconds. Your site takes five times that to show its first meaningful content. By the time your homepage appears, that homeowner has already tapped the back button and called your competitor. You are a GAF Master Elite contractor expanding into three states. Your site should reflect that.</p>
+</div>
+
+<div class="issue">
+  <div class="issue-top">
+    <span class="sev sev-high">Critical</span>
+    <h3>8.1 MB page weight, almost entirely unoptimized images</h3>
+  </div>
+  <p>Your homepage weighs 8.1 megabytes. The top-performing audit flag is "Improve image delivery." Your photos of completed roofing jobs are high quality, but they are being served at full resolution to every device, including phones on cellular data. Properly compressing, resizing, and lazy-loading these images would cut page weight by 70-80% without any visible quality loss.</p>
+</div>
+
+<div class="issue">
+  <div class="issue-top">
+    <span class="sev sev-high">Critical</span>
+    <h3>758ms of main thread blocking</h3>
+  </div>
+  <p>Your site's JavaScript blocks the browser for over three-quarters of a second at a time. During these moments, the page appears loaded but nothing responds to taps. A homeowner trying to tap your phone number or "Get a Free Quote" button gets no response and assumes the site is broken. This is the second-largest contributor to your poor performance score.</p>
+</div>
+
+<div class="issue">
+  <div class="issue-top">
+    <span class="sev sev-high">Critical</span>
+    <h3>16.8 seconds to become interactive</h3>
+  </div>
+  <p>Time to Interactive measures when a visitor can actually use your site: tap buttons, fill out forms, click phone numbers. At 16.8 seconds, your site is effectively frozen for the first 17 seconds of every mobile visit. The benchmark is under 3.8 seconds.</p>
+</div>
+
+<div class="issue">
+  <div class="issue-top">
+    <span class="sev sev-med">Important</span>
+    <h3>Unused CSS and JavaScript</h3>
+  </div>
+  <p>The site loads stylesheets and scripts that are not used on the homepage. This adds unnecessary weight and delays rendering. Removing or deferring this unused code is one of the fastest fixes available.</p>
+</div>
+
+<div class="issue">
+  <div class="issue-top">
+    <span class="sev sev-med">Important</span>
+    <h3>No main landmark for accessibility</h3>
+  </div>
+  <p>The site is missing a main content landmark, which affects screen reader users and contributes to the accessibility score of 85. This is a straightforward HTML fix that also signals to Google that the site follows modern web standards.</p>
+</div>
+
+<div class="rev">
+  <h2>What this is likely costing you</h2>
+  <div class="rev-grid">
+    <div class="rev-item">
+      <div class="rev-label">Estimated mobile visitors lost monthly</div>
+      <div class="rev-val">50-80</div>
+      <div class="rev-note">Based on excess bounce rate above 3-second threshold</div>
+    </div>
+    <div class="rev-item">
+      <div class="rev-label">Estimated annual revenue at risk</div>
+      <div class="rev-val">$96K-$240K</div>
+      <div class="rev-note">At avg roof replacement value of $12K, 20% close rate</div>
+    </div>
+  </div>
+</div>
+
+<p style="font-size: 13px; color: #888; margin: -0.5rem 0 2rem;">Revenue estimate based on industry average roof replacement value in Metro Atlanta. Your actual numbers may be higher or lower depending on your mix of repairs vs. full replacements.</p>
+
+<div class="div"></div>
+
+<div class="fixed">
+  <h2>What "fixed" looks like</h2>
+
+  <div class="fix-item">
+    <div class="fix-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="fix-text">Page loads under 2.5 seconds on mobile. No more blank screens. No more lost visitors.</div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="fix-text">Page weight under 1 MB. Optimized images, compressed code, lazy loading. Same visual quality, 80% less weight.</div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="fix-text">Click-to-call button above the fold on every page. Storm damage inquiries convert in one tap.</div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="fix-text">Your 300 reviews at 4.9 stars displayed prominently. Social proof where it converts, not buried on Google Maps.</div>
+  </div>
+
+  <div class="fix-item">
+    <div class="fix-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="fix-text">Performance score above 90. Google rewards fast sites with better search placement. Slow sites get buried.</div>
+  </div>
+</div>
+
+<div class="div"></div>
+
+<div class="ctas">
+
+  <div class="cta featured">
+    <div class="cta-tag">Recommended</div>
+    <h3>Website rebuild + managed operations</h3>
+    <p>We rebuild your site from the ground up for speed, mobile, and conversions. Then we stay in the system and manage your intake, scheduling, follow-up, and client communication. The ops staff you do not have to hire.</p>
+    <a href="#book" class="cta-btn cta-btn-primary">Book a 30-minute discovery call</a>
+  </div>
+
+  <div class="cta">
+    <h3>Website rebuild only</h3>
+    <p>Professional site built for speed, mobile, and lead conversion. Includes performance optimization, review integration, click-to-call on every page, and SEO best practices. One-time build, you own it.</p>
+    <a href="#book" class="cta-btn cta-btn-secondary">Learn more</a>
+  </div>
+
+  <div class="cta">
+    <h3>Start with a smart agent</h3>
+    <p>Not ready for a rebuild? Start with an automated system that handles your missed calls and inquiries while your team is on the job. No website changes required.</p>
+    <a href="#book" class="cta-btn cta-btn-secondary">See how it works</a>
+  </div>
+
+</div>
+
+<div class="rpt-footer">
+  <div class="f-brand">CLAIREN HAUS</div>
+  <div class="f-sub">clairenhaus.com &middot; Atlanta, GA &middot; Michelle Robinson, Founder</div>
+</div>
+
+</div>
+</body>
+</html>

@@ -145,55 +145,57 @@ body { font-family: 'DM Sans', -apple-system, sans-serif; background: #FAFAFA; c
 <p class="scores-note">Scores from Google PageSpeed Insights (Lighthouse). Scale: 0-49 poor, 50-89 needs work, 90-100 good.</p>
 
 <div class="headline">
-  <span class="hl-number">40.6</span><span class="hl-unit"> megabytes</span>
-  <p class="hl-desc">That is how much data your website forces every visitor to download. A well-built site serving the same content would weigh under 2 MB. Yours is 20 times that.</p>
+  <span class="hl-number">53</span><span class="hl-unit"> out of 100</span>
+  <p class="hl-desc">That is your Google Performance Score on mobile. Google uses this score to evaluate how well your site performs for search rankings. Sites scoring below 50 are rated "Poor" and yours is barely above that line. Your competitors scoring 80+ are being placed above you when someone searches "HVAC repair near me."</p>
 </div>
 
 <div class="metrics">
   <div class="metric">
-    <div class="m-val m-mid">2.3s</div>
-    <div class="m-label">First paint</div>
-  </div>
-  <div class="metric">
-    <div class="m-val m-bad">4.7s</div>
-    <div class="m-label">Main content</div>
-  </div>
-  <div class="metric">
-    <div class="m-val m-bad">23.3s</div>
-    <div class="m-label">Interactive</div>
+    <div class="m-val m-bad">53/100</div>
+    <div class="m-label">Performance</div>
   </div>
   <div class="metric">
     <div class="m-val m-bad">40.6 MB</div>
     <div class="m-label">Page weight</div>
   </div>
+  <div class="metric">
+    <div class="m-val m-bad">0.154</div>
+    <div class="m-label">Layout shift</div>
+  </div>
+  <div class="metric">
+    <div class="m-val m-mid">73/100</div>
+    <div class="m-label">Best practices</div>
+  </div>
 </div>
+
+<p style="font-size: 12px; color: #888; margin-top: 8px;">Verify this score yourself: visit <a href="https://pagespeed.web.dev/analysis?url=https://georgiaroofadvisors.com" style="color: #00B8D4;">pagespeed.web.dev</a> and enter your URL. Select "Mobile" to see these results.</p>
 
 <div class="div"></div>
 
-<div class="issues-header">What is actually wrong</div>
+<div class="issues-header">What is dragging your score down</div>
 
 <div class="issue">
   <div class="issue-top">
     <span class="sev sev-high">Critical</span>
-    <h3>40.6 MB page weight, likely from auto-playing drone footage</h3>
+    <h3>Google scores your mobile performance at 53 out of 100</h3>
   </div>
-  <p>Your homepage weighs 40.6 megabytes. That is over 20 times the size of a properly built site. The most likely cause is uncompressed video content loading automatically on every page visit. Every visitor, whether they are on WiFi or cellular data, is forced to download over 40 MB before they can interact with your site. On a typical mobile connection, that takes 15-20 seconds. Many visitors on limited data plans will see their browser stall entirely.</p>
+  <p>Google uses this score as a ranking signal. When a homeowner searches "roofing company near me" or "roof repair Marietta," Google evaluates which sites to place first. Your score of 53 puts you in the "Needs Work" range, just above the "Poor" threshold of 50. Competitors scoring 80+ are being favored in local results. You have 497 reviews and a FORTIFIED Roof certification. That credibility should be working for you in search, not being undermined by site performance.</p>
 </div>
 
 <div class="issue">
   <div class="issue-top">
     <span class="sev sev-high">Critical</span>
-    <h3>23.3 seconds to become interactive</h3>
+    <h3>40.6 MB page weight</h3>
   </div>
-  <p>Time to Interactive measures when a visitor can actually use your site. At 23.3 seconds, your phone number, "Get a Quote" button, and contact form are visible but do not respond to taps for nearly half a minute. The industry benchmark is under 3.8 seconds. You are six times over.</p>
+  <p>Your homepage forces every visitor to download 40.6 megabytes of data. A well-optimized site serving the same content would weigh under 2 MB. Yours is 20 times that. The most likely cause is uncompressed video content (likely drone footage) loading automatically on every visit. This is the single largest factor in your low performance score. The footage can be compressed, thumbnailed, or loaded on demand without losing the visual impact.</p>
 </div>
 
 <div class="issue">
   <div class="issue-top">
     <span class="sev sev-high">Critical</span>
-    <h3>Cumulative Layout Shift: 0.154 (content jumping on screen)</h3>
+    <h3>Cumulative Layout Shift: 0.154</h3>
   </div>
-  <p>As your page loads, elements shift and jump around the screen. A CLS score above 0.1 is rated poor by Google. Yours is 0.154. This means a visitor trying to tap a button may accidentally tap something else because the layout shifted at the moment they reached for it. It is also a Google ranking factor. Sites with high CLS get penalized in search results.</p>
+  <p>As your page loads, elements shift and jump around the screen. Google measures this as CLS and rates anything above 0.1 as "Poor." Yours is 0.154. This is both a ranking factor and a usability issue. On mobile, a visitor trying to tap your phone number could accidentally tap something else because the layout moved at the moment they reached for it. Google penalizes high CLS directly in search rankings.</p>
 </div>
 
 <div class="issue">
@@ -201,15 +203,15 @@ body { font-family: 'DM Sans', -apple-system, sans-serif; background: #FAFAFA; c
     <span class="sev sev-med">Important</span>
     <h3>Links are not crawlable</h3>
   </div>
-  <p>Some links on your site cannot be followed by Google's crawler. This means pages that should be indexed and showing up in search results may be invisible to Google entirely. For a company with 497 reviews and FORTIFIED Roof certification, every page should be discoverable.</p>
+  <p>Some links on your site cannot be followed by Google's crawler. This means pages that should be indexed and appearing in search results may be invisible to Google. For a company with 497 reviews and FORTIFIED Roof certification, every page should be discoverable.</p>
 </div>
 
 <div class="issue">
   <div class="issue-top">
     <span class="sev sev-med">Important</span>
-    <h3>Best Practices score: 73</h3>
+    <h3>Best Practices score: 73 out of 100</h3>
   </div>
-  <p>Your Best Practices score is the lowest in this category across our analysis. This reflects issues with how the site handles browser APIs, security headers, and modern web standards. It signals to both Google and visitors that the site has not been maintained to current standards.</p>
+  <p>This is the lowest Best Practices score across our analysis. Google flags issues with how the site handles browser APIs, security headers, and modern web standards. A low Best Practices score signals to Google that the site has not been maintained to current standards, which can compound the ranking penalty from the low performance score.</p>
 </div>
 
 <div class="issue">
@@ -217,26 +219,26 @@ body { font-family: 'DM Sans', -apple-system, sans-serif; background: #FAFAFA; c
     <span class="sev sev-med">Important</span>
     <h3>Contrast ratio failures</h3>
   </div>
-  <p>Text on several sections of your site does not meet minimum contrast requirements. This makes content difficult to read for visitors with visual impairments and on screens in direct sunlight, which is common for homeowners inspecting roof damage from their driveway.</p>
+  <p>Text on several sections does not meet minimum contrast requirements, contributing to the accessibility score of 88. Google evaluates accessibility as part of its overall site quality assessment. This is also a practical issue for homeowners viewing your site on their phone in direct sunlight while inspecting roof damage.</p>
 </div>
 
 <div class="rev">
   <h2>What this is likely costing you</h2>
   <div class="rev-grid">
     <div class="rev-item">
-      <div class="rev-label">Estimated mobile visitors lost monthly</div>
-      <div class="rev-val">45-70</div>
-      <div class="rev-note">Based on excess bounce rate above 3-second threshold</div>
+      <div class="rev-label">Google Performance Score</div>
+      <div class="rev-val">53/100</div>
+      <div class="rev-note">Below 50 is rated "Poor" by Google</div>
     </div>
     <div class="rev-item">
-      <div class="rev-label">Estimated annual revenue at risk</div>
-      <div class="rev-val">$86K-$168K</div>
-      <div class="rev-note">At avg roof replacement value of $12K, 20% close rate</div>
+      <div class="rev-label">Search visibility impact</div>
+      <div class="rev-val">Significant</div>
+      <div class="rev-note">Competitors at 80+ are favored in local results</div>
     </div>
   </div>
 </div>
 
-<p style="font-size: 13px; color: #888; margin: -0.5rem 0 2rem;">Revenue estimate based on industry average roof replacement value in Metro Atlanta. Your actual numbers may be higher or lower depending on your mix of repairs vs. full replacements.</p>
+<p style="font-size: 13px; color: #888; margin: -0.5rem 0 2rem;">Google has confirmed that page experience signals, including performance scores, are used as ranking factors. A score of 41 puts your site at a measurable disadvantage against competitors with optimized sites. At your average job value, even a small improvement in search placement can represent significant revenue.</p>
 
 <div class="div"></div>
 
@@ -245,7 +247,7 @@ body { font-family: 'DM Sans', -apple-system, sans-serif; background: #FAFAFA; c
 
   <div class="fix-item">
     <div class="fix-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <div class="fix-text">Page loads under 2.5 seconds on mobile. No more blank screens. No more lost visitors.</div>
+    <div class="fix-text">Performance score above 90. Google sees a fast, well-built site and rewards it with better placement in local search results.</div>
   </div>
 
   <div class="fix-item">
@@ -260,7 +262,7 @@ body { font-family: 'DM Sans', -apple-system, sans-serif; background: #FAFAFA; c
 
   <div class="fix-item">
     <div class="fix-check"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <div class="fix-text">Your 497 reviews and FORTIFIED Roof certification displayed prominently. Social proof and credentials where they convert.</div>
+    <div class="fix-text">Your 497 reviews and FORTIFIED Roof certification displayed prominently. Social proof where it converts, not buried on Google Maps.</div>
   </div>
 
   <div class="fix-item">
@@ -274,10 +276,10 @@ body { font-family: 'DM Sans', -apple-system, sans-serif; background: #FAFAFA; c
 <div class="ctas">
 
   <div class="cta featured">
-  <h3>Let's fix this.</h3>
-  <p>Whether it's the website, your backend operations, or both, it starts with a 30-minute conversation about what's costing you the most right now.</p>
-  <a href="https://calendly.com/clairenhaus/operations-diagnostic" class="cta-btn cta-btn-primary">Book a 30-minute call</a>
-</div>
+    <h3>Let's fix this.</h3>
+    <p>Whether it's the website, your backend operations, or both, it starts with a 30-minute conversation about what's costing you the most right now.</p>
+    <a href="https://calendly.com/clairenhaus/operations-diagnostic" class="cta-btn cta-btn-primary">Book a 30-minute call</a>
+  </div>
 
 </div>
 

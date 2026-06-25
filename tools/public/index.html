@@ -525,7 +525,15 @@ function rCalendar(){
 
   var bodyHtml='';
   if(isBusy){
-    bodyHtml='<div class="plat-empty"><div class="spinner" style="margin:0 auto 16px"></div><div class="plat-et">Writing your '+ap.label+' posts...</div><div class="plat-es">This takes about 30 seconds.</div></div>';
+    bodyHtml='<div class="plat-empty">'+
+      '<div class="spinner" style="margin:0 auto 16px"></div>'+
+      '<div class="plat-et">Writing your '+ap.label+' posts...</div>'+
+      '<div class="plat-es">Generating in two batches. This takes 60-90 seconds.<br>Do not close or refresh this tab.</div>'+
+      '<div style="margin-top:20px;max-width:320px;margin-left:auto;margin-right:auto">'+
+      '<div style="display:flex;justify-content:space-between;font-size:11px;color:#666677;margin-bottom:6px"><span>Batch 1: Days 1-15</span><span>Batch 2: Days 16-30</span></div>'+
+      '<div style="height:4px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden">'+
+      '<div id="gen-progress" style="height:100%;background:linear-gradient(90deg,#00C2B7,#4A6FFF);border-radius:4px;transition:width 1s ease;width:'+(S.genProgress||0)+'%"></div>'+
+      '</div></div></div>';
   } else if(!posts.length){
     bodyHtml='<div class="plat-empty">'+
       '<div class="plat-ico2">'+ap.icon+'</div>'+
@@ -648,7 +656,13 @@ function buildDP(post,platform,pillar){
 }
 
 function genPosts(pid){
-  S.genBusy[pid]=true; S.postErr[pid]=null; render();
+  S.genBusy[pid]=true; S.postErr[pid]=null; S.genProgress=5; render();
+
+  // Animate progress bar during generation
+  var progInterval=setInterval(function(){
+    var bar=document.getElementById('gen-progress');
+    if(bar&&S.genProgress<45){S.genProgress+=2;bar.style.width=S.genProgress+'%';}
+  },1500);
   var p=getPl(pid);
   var pillarLines='';
   for(var i=0;i<S.pillars.length;i++){
@@ -688,14 +702,20 @@ function genPosts(pid){
   }
 
   fetchBatch(1,15).then(function(batch1){
+    S.genProgress=50;
+    var bar=document.getElementById('gen-progress');
+    if(bar) bar.style.width='50%';
     return fetchBatch(16,30).then(function(batch2){
       return batch1.concat(batch2);
     });
   }).then(function(allPosts){
+    clearInterval(progInterval);
+    S.genProgress=100;
     S.posts[pid]=allPosts;
     S.genBusy[pid]=false;
     render();
   }).catch(function(e){
+    clearInterval(progInterval);
     S.genBusy[pid]=false;
     S.postErr[pid]=e.message||'Generation failed. Please try again.';
     render();

@@ -658,27 +658,41 @@ function genPosts(pid){
   var isIG=pid==='ig';
   var isShort=pid==='th'||pid==='x';
   var altField=isIG?',"alttext":"Descriptive alt text under 80 words."':'';
-  var prompt='You are a professional social media strategist. Create exactly 30 '+p.label+' posts for this business.\n\n'+
-    'BUSINESS: '+S.user.business+'\nINDUSTRY: '+S.ans.industry+'\nAUDIENCE: '+S.ans.audience+'\nCORE OFFER: '+S.ans.offer+'\nBRAND VOICE: '+S.ans.voice+'\nGOALS: '+(S.ans.goals||[]).join(', ')+'\n\n'+
-    'CONTENT PILLARS (exactly 6 posts each):\n'+pillarLines+'\n'+
-    'PLATFORM: '+p.label+'\nFORMATS: '+p.formats.join(', ')+'\nCHARACTER LIMIT: '+p.limit+' chars for content field\n\n'+
-    'Return ONLY valid JSON, no markdown:\n{"posts":[{"day":1,"pillar":"pillar_key","format":"format name","hook":"Attention-grabbing opener. 12 words max.","content":"Full post body. Under '+p.limit+' chars. '+(isShort?'Short and punchy.':'Include a clear call to action.')+' No em dashes.","hashtags":"'+(isShort?'3-5':'8-15')+' relevant hashtags"'+altField+'}]}\n\n'+
-    'REQUIREMENTS:\n- Exactly 30 posts, days 1 through 30.\n- Exactly 6 posts per pillar.\n- Rotate formats naturally.\n- Every post specific to '+S.user.business+', never generic.\n- No em dashes anywhere.\n- Week 1 (1-7): Establish and educate. Week 2 (8-14): Build trust. Week 3 (15-21): Authority. Week 4 (22-28): Conversion. Days 29-30: Final push.';
 
-  fetch('/api/claude',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:16000,messages:[{role:'user',content:prompt}]})
-  }).then(function(res){
-    if(!res.ok) throw new Error('API error '+res.status);
-    return res.json();
-  }).then(function(d){
-    if(d.error) throw new Error(d.error.message||'API error');
-    var txt='';
-    if(d.content){for(var i=0;i<d.content.length;i++){if(d.content[i].type==='text'){txt=d.content[i].text;break;}}}
-    if(!txt) throw new Error('Empty response');
-    var parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
-    S.posts[pid]=parsed.posts;
+  function makePrompt(startDay,endDay){
+    return 'You are a professional social media strategist. Create exactly '+(endDay-startDay+1)+' '+p.label+' posts for this business. Days '+startDay+' through '+endDay+' only.\n\n'+
+      'BUSINESS: '+S.user.business+'\nINDUSTRY: '+S.ans.industry+'\nAUDIENCE: '+S.ans.audience+'\nCORE OFFER: '+S.ans.offer+'\nBRAND VOICE: '+S.ans.voice+'\nGOALS: '+(S.ans.goals||[]).join(', ')+'\n\n'+
+      'CONTENT PILLARS:\n'+pillarLines+'\n'+
+      'PLATFORM: '+p.label+'\nFORMATS: '+p.formats.join(', ')+'\nCHARACTER LIMIT: '+p.limit+' chars for content field\n\n'+
+      'Return ONLY valid JSON, no markdown:\n{"posts":[{"day":'+startDay+',"pillar":"pillar_key","format":"format name","hook":"12 words max.","content":"Under '+p.limit+' chars. No em dashes.","hashtags":"'+(isShort?'3-5':'8-15')+' hashtags"'+altField+'}]}\n\n'+
+      'REQUIREMENTS:\n- Exactly '+(endDay-startDay+1)+' posts, days '+startDay+' to '+endDay+'.\n- Distribute pillars across these days.\n- Every post specific to '+S.user.business+'.\n- No em dashes anywhere.\n'+
+      (startDay===1?'- Days 1-7: Establish and educate. Days 8-15: Build trust.\n':'- Days 16-21: Authority. Days 22-28: Conversion. Days 29-30: Final push.\n');
+  }
+
+  function fetchBatch(startDay,endDay){
+    return fetch('/api/claude',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:8000,messages:[{role:'user',content:makePrompt(startDay,endDay)}]})
+    }).then(function(res){
+      if(!res.ok) throw new Error('API error '+res.status);
+      return res.json();
+    }).then(function(d){
+      if(d.error) throw new Error(d.error.message||'API error');
+      var txt='';
+      if(d.content){for(var i=0;i<d.content.length;i++){if(d.content[i].type==='text'){txt=d.content[i].text;break;}}}
+      if(!txt) throw new Error('Empty response');
+      var parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
+      return parsed.posts||[];
+    });
+  }
+
+  fetchBatch(1,15).then(function(batch1){
+    return fetchBatch(16,30).then(function(batch2){
+      return batch1.concat(batch2);
+    });
+  }).then(function(allPosts){
+    S.posts[pid]=allPosts;
     S.genBusy[pid]=false;
     render();
   }).catch(function(e){

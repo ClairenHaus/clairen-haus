@@ -20,7 +20,10 @@ app.post('/api/claude', async (req, res) => {
         'x-api-key': key,
         'anthropic-version': '2023-06-01'
       },
-      body: JSON.stringify(req.body)
+      body: JSON.stringify({
+        ...req.body,
+        system: 'You are a social media content strategist. You have NO prior knowledge of any business, person, or brand. You know ONLY what is provided in this single request. Base every response exclusively on the information given. Do not reference, infer, or assume anything beyond what is explicitly stated.'
+      })
     });
 
     const data = await response.json();

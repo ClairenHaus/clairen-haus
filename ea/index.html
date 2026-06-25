@@ -499,6 +499,164 @@
     .steps { grid-template-columns: 1fr; }
   }
 
+  /* PRICING */
+  .pricing-section {
+    padding: 96px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    margin-top: 52px;
+  }
+  .pricing-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 44px 36px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .pricing-card:hover { border-color: rgba(0,212,200,0.25); }
+  .pricing-card.featured {
+    border-color: rgba(0,212,200,0.35);
+    background: #0f0f24;
+  }
+  .pricing-card.featured::before {
+    content: 'Most Popular';
+    position: absolute;
+    top: -1px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--gradient);
+    color: var(--bg);
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    white-space: nowrap;
+  }
+  .pricing-top-bar {
+    height: 2px;
+    background: var(--gradient);
+    margin: -44px -36px 36px;
+  }
+  .pricing-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+  .pricing-name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-white);
+    margin-bottom: 8px;
+  }
+  .pricing-price {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .pricing-price sup {
+    font-size: 22px;
+    font-weight: 600;
+    vertical-align: super;
+    -webkit-text-fill-color: transparent;
+  }
+  .pricing-cadence {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+  }
+  .pricing-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 36px;
+  }
+  .pricing-features li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 8px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .pricing-features li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--teal);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .pricing-cta {
+    display: block;
+    text-align: center;
+    padding: 14px 24px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .pricing-cta.outline {
+    border: 1px solid rgba(0,212,200,0.4);
+    color: var(--teal);
+  }
+  .pricing-cta.outline:hover { background: rgba(0,212,200,0.08); }
+  .pricing-cta.solid {
+    background: var(--gradient);
+    color: var(--bg);
+  }
+  .pricing-cta.solid:hover { opacity: 0.88; }
+  .pricing-note {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 28px;
+    line-height: 1.6;
+  }
+  .pilot-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,140,50,0.1);
+    border: 1px solid rgba(255,140,50,0.25);
+    color: var(--orange);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    margin-bottom: 32px;
+  }
+  .pilot-badge::before { content: '★'; font-size: 10px; }
+
   /* SCROLL FADE IN */
   .fade-in {
     opacity: 0;
@@ -523,7 +681,7 @@
 <nav>
   <div class="nav-inner">
     <a href="#" class="nav-logo">Clairen Haus <span>/ EA Assistant</span></a>
-    <a href="#contact" class="nav-cta">Book a Call</a>
+    <a href="#pricing" class="nav-cta">Start Your Pilot</a>
   </div>
 </nav>
 
@@ -681,29 +839,29 @@
 <div class="how-bg fade-in" id="how">
   <div class="how-inner">
     <p class="section-label">The Process</p>
-    <h2 class="section-title">Operational in two weeks.</h2>
-    <p class="section-body">We scope, build, and hand off a system that runs. No months-long implementation. No learning curve on your end.</p>
+    <h2 class="section-title">Live in 30 days. No risk.</h2>
+    <p class="section-body">We start with a paid 30-day pilot. You see it work before you commit to anything ongoing. No setup fees. No long-term contracts upfront.</p>
 
     <div class="steps">
       <div class="step">
         <div class="step-num">01</div>
         <h3>Discovery Call</h3>
-        <p>We map your current workflow, your tools, and where the biggest time drains live. This shapes everything we build.</p>
+        <p>We map your current workflow, your tools, and where the biggest time drains live. Free, 30 minutes, no pitch deck.</p>
       </div>
       <div class="step">
         <div class="step-num">02</div>
-        <h3>Custom Build</h3>
-        <p>We configure your AI assistant to your inbox, your CRM, your voice, and your specific business logic. Nothing generic.</p>
+        <h3>30-Day Pilot</h3>
+        <p>We build and run your full EA system for one month at a flat rate. You see exactly what it does and what it saves you before committing to anything more.</p>
       </div>
       <div class="step">
         <div class="step-num">03</div>
-        <h3>Integration and Testing</h3>
-        <p>Full setup across your tools. We test every workflow before you ever see it. Errors stay on our side.</p>
+        <h3>Results Review</h3>
+        <p>At the end of 30 days we show you the numbers: time reclaimed, emails handled, pipeline touched. You decide if you want to continue.</p>
       </div>
       <div class="step">
         <div class="step-num">04</div>
         <h3>Ongoing Operations</h3>
-        <p>We monitor, tune, and expand the system monthly. Your assistant gets smarter as your business grows.</p>
+        <p>If it works for you, we move to a monthly retainer. We monitor, tune, and expand the system as your business grows.</p>
       </div>
     </div>
   </div>
@@ -744,15 +902,80 @@
   </div>
 </div>
 
+<!-- PRICING -->
+<section class="pricing-section fade-in" id="pricing">
+  <p class="section-label">Pricing</p>
+  <h2 class="section-title">Start with a pilot.<br>Commit when it works.</h2>
+  <p class="section-body">No setup fees. No long-term contract upfront. We earn the retainer by proving the value first.</p>
+
+  <div class="pricing-grid">
+
+    <!-- PILOT -->
+    <div class="pricing-card">
+      <div class="pricing-label">Start here</div>
+      <div class="pricing-name">30-Day Pilot</div>
+      <div class="pricing-price"><sup>$</sup>750</div>
+      <div class="pricing-cadence">one time, covers your first 30 days</div>
+      <p class="pricing-desc">We build and run your full AI executive assistant for 30 days. You see exactly what it does before committing to a retainer.</p>
+      <ul class="pricing-features">
+        <li>Full inbox triage and draft setup</li>
+        <li>CRM integration and automation</li>
+        <li>Calendar and scheduling configuration</li>
+        <li>30-day results report at close</li>
+        <li>No contract beyond the pilot period</li>
+      </ul>
+      <a href="https://clairenhaus.com/ea/apply" class="pricing-cta outline">Start Your Pilot</a>
+    </div>
+
+    <!-- ESSENTIAL -->
+    <div class="pricing-card">
+      <div class="pricing-label">After your pilot</div>
+      <div class="pricing-name">Essential</div>
+      <div class="pricing-price"><sup>$</sup>497</div>
+      <div class="pricing-cadence">per month, after pilot converts</div>
+      <p class="pricing-desc">Core EA infrastructure for founders who need inbox and scheduling handled without managing it themselves.</p>
+      <ul class="pricing-features">
+        <li>Inbox triage and prioritization</li>
+        <li>AI draft responses in your voice</li>
+        <li>Calendar and booking management</li>
+        <li>Monthly performance summary</li>
+        <li>One workflow update per month</li>
+      </ul>
+      <a href="https://clairenhaus.com/ea/apply" class="pricing-cta outline">Start with Pilot</a>
+    </div>
+
+    <!-- FULL STACK -->
+    <div class="pricing-card featured">
+      <div class="pricing-top-bar"></div>
+      <div class="pricing-label">After your pilot</div>
+      <div class="pricing-name">Full Stack</div>
+      <div class="pricing-price"><sup>$</sup>997</div>
+      <div class="pricing-cadence">per month, after pilot converts</div>
+      <p class="pricing-desc">The complete EA replacement: inbox, CRM, scheduling, and weekly reporting all running without you.</p>
+      <ul class="pricing-features">
+        <li>Everything in Essential</li>
+        <li>Full CRM automation and pipeline logging</li>
+        <li>Follow-up triggers and deal monitoring</li>
+        <li>Weekly executive summary report</li>
+        <li>Custom KPI tracking dashboard</li>
+        <li>Ongoing workflow tuning and expansion</li>
+      </ul>
+      <a href="https://clairenhaus.com/ea/apply" class="pricing-cta solid">Start with Pilot</a>
+    </div>
+
+  </div>
+  <p class="pricing-note">All plans begin with the $750 pilot. After 30 days, you choose your retainer tier or walk away — no questions asked.</p>
+</section>
+
 <!-- CTA -->
 <section class="cta-section fade-in" id="contact">
   <p class="section-label">Get Started</p>
-  <h2 class="section-title">Ready to hand off your inbox and pipeline?</h2>
-  <p class="section-body">Book a 30-minute discovery call. We'll look at your current setup, identify what's costing you the most time, and tell you exactly what we'd build.</p>
+  <h2 class="section-title">Try it for 30 days.<br>Then decide.</h2>
+  <p class="section-body">Book a free 30-minute call. We'll look at your current setup, tell you exactly what we'd build, and walk you through how the pilot works. No commitment beyond that conversation.</p>
   <div class="cta-wrapper">
-    <a href="https://clairenhaus.com" class="btn-primary">Book Your Discovery Call</a>
+    <a href="https://clairenhaus.com/ea/apply" class="btn-primary">Start Your Pilot</a>
   </div>
-  <p class="cta-note">No commitment. No pitch deck. Just a real conversation about your operations.</p>
+  <p class="cta-note">30-minute call. No pitch deck. Pilot starts at $750 with no further commitment required.</p>
 </section>
 
 <!-- FOOTER -->

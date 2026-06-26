@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply — Executive AI Assistant | Clairen Haus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #08080e;
+    --bg-surface: #0d0d1a;
+    --bg-card: #111122;
+    --teal: #00d4c8;
+    --blue: #3c8cff;
+    --purple: #8c50ff;
+    --orange: #ff8c32;
+    --text-white: #f0f0f8;
+    --text-muted: #8888aa;
+    --text-dim: #555570;
+    --gradient: linear-gradient(90deg, var(--teal), var(--blue), var(--purple));
+    --gradient-text: linear-gradient(135deg, var(--teal) 0%, var(--blue) 50%, var(--purple) 100%);
+    --font-display: 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  .gradient-bar {
+    height: 3px;
+    background: var(--gradient);
+    width: 100%;
+    display: block;
+  }
+
+  /* NAV */
+  nav {
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--text-muted); font-weight: 400; }
+  .nav-back {
+    font-size: 13px;
+    color: var(--text-dim);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--text-muted); }
+
+  /* LAYOUT */
+  .page-wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+  }
+
+  /* HEADER */
+  .page-header {
+    margin-bottom: 48px;
+  }
+  .page-eyebrow {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .page-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: var(--teal);
+  }
+  .page-header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .page-header p {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    margin-bottom: 44px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .progress-label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .progress-count {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--teal);
+  }
+  .progress-bar-bg {
+    height: 2px;
+    background: rgba(255,255,255,0.06);
+    width: 100%;
+  }
+  .progress-bar-fill {
+    height: 2px;
+    background: var(--gradient);
+    transition: width 0.4s ease;
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    display: none;
+    animation: fadeUp 0.35s ease forwards;
+  }
+  .question-card.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .q-text {
+    font-family: var(--font-display);
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    color: var(--text-white);
+  }
+  .q-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  /* OPTIONS */
+  .options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .option-btn {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-white);
+    font-family: var(--font-body);
+    font-size: 15px;
+    padding: 16px 20px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    line-height: 1.4;
+  }
+  .option-btn:hover {
+    border-color: rgba(0,212,200,0.35);
+    background: rgba(0,212,200,0.04);
+  }
+  .option-btn.selected {
+    border-color: var(--teal);
+    background: rgba(0,212,200,0.08);
+    color: var(--text-white);
+  }
+  .option-btn .opt-marker {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s;
+  }
+  .option-btn.selected .opt-marker {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+  .option-btn.selected .opt-marker::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--bg);
+    border-radius: 50%;
+    display: block;
+  }
+
+  /* TEXT INPUT */
+  .text-input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-white);
+    font-family: var(--font-body);
+    font-size: 15px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    outline: none;
+    transition: border-color 0.18s;
+    resize: none;
+  }
+  .text-input:focus { border-color: rgba(0,212,200,0.4); }
+  .text-input::placeholder { color: var(--text-dim); }
+
+  /* CHECKBOX OPTIONS */
+  .checkbox-option {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-white);
+    font-family: var(--font-body);
+    font-size: 15px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    line-height: 1.4;
+    user-select: none;
+  }
+  .checkbox-option:hover { border-color: rgba(0,212,200,0.35); }
+  .checkbox-option.selected {
+    border-color: var(--teal);
+    background: rgba(0,212,200,0.06);
+  }
+  .chk-box {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s;
+  }
+  .checkbox-option.selected .chk-box {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+  .checkbox-option.selected .chk-box::after {
+    content: '✓';
+    font-size: 11px;
+    color: var(--bg);
+    font-weight: 700;
+  }
+
+  /* NAV BUTTONS */
+  .q-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn-next {
+    background: var(--gradient);
+    color: var(--bg);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-next:hover { opacity: 0.88; }
+  .btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-prev {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--font-body);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 14px 0;
+    transition: color 0.2s;
+  }
+  .btn-prev:hover { color: var(--text-muted); }
+
+  /* RESULT SCREENS */
+  .result-screen {
+    display: none;
+    animation: fadeUp 0.4s ease forwards;
+  }
+  .result-screen.active { display: block; }
+
+  .result-icon {
+    font-size: 48px;
+    margin-bottom: 24px;
+    display: block;
+  }
+  .result-title {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .result-title .grad {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .result-body {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+
+  /* SUMMARY CARD */
+  .summary-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+  .summary-card h3 {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0,212,200,0.15);
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    gap: 20px;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-key {
+    font-size: 13px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+    min-width: 140px;
+  }
+  .summary-val {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  /* NEXT STEPS */
+  .next-steps {
+    margin-bottom: 36px;
+  }
+  .next-step-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    align-items: flex-start;
+  }
+  .step-num-sm {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    flex-shrink: 0;
+    min-width: 24px;
+  }
+  .next-step-item p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .next-step-item strong {
+    color: var(--text-white);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--gradient);
+    color: var(--bg);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+
+  .call-note {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 28px 24px;
+    margin-top: 48px;
+  }
+  .footer-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: var(--teal);
+    text-transform: uppercase;
+  }
+  .footer-copy { font-size: 12px; color: var(--text-dim); }
+
+  @media (max-width: 600px) {
+    .page-wrap { padding: 40px 20px 72px; }
+    .summary-row { flex-direction: column; gap: 4px; }
+    .summary-val { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<span class="gradient-bar"></span>
+
+<nav>
+  <a href="https://clairenhaus.com/ea" class="nav-logo">Clairen Haus <span>/ EA Assistant</span></a>
+  <a href="https://clairenhaus.com/ea" class="nav-back">← Back to overview</a>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HEADER -->
+  <div class="page-header" id="formHeader">
+    <p class="page-eyebrow">Start Your Pilot</p>
+    <h1>Tell us about your setup.</h1>
+    <p>Nine questions. Less than four minutes. We use your answers to build the right system for your business from day one.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-meta">
+      <span class="progress-label">Progress</span>
+      <span class="progress-count" id="progressCount">1 of 9</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width: 11%"></div>
+    </div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div id="questionContainer">
+
+    <!-- Q1: Name -->
+    <div class="question-card active" data-q="1">
+      <p class="q-number">Question 1</p>
+      <p class="q-text">What's your name?</p>
+      <p class="q-sub">First name is fine.</p>
+      <input type="text" class="text-input" id="q1" placeholder="Your first name" maxlength="60">
+      <div class="q-actions">
+        <button class="btn-next" onclick="nextQ(1)">Continue</button>
+      </div>
+    </div>
+
+    <!-- Q2: Business type -->
+    <div class="question-card" data-q="2">
+      <p class="q-number">Question 2</p>
+      <p class="q-text">What best describes your business?</p>
+      <p class="q-sub">Pick the closest match.</p>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 2)"><span class="opt-marker"></span>Consultant or coach</button>
+        <button class="option-btn" onclick="selectOption(this, 2)"><span class="opt-marker"></span>Agency or creative studio</button>
+        <button class="option-btn" onclick="selectOption(this, 2)"><span class="opt-marker"></span>Service-based business (trades, health, field ops)</button>
+        <button class="option-btn" onclick="selectOption(this, 2)"><span class="opt-marker"></span>SaaS or tech startup</button>
+        <button class="option-btn" onclick="selectOption(this, 2)"><span class="opt-marker"></span>E-commerce or product business</button>
+        <button class="option-btn" onclick="selectOption(this, 2)"><span class="opt-marker"></span>Other</button>
+      </div>
+      <div class="q-actions">
+        <button class="btn-next" id="next2" onclick="nextQ(2)" disabled>Continue</button>
+        <button class="btn-prev" onclick="prevQ(2)">← Back</button>
+      </div>
+    </div>
+
+    <!-- Q3: Revenue range -->
+    <div class="question-card" data-q="3">
+      <p class="q-number">Question 3</p>
+      <p class="q-text">What's your approximate annual revenue?</p>
+      <p class="q-sub">This helps us scope the right system complexity for your volume.</p>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 3)"><span class="opt-marker"></span>Under $100K</button>
+        <button class="option-btn" onclick="selectOption(this, 3)"><span class="opt-marker"></span>$100K — $250K</button>
+        <button class="option-btn" onclick="selectOption(this, 3)"><span class="opt-marker"></span>$250K — $500K</button>
+        <button class="option-btn" onclick="selectOption(this, 3)"><span class="opt-marker"></span>$500K — $1M</button>
+        <button class="option-btn" onclick="selectOption(this, 3)"><span class="opt-marker"></span>$1M+</button>
+        <button class="option-btn" onclick="selectOption(this, 3)"><span class="opt-marker"></span>Prefer not to say</button>
+      </div>
+      <div class="q-actions">
+        <button class="btn-next" id="next3" onclick="nextQ(3)" disabled>Continue</button>
+        <button class="btn-prev" onclick="prevQ(3)">← Back</button>
+      </div>
+    </div>
+
+    <!-- Q4: Email provider -->
+    <div class="question-card" data-q="4">
+      <p class="q-number">Question 4</p>
+      <p class="q-text">What email provider do you use?</p>
+      <p class="q-sub">This determines how we connect to your inbox.</p>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 4)"><span class="opt-marker"></span>Gmail / Google Workspace</button>
+        <button class="option-btn" onclick="selectOption(this, 4)"><span class="opt-marker"></span>Outlook / Microsoft 365</button>
+        <button class="option-btn" onclick="selectOption(this, 4)"><span class="opt-marker"></span>Both Gmail and Outlook</button>
+        <button class="option-btn" onclick="selectOption(this, 4)" data-flag="other-email"><span class="opt-marker"></span>Something else</button>
+      </div>
+      <div class="q-actions">
+        <button class="btn-next" id="next4" onclick="nextQ(4)" disabled>Continue</button>
+        <button class="btn-prev" onclick="prevQ(4)">← Back</button>
+      </div>
+    </div>
+
+    <!-- Q5: CRM -->
+    <div class="question-card" data-q="5">
+      <p class="q-number">Question 5</p>
+      <p class="q-text">What CRM do you use?</p>
+      <p class="q-sub">If you use more than one, pick your primary.</p>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 5)"><span class="opt-marker"></span>HubSpot</button>
+        <button class="option-btn" onclick="selectOption(this, 5)"><span class="opt-marker"></span>GoHighLevel</button>
+        <button class="option-btn" onclick="selectOption(this, 5)"><span class="opt-marker"></span>Salesforce</button>
+        <button class="option-btn" onclick="selectOption(this, 5)"><span class="opt-marker"></span>Notion or Airtable</button>
+        <button class="option-btn" onclick="selectOption(this, 5)"><span class="opt-marker"></span>Spreadsheet (no formal CRM)</button>
+        <button class="option-btn" onclick="selectOption(this, 5)" data-flag="other-crm"><span class="opt-marker"></span>Something else</button>
+        <button class="option-btn" onclick="selectOption(this, 5)"><span class="opt-marker"></span>No CRM currently</button>
+      </div>
+      <div class="q-actions">
+        <button class="btn-next" id="next5" onclick="nextQ(5)" disabled>Continue</button>
+        <button class="btn-prev" onclick="prevQ(5)">← Back</button>
+      </div>
+    </div>
+
+    <!-- Q6: Calendar -->
+    <div class="question-card" data-q="6">
+      <p class="q-number">Question 6</p>
+      <p class="q-text">How do you manage your calendar and bookings?</p>
+      <p class="q-sub">Select all that apply.</p>
+      <div class="options-list" id="q6options">
+        <div class="checkbox-option" onclick="toggleCheck(this, 6)"><span class="chk-box"></span>Google Calendar</div>
+        <div class="checkbox-option" onclick="toggleCheck(this, 6)"><span class="chk-box"></span>Outlook Calendar</div>
+        <div class="checkbox-option" onclick="toggleCheck(this, 6)"><span class="chk-box"></span>Calendly</div>
+        <div class="checkbox-option" onclick="toggleCheck(this, 6)"><span class="chk-box"></span>Cal.com</div>
+        <div class="checkbox-option" onclick="toggleCheck(this, 6)"><span class="chk-box"></span>Acuity / Squarespace Scheduling</div>
+        <div class="checkbox-option" onclick="toggleCheck(this, 6)"><span class="chk-box"></span>I manage manually (email / DM)</div>
+        <div class="checkbox-option" onclick="toggleCheck(this, 6)"><span class="chk-box"></span>Other</div>
+      </div>
+      <div class="q-actions" style="margin-top: 28px;">
+        <button class="btn-next" id="next6" onclick="nextQ(6)" disabled>Continue</button>
+        <button class="btn-prev" onclick="prevQ(6)">← Back</button>
+      </div>
+    </div>
+
+    <!-- Q7: Biggest pain point -->
+    <div class="question-card" data-q="7">
+      <p class="q-number">Question 7</p>
+      <p class="q-text">Where are you losing the most time right now?</p>
+      <p class="q-sub">Pick your biggest pain point. This shapes our build priority.</p>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 7)"><span class="opt-marker"></span>My inbox — it's unmanageable</button>
+        <button class="option-btn" onclick="selectOption(this, 7)"><span class="opt-marker"></span>Following up on leads and deals</button>
+        <button class="option-btn" onclick="selectOption(this, 7)"><span class="opt-marker"></span>Scheduling and calendar back-and-forth</button>
+        <button class="option-btn" onclick="selectOption(this, 7)"><span class="opt-marker"></span>CRM data entry and pipeline updates</button>
+        <button class="option-btn" onclick="selectOption(this, 7)"><span class="opt-marker"></span>All of the above equally</button>
+      </div>
+      <div class="q-actions">
+        <button class="btn-next" id="next7" onclick="nextQ(7)" disabled>Continue</button>
+        <button class="btn-prev" onclick="prevQ(7)">← Back</button>
+      </div>
+    </div>
+
+    <!-- Q8: Tried before -->
+    <div class="question-card" data-q="8">
+      <p class="q-number">Question 8</p>
+      <p class="q-text">Have you tried to solve this before?</p>
+      <p class="q-sub">No wrong answers here.</p>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 8)"><span class="opt-marker"></span>Yes — hired a VA, didn't stick</button>
+        <button class="option-btn" onclick="selectOption(this, 8)"><span class="opt-marker"></span>Yes — tried AI tools (Fyxer, Superhuman, etc.), not enough</button>
+        <button class="option-btn" onclick="selectOption(this, 8)"><span class="opt-marker"></span>Yes — both, nothing fully worked</button>
+        <button class="option-btn" onclick="selectOption(this, 8)"><span class="opt-marker"></span>No — this is my first attempt at solving it</button>
+        <button class="option-btn" onclick="selectOption(this, 8)"><span class="opt-marker"></span>No — I've just accepted it as part of the job</button>
+      </div>
+      <div class="q-actions">
+        <button class="btn-next" id="next8" onclick="nextQ(8)" disabled>Continue</button>
+        <button class="btn-prev" onclick="prevQ(8)">← Back</button>
+      </div>
+    </div>
+
+    <!-- Q9: Contact -->
+    <div class="question-card" data-q="9">
+      <p class="q-number">Question 9</p>
+      <p class="q-text">Last one. Where should we send your pilot details?</p>
+      <p class="q-sub">We'll review your answers and follow up within one business day.</p>
+      <input type="email" class="text-input" id="q9email" placeholder="your@email.com" style="margin-bottom: 12px;">
+      <input type="text" class="text-input" id="q9phone" placeholder="Phone number (optional)" style="margin-bottom: 32px;">
+      <div class="q-actions">
+        <button class="btn-next" onclick="submitForm()">Submit Application</button>
+        <button class="btn-prev" onclick="prevQ(9)">← Back</button>
+      </div>
+    </div>
+
+  </div><!-- /questionContainer -->
+
+  <!-- RESULT: STANDARD (auto-onboard) -->
+  <div class="result-screen" id="resultStandard">
+    <span class="result-icon">✅</span>
+    <h2 class="result-title">You're a great fit.<br><span class="grad">One step to go.</span></h2>
+    <p class="result-body">Your application looks great. Click below to complete your $750 pilot payment. You'll be taken directly to your pre-filled agreement to sign immediately after. The whole thing takes under 2 minutes.</p>
+
+    <div class="summary-card">
+      <h3>Your Application Summary</h3>
+      <div id="summaryRows"></div>
+    </div>
+
+    <div class="next-steps">
+      <div class="next-step-item">
+        <span class="step-num-sm">01</span>
+        <p><strong>Pay $750.</strong> Secure Stripe checkout. Takes 60 seconds.</p>
+      </div>
+      <div class="next-step-item">
+        <span class="step-num-sm">02</span>
+        <p><strong>Sign your agreement.</strong> Pre-filled with your details. Type your name and you're done.</p>
+      </div>
+      <div class="next-step-item">
+        <span class="step-num-sm">03</span>
+        <p><strong>Onboarding checklist incoming.</strong> Within 24 hours we send what we need to start building.</p>
+      </div>
+      <div class="next-step-item">
+        <span class="step-num-sm">04</span>
+        <p><strong>Go live in 48–72 hours.</strong> Your AI executive assistant is operational.</p>
+      </div>
+    </div>
+
+    <a href="https://buy.stripe.com/28EbJ23tt0nR0PHbxUbQY01" id="pilotPayBtn" class="btn-primary" style="display: inline-block;">Pay $750 and Sign Agreement →</a>
+    <p style="margin-top: 12px; font-size: 13px; color: var(--text-dim);">Secure checkout via Stripe. You'll be redirected to sign your agreement immediately after payment.</p>
+  </div>
+
+  <!-- RESULT: NOT READY YET -->
+  <div class="result-screen" id="resultNotReady">
+    <span class="result-icon">🌱</span>
+    <h2 class="result-title">Not quite yet.<br><span class="grad">But here's your next move.</span></h2>
+    <p class="result-body">The DFY pilot is built for founders at $100K+ revenue where the ROI on a managed system is clear. Based on your answers, you're not there yet — and that's fine. We built something specifically for where you are right now.</p>
+
+    <div class="summary-card" style="text-align: left;">
+      <h3>Recommended: DIY EA Kit — $47</h3>
+      <div style="margin-bottom: 16px;">
+        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.7;">A step-by-step system using Fyxer, HubSpot Free, and Cal.com. You set it up yourself with our guide, get 30 days of email support, and run it for about $30/month. When you hit the ceiling, the upgrade path to DFY is built right in.</p>
+      </div>
+      <ul style="list-style: none;">
+        <li style="font-size: 14px; color: var(--text-muted); padding: 8px 0; display: flex; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.04);"><span style="color: var(--teal); font-weight: 700;">✓</span> Setup guide PDF</li>
+        <li style="font-size: 14px; color: var(--text-muted); padding: 8px 0; display: flex; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.04);"><span style="color: var(--teal); font-weight: 700;">✓</span> 30-day activation checklist</li>
+        <li style="font-size: 14px; color: var(--text-muted); padding: 8px 0; display: flex; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.04);"><span style="color: var(--teal); font-weight: 700;">✓</span> Curated tool stack with exact settings</li>
+        <li style="font-size: 14px; color: var(--text-muted); padding: 8px 0; display: flex; gap: 10px;"><span style="color: var(--teal); font-weight: 700;">✓</span> 30 days of email support from Clairen Haus</li>
+      </ul>
+    </div>
+
+    <div class="next-steps">
+      <div class="next-step-item">
+        <span class="step-num-sm">01</span>
+        <p><strong>Get the kit.</strong> Instant access. One-time $47. Includes everything you need to build your own EA system this week.</p>
+      </div>
+      <div class="next-step-item">
+        <span class="step-num-sm">02</span>
+        <p><strong>Run it for 30 days.</strong> Follow the checklist. Use the support. Get your inbox and pipeline under control.</p>
+      </div>
+      <div class="next-step-item">
+        <span class="step-num-sm">03</span>
+        <p><strong>Come back when you're ready.</strong> Kit buyers get $47 credited toward the DFY pilot when the time comes.</p>
+      </div>
+    </div>
+
+    <a href="https://buy.stripe.com/cNi6oI2pp9YrfKBbxUbQY00" class="btn-primary" style="display: inline-block; background: var(--orange); color: #fff;">Get the DIY Kit — $47</a>
+    <p class="call-note" style="margin-top: 12px;">7-day refund policy. No questions asked.</p>
+  </div>
+  <div class="result-screen" id="resultCall">
+    <span class="result-icon">📞</span>
+    <h2 class="result-title">One quick call and<br><span class="grad">we're ready to build.</span></h2>
+    <p class="result-body">Your setup has a few specifics we want to get right before we build. We'd rather spend 20 minutes on a call than build the wrong thing. We'll reach out within one business day to find a time that works for you.</p>
+
+    <div class="summary-card">
+      <h3>Your Application Summary</h3>
+      <div id="summaryRowsCall"></div>
+    </div>
+
+    <div class="next-steps">
+      <div class="next-step-item">
+        <span class="step-num-sm">01</span>
+        <p><strong>Watch for our email.</strong> We'll reach out within one business day to schedule a 20-minute scoping call.</p>
+      </div>
+      <div class="next-step-item">
+        <span class="step-num-sm">02</span>
+        <p><strong>Quick scoping call.</strong> We map your exact stack and confirm the build plan. No pitch, just logistics.</p>
+      </div>
+      <div class="next-step-item">
+        <span class="step-num-sm">03</span>
+        <p><strong>Pilot kicks off.</strong> Same $750 pilot, same 30-day timeline. The call just makes sure we build it right.</p>
+      </div>
+    </div>
+
+    <p class="call-note">Pilot is still $750 flat. The call is free and takes about 20 minutes.</p>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<span class="gradient-bar"></span>
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Clairen Haus</span>
+    <span class="footer-copy">clairenhaus.com — Atlanta, GA</span>
+  </div>
+</footer>
+
+<script>
+  // STATE
+  const answers = {};
+  const checkAnswers = { 6: [] };
+  let complexFlags = 0;
+
+  const TOTAL = 9;
+
+  // ── OPTION SELECT (radio-style) ──────────────────────────
+  function selectOption(btn, qNum) {
+    const parent = btn.closest('.options-list');
+    parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    answers[qNum] = btn.textContent.trim();
+
+    // Flag complex stacks
+    if (btn.dataset.flag) {
+      answers[qNum + '_flag'] = btn.dataset.flag;
+    } else {
+      delete answers[qNum + '_flag'];
+    }
+
+    const nextBtn = document.getElementById('next' + qNum);
+    if (nextBtn) nextBtn.disabled = false;
+  }
+
+  // ── CHECKBOX TOGGLE (multi-select) ──────────────────────
+  function toggleCheck(el, qNum) {
+    el.classList.toggle('selected');
+    const label = el.textContent.trim();
+    const arr = checkAnswers[qNum];
+    const idx = arr.indexOf(label);
+    if (idx === -1) arr.push(label); else arr.splice(idx, 1);
+
+    const nextBtn = document.getElementById('next' + qNum);
+    if (nextBtn) nextBtn.disabled = arr.length === 0;
+  }
+
+  // ── PROGRESS UPDATE ──────────────────────────────────────
+  function updateProgress(current) {
+    document.getElementById('progressCount').textContent = current + ' of ' + TOTAL;
+    document.getElementById('progressFill').style.width = ((current / TOTAL) * 100) + '%';
+  }
+
+  // ── NEXT ─────────────────────────────────────────────────
+  function nextQ(current) {
+    // Validate
+    if (current === 1) {
+      const val = document.getElementById('q1').value.trim();
+      if (!val) return;
+      answers[1] = val;
+    }
+
+    const currentCard = document.querySelector('[data-q="' + current + '"]');
+    const nextCard = document.querySelector('[data-q="' + (current + 1) + '"]');
+
+    if (nextCard) {
+      currentCard.classList.remove('active');
+      nextCard.classList.add('active');
+      updateProgress(current + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Q1 enter key
+  document.getElementById('q1').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && this.value.trim()) nextQ(1);
+  });
+
+  // ── PREV ─────────────────────────────────────────────────
+  function prevQ(current) {
+    const currentCard = document.querySelector('[data-q="' + current + '"]');
+    const prevCard = document.querySelector('[data-q="' + (current - 1) + '"]');
+    if (prevCard) {
+      currentCard.classList.remove('active');
+      prevCard.classList.add('active');
+      updateProgress(current - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // ── ROUTING LOGIC ────────────────────────────────────────
+  function isComplex() {
+    // Flag: non-standard email
+    if (answers['4_flag'] === 'other-email') return true;
+    // Flag: non-standard CRM
+    if (answers['5_flag'] === 'other-crm') return true;
+    // Flag: both Gmail and Outlook (multi-inbox)
+    if (answers[4] && answers[4].includes('Both')) return true;
+    return false;
+  }
+
+  // ── BUILD SUMMARY ROWS ───────────────────────────────────
+  function buildSummary(containerId) {
+    const name = answers[1] || '';
+    const bizType = answers[2] || '';
+    const revenue = answers[3] || '';
+    const email = answers[4] || '';
+    const crm = answers[5] || '';
+    const calendar = checkAnswers[6].join(', ') || '';
+    const pain = answers[7] || '';
+    const tried = answers[8] || '';
+    const contactEmail = document.getElementById('q9email').value.trim();
+
+    const rows = [
+      ['Name', name],
+      ['Business type', bizType],
+      ['Revenue', revenue],
+      ['Email provider', email],
+      ['CRM', crm],
+      ['Calendar tools', calendar],
+      ['Biggest pain point', pain],
+      ['Previously tried', tried],
+      ['Contact email', contactEmail],
+    ];
+
+    const container = document.getElementById(containerId);
+    container.innerHTML = rows.map(([k, v]) =>
+      v ? `<div class="summary-row"><span class="summary-key">${k}</span><span class="summary-val">${v}</span></div>` : ''
+    ).join('');
+  }
+
+  // ── SUBMIT ───────────────────────────────────────────────
+  function submitForm() {
+    const emailVal = document.getElementById('q9email').value.trim();
+    if (!emailVal || !emailVal.includes('@')) {
+      document.getElementById('q9email').focus();
+      document.getElementById('q9email').style.borderColor = 'rgba(255,140,50,0.6)';
+      return;
+    }
+
+    // Collect client data for prefill
+    const clientName  = answers[1] || '';
+    const clientBiz   = answers[2] || '';
+    const clientEmail = emailVal;
+
+    // Build agreement URL with params
+    const agreementURL = 'https://clairenhaus.com/ea/agreement' +
+      '?name='  + encodeURIComponent(clientName) +
+      '&email=' + encodeURIComponent(clientEmail) +
+      '&biz='   + encodeURIComponent(clientBiz);
+
+    // Build Stripe pilot URL with prefill + success redirect to agreement
+    const pilotStripeURL = 'https://buy.stripe.com/28EbJ23tt0nR0PHbxUbQY01' +
+      '?prefilled_email=' + encodeURIComponent(clientEmail) +
+      '&client_reference_id=' + encodeURIComponent(clientName);
+
+    // Store agreement URL in sessionStorage so Stripe success page can redirect
+    sessionStorage.setItem('ch_agreement_url', agreementURL);
+
+    // Hide form chrome
+    document.getElementById('formHeader').style.display = 'none';
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('questionContainer').style.display = 'none';
+
+    const complex  = isComplex();
+    const notReady = answers[3] === 'Under $100K';
+
+    if (notReady) {
+      buildSummary('summaryRows');
+      document.getElementById('resultNotReady').classList.add('active');
+    } else if (complex) {
+      buildSummary('summaryRowsCall');
+      document.getElementById('resultCall').classList.add('active');
+    } else {
+      buildSummary('summaryRows');
+      // Inject live Stripe URL into the pay button
+      const payBtn = document.getElementById('pilotPayBtn');
+      if (payBtn) payBtn.href = pilotStripeURL;
+      document.getElementById('resultStandard').classList.add('active');
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>

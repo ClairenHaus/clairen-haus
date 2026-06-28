@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Response Automation Blueprint — Clairen Haus</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#080812;color:#F0F0F8;min-height:100vh;overflow-x:hidden;}
+.gbar{height:3px;background:linear-gradient(90deg,#00C2B7,#4A6FFF,#9B59FF,#FF8C32);}
+.logo{font-size:11px;font-weight:800;letter-spacing:2px;color:#00C2B7;}
+.logo em{color:#FF8C32;font-style:normal;}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;border-bottom:1px solid rgba(255,255,255,.05);}
+.nav-back{font-size:12px;color:#666677;text-decoration:none;font-weight:700;transition:color .2s;}
+.nav-back:hover{color:#F0F0F8;}
+
+/* HEADER */
+.bp-header{padding:40px 32px 32px;text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(0,194,183,.12) 0%,transparent 65%);}
+.bp-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(0,194,183,.1);border:1px solid rgba(0,194,183,.25);border-radius:20px;padding:4px 14px;font-size:10px;color:#00C2B7;font-weight:800;letter-spacing:.8px;margin-bottom:14px;}
+.bp-header h1{font-size:clamp(20px,3.5vw,32px);font-weight:800;margin-bottom:8px;line-height:1.2;}
+.bp-header h1 span{background:linear-gradient(90deg,#00C2B7,#4A6FFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.bp-header p{font-size:13px;color:#888899;max-width:520px;margin:0 auto 24px;line-height:1.7;}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:0;}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#888899;font-weight:600;}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+
+/* DIAGRAM AREA */
+.diagram-wrap{padding:24px 16px 48px;max-width:1100px;margin:0 auto;overflow-x:auto;}
+.diagram{min-width:780px;position:relative;}
+
+/* LAYER LABELS */
+.layer-row{display:grid;grid-template-columns:90px 1fr;gap:0;margin-bottom:0;}
+.layer-label{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);font-size:9px;font-weight:800;letter-spacing:1.5px;color:#444455;display:flex;align-items:center;justify-content:center;padding:16px 0;}
+
+/* SWIMLANES */
+.lane{display:grid;grid-template-columns:90px 1fr;border-top:1px solid rgba(255,255,255,.04);padding:16px 0;}
+.lane-label{font-size:9px;font-weight:800;letter-spacing:1.2px;color:#444455;padding:4px 12px 0 0;text-align:right;line-height:1.4;padding-top:16px;}
+.lane-body{padding:12px 0 12px 16px;position:relative;}
+
+/* NODE BASE */
+.node{display:inline-flex;flex-direction:column;align-items:flex-start;border-radius:10px;padding:10px 13px;font-size:11px;font-weight:700;position:relative;cursor:default;transition:transform .15s;}
+.node:hover{transform:translateY(-2px);}
+.node-label{font-size:9px;font-weight:800;letter-spacing:.8px;margin-bottom:3px;opacity:.7;}
+.node-title{font-size:12px;font-weight:800;line-height:1.3;color:#F0F0F8;}
+.node-sub{font-size:10px;font-weight:500;line-height:1.4;margin-top:3px;opacity:.75;}
+
+/* NODE VARIANTS */
+.node-entry{background:rgba(0,194,183,.1);border:1.5px solid rgba(0,194,183,.35);}
+.node-entry .node-label{color:#00C2B7;}
+.node-entry .node-sub{color:#00C2B7;}
+
+.node-action{background:rgba(74,111,255,.1);border:1.5px solid rgba(74,111,255,.3);}
+.node-action .node-label{color:#4A6FFF;}
+.node-action .node-sub{color:#7A9FFF;}
+
+.node-decision{background:rgba(255,140,50,.08);border:1.5px solid rgba(255,140,50,.3);}
+.node-decision .node-label{color:#FF8C32;}
+.node-decision .node-sub{color:#FF8C32;}
+
+.node-sequence{background:rgba(155,89,255,.1);border:1.5px solid rgba(155,89,255,.3);}
+.node-sequence .node-label{color:#9B59FF;}
+.node-sequence .node-sub{color:#B88AFF;}
+
+.node-exit-win{background:rgba(29,158,117,.1);border:1.5px solid rgba(29,158,117,.35);}
+.node-exit-win .node-label{color:#1D9E75;}
+.node-exit-win .node-sub{color:#1D9E75;}
+
+.node-exit-lose{background:rgba(102,102,119,.1);border:1.5px solid rgba(102,102,119,.3);}
+.node-exit-lose .node-label{color:#888899;}
+.node-exit-lose .node-sub{color:#888899;}
+
+/* TOOL TAGS */
+.tool-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.tool-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;}
+.tag-free{background:rgba(29,158,117,.15);color:#1D9E75;border:1px solid rgba(29,158,117,.2);}
+.tag-mid{background:rgba(74,111,255,.12);color:#4A6FFF;border:1px solid rgba(74,111,255,.2);}
+.tag-full{background:rgba(255,140,50,.1);color:#FF8C32;border:1px solid rgba(255,140,50,.2);}
+
+/* FLOW ROWS */
+.flow-row{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+.flow-row + .flow-row{margin-top:8px;}
+
+/* CONNECTORS */
+.arrow-right{display:flex;align-items:center;color:#333345;font-size:18px;padding:0 2px;align-self:center;margin-top:16px;}
+.arrow-down{display:flex;justify-content:flex-start;padding-left:20px;margin:4px 0;color:#333345;font-size:16px;}
+.arrow-down-center{display:flex;justify-content:center;margin:4px 0;color:#333345;font-size:16px;}
+
+/* BRANCH CONTAINER */
+.branch{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;}
+.branch-col{display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
+.branch-label{font-size:9px;font-weight:800;letter-spacing:.8px;padding:3px 8px;border-radius:4px;margin-bottom:2px;}
+.branch-yes{background:rgba(29,158,117,.1);color:#1D9E75;}
+.branch-no{background:rgba(232,93,74,.1);color:#E85D4A;}
+.branch-warm{background:rgba(255,140,50,.1);color:#FF8C32;}
+.branch-cold{background:rgba(155,89,255,.1);color:#9B59FF;}
+
+/* SEQUENCE TIMELINE */
+.seq-timeline{display:flex;gap:0;align-items:stretch;margin-top:4px;}
+.seq-step{display:flex;flex-direction:column;align-items:center;min-width:80px;}
+.seq-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;}
+.seq-dot.teal{background:rgba(0,194,183,.2);border:1.5px solid rgba(0,194,183,.5);color:#00C2B7;}
+.seq-dot.blue{background:rgba(74,111,255,.2);border:1.5px solid rgba(74,111,255,.5);color:#4A6FFF;}
+.seq-dot.purple{background:rgba(155,89,255,.2);border:1.5px solid rgba(155,89,255,.5);color:#9B59FF;}
+.seq-dot.orange{background:rgba(255,140,50,.2);border:1.5px solid rgba(255,140,50,.5);color:#FF8C32;}
+.seq-dot.green{background:rgba(29,158,117,.2);border:1.5px solid rgba(29,158,117,.5);color:#1D9E75;}
+.seq-line{flex:1;height:2px;background:rgba(255,255,255,.07);align-self:center;min-width:16px;}
+.seq-info{font-size:9px;color:#888899;margin-top:5px;text-align:center;max-width:72px;line-height:1.4;}
+
+/* SECTION CARD */
+.section-wrap{background:#0D0D1A;border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:20px;margin-bottom:20px;}
+.section-wrap + .section-wrap{margin-top:0;}
+.section-eyebrow{font-size:9px;font-weight:800;letter-spacing:1.5px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.05);}
+
+/* TOOLTIP */
+.tooltip-wrap{position:relative;}
+.tooltip-wrap:hover .tooltip{opacity:1;pointer-events:auto;transform:translateY(0);}
+.tooltip{position:absolute;bottom:calc(100% + 8px);left:0;background:#111128;border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:10px 13px;width:220px;font-size:11px;color:#CCCCDD;line-height:1.6;opacity:0;pointer-events:none;transform:translateY(4px);transition:all .2s;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.6);}
+.tooltip strong{color:#F0F0F8;display:block;margin-bottom:4px;}
+
+/* DETAIL PANEL */
+.detail-panel{background:#080812;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px;margin-top:14px;}
+.detail-title{font-size:11px;font-weight:800;color:#F0F0F8;margin-bottom:8px;}
+.detail-row{display:flex;gap:8px;margin-bottom:6px;align-items:flex-start;}
+.detail-icon{font-size:12px;width:18px;flex-shrink:0;}
+.detail-text{font-size:11px;color:#888899;line-height:1.5;}
+.detail-text strong{color:#F0F0F8;}
+
+/* TIMING BADGE */
+.timing{display:inline-block;font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.06);color:#666677;letter-spacing:.5px;}
+
+/* PRINT / DOWNLOAD */
+.dl-bar{position:fixed;bottom:20px;right:20px;z-index:50;}
+.dl-btn{padding:10px 18px;background:#0D0D1A;border:1.5px solid rgba(0,194,183,.3);border-radius:10px;color:#00C2B7;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
+.dl-btn:hover{background:rgba(0,194,183,.08);}
+
+@media print{.dl-bar{display:none;}nav{display:none;}.gbar{display:none;}}
+@media(max-width:600px){nav{padding:14px 16px;}.bp-header{padding:28px 16px 24px;}.diagram-wrap{padding:16px 8px 40px;}}
+</style>
+</head>
+<body>
+<div class="gbar"></div>
+
+<nav>
+  <div class="logo">CLAIREN<em>HAUS</em></div>
+  <a href="/systems/follow-up-kit" class="nav-back">← Back to System</a>
+</nav>
+
+<div class="bp-header">
+  <div class="bp-pill">COMPONENT 02</div>
+  <h1>Lead Response <span>Automation Blueprint</span></h1>
+  <p>Your complete lead journey from first touch to booked call. Zero manual steps. Hover any node for tool options at each stage.</p>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#00C2B7;"></div>Entry points</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#4A6FFF;"></div>Automation actions</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#FF8C32;"></div>Decision / branch</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#9B59FF;"></div>Sequence</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1D9E75;"></div>Win</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#666677;"></div>Exit / nurture</div>
+  </div>
+</div>
+
+<div class="diagram-wrap">
+<div class="diagram">
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- STAGE 1: ENTRY -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+  <div class="section-eyebrow" style="color:#00C2B7;">STAGE 1 — LEAD ENTERS YOUR WORLD</div>
+
+  <div class="flow-row" style="gap:10px;align-items:flex-start;">
+
+    <div class="tooltip-wrap">
+      <div class="node node-entry" style="min-width:140px;">
+        <div class="node-label">ENTRY 01</div>
+        <div class="node-title">Facebook Lead Ad</div>
+        <div class="node-sub">Form submit triggers automation</div>
+        <div class="tool-tags">
+          <span class="tool-tag tag-free">Facebook Ads</span>
+          <span class="tool-tag tag-free">Zapier Free</span>
+        </div>
+      </div>
+      <div class="tooltip"><strong>How it connects</strong>Facebook Lead Ad form → Zapier trigger "New Lead" → tags contact in your email tool → fires sequence. Free tier: 100 Zaps/month covers most early-stage volume.</div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <div class="tooltip-wrap">
+      <div class="node node-entry" style="min-width:140px;">
+        <div class="node-label">ENTRY 02</div>
+        <div class="node-title">Website Contact Form</div>
+        <div class="node-sub">Form submit or pop-up opt-in</div>
+        <div class="tool-tags">
+          <span class="tool-tag tag-free">Mailchimp Form</span>
+          <span class="tool-tag tag-mid">ConvertKit</span>
+          <span class="tool-tag tag-full">HubSpot</span>
+        </div>
+      </div>
+      <div class="tooltip"><strong>How it connects</strong>Native form embed on your site → contact auto-added to your list → tagged "New Lead" → sequence fires. No Zapier needed if you use native integrations.</div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <div class="tooltip-wrap">
+      <div class="node node-entry" style="min-width:140px;">
+        <div class="node-label">ENTRY 03</div>
+        <div class="node-title">DM / Comment Trigger</div>
+        <div class="node-sub">Keyword auto-reply in DMs</div>
+        <div class="tool-tags">
+          <span class="tool-tag tag-free">Manychat Free</span>
+          <span class="tool-tag tag-mid">Manychat Pro</span>
+        </div>
+      </div>
+      <div class="tooltip"><strong>How it connects</strong>Someone comments "READY" or DMs a keyword → Manychat fires an instant DM reply → captures email → passes contact to your email tool via Zapier or native sync.</div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <div class="tooltip-wrap">
+      <div class="node node-entry" style="min-width:140px;">
+        <div class="node-label">ENTRY 04</div>
+        <div class="node-title">Missed Call Text-Back</div>
+        <div class="node-sub">Auto-SMS when a call goes unanswered</div>
+        <div class="tool-tags">
+          <span class="tool-tag tag-mid">SimpleTexting</span>
+          <span class="tool-tag tag-full">GoHighLevel</span>
+          <span class="tool-tag tag-full">Calyntis</span>
+        </div>
+      </div>
+      <div class="tooltip"><strong>How it connects</strong>Missed call detected → auto-SMS fires within 60 seconds: "Hey, just missed your call — happy to connect. What's the best time?" → reply triggers full sequence.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ARROW DOWN -->
+<div class="arrow-down-center" style="font-size:22px;margin:4px 0;">↓</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- STAGE 2: INSTANT RESPONSE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+  <div class="section-eyebrow" style="color:#4A6FFF;">STAGE 2 — INSTANT RESPONSE (under 5 minutes)</div>
+
+  <div class="flow-row" style="align-items:flex-start;gap:16px;flex-wrap:nowrap;">
+
+    <div class="tooltip-wrap" style="flex:1;min-width:180px;">
+      <div class="node node-action" style="width:100%;">
+        <div class="node-label">ACTION</div>
+        <div class="node-title">Tag Contact</div>
+        <div class="node-sub">"New Lead" tag applied. Checks for duplicate.</div>
+        <div class="tool-tags">
+          <span class="tool-tag tag-free">Mailchimp</span>
+          <span class="tool-tag tag-mid">ActiveCampaign</span>
+          <span class="tool-tag tag-full">GoHighLevel</span>
+        </div>
+      </div>
+      <div class="tooltip"><strong>Why this matters</strong>Tagging prevents duplicate sequences firing if the same contact opts in from two entry points. Check for existing contact first — if found, update tag rather than create new.</div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <div class="tooltip-wrap" style="flex:1;min-width:180px;">
+      <div class="node node-action" style="width:100%;">
+        <div class="node-label">ACTION</div>
+        <div class="node-title">Fire Instant SMS</div>
+        <div class="node-sub">Warm opener. Sends within 60 seconds of opt-in.</div>
+        <div class="tool-tags">
+          <span class="tool-tag tag-free">Google Voice + Zapier</span>
+          <span class="tool-tag tag-mid">SimpleTexting</span>
+          <span class="tool-tag tag-full">GoHighLevel</span>
+        </div>
+      </div>
+      <div class="tooltip"><strong>Message 01 (SMS)</strong>"Hey [Name]! Just saw your message about [offer]. I'd love to connect — what does [Day/Day] look like for a quick call?" Short. One question. Response is the goal.</div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <div class="tooltip-wrap" style="flex:1;min-width:180px;">
+      <div class="node node-action" style="width:100%;">
+        <div class="node-label">ACTION</div>
+        <div class="node-title">Queue Email Sequence</div>
+        <div class="node-sub">5-touch sequence starts. 2hr delay for touch 2.</div>
+        <div class="tool-tags">
+          <span class="tool-tag tag-free">Mailchimp Automation</span>
+          <span class="tool-tag tag-mid">ConvertKit</span>
+          <span class="tool-tag tag-full">ActiveCampaign</span>
+        </div>
+      </div>
+      <div class="tooltip"><strong>Sequence timing</strong>Touch 1: immediate SMS. Touch 2: +2hr email. Touch 3: +24hr SMS. Touch 4: +3 days email. Touch 5: +7 days email. All copy is in Component 01.</div>
+    </div>
+
+  </div>
+
+  <!-- SEQUENCE TIMELINE -->
+  <div style="margin-top:16px;background:#080812;border-radius:10px;padding:14px 16px;">
+    <div style="font-size:9px;font-weight:800;letter-spacing:1px;color:#666677;margin-bottom:12px;">NEW LEAD SEQUENCE TIMELINE</div>
+    <div class="seq-timeline" style="align-items:center;">
+      <div class="seq-step">
+        <div class="seq-dot teal">01</div>
+        <div class="seq-info"><span class="timing">NOW</span><br>SMS Warm Opener</div>
+      </div>
+      <div class="seq-line"></div>
+      <div class="seq-step">
+        <div class="seq-dot blue">02</div>
+        <div class="seq-info"><span class="timing">+2 HR</span><br>Email Value Intro</div>
+      </div>
+      <div class="seq-line"></div>
+      <div class="seq-step">
+        <div class="seq-dot purple">03</div>
+        <div class="seq-info"><span class="timing">+24 HR</span><br>SMS Check-In</div>
+      </div>
+      <div class="seq-line"></div>
+      <div class="seq-step">
+        <div class="seq-dot orange">04</div>
+        <div class="seq-info"><span class="timing">+3 DAYS</span><br>Email Social Proof</div>
+      </div>
+      <div class="seq-line"></div>
+      <div class="seq-step">
+        <div class="seq-dot green">05</div>
+        <div class="seq-info"><span class="timing">+7 DAYS</span><br>Email Graceful Close</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARROW DOWN -->
+<div class="arrow-down-center" style="font-size:22px;margin:4px 0;">↓</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- STAGE 3: DECISION BRANCH -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+  <div class="section-eyebrow" style="color:#FF8C32;">STAGE 3 — LEAD RESPONDS?</div>
+
+  <div class="flow-row" style="align-items:flex-start;gap:24px;">
+
+    <!-- DECISION NODE -->
+    <div style="flex:0 0 auto;">
+      <div class="node node-decision" style="min-width:160px;">
+        <div class="node-label">DECISION</div>
+        <div class="node-title">Did they reply or book?</div>
+        <div class="node-sub">Checks for booking confirmation or email/SMS reply</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;flex:1;">
+
+      <!-- YES BRANCH -->
+      <div>
+        <div class="branch-label branch-yes">YES — REPLIED OR BOOKED</div>
+        <div class="flow-row" style="gap:10px;margin-top:6px;">
+          <div class="tooltip-wrap">
+            <div class="node node-action" style="min-width:150px;">
+              <div class="node-label">ACTION</div>
+              <div class="node-title">Remove from Sequence</div>
+              <div class="node-sub">Stop further follow-up touches</div>
+            </div>
+            <div class="tooltip"><strong>How to set this up</strong>In ActiveCampaign or GoHighLevel: create a goal "Contact books a call" — when met, the contact exits the sequence automatically. In Mailchimp: use a tag removal to suppress further sends.</div>
+          </div>
+          <div class="arrow-right" style="margin-top:20px;">›</div>
+          <div class="tooltip-wrap">
+            <div class="node node-action" style="min-width:150px;">
+              <div class="node-label">ACTION</div>
+              <div class="node-title">Send Booking Confirmation</div>
+              <div class="node-sub">+24hr reminder + 1hr reminder</div>
+              <div class="tool-tags">
+                <span class="tool-tag tag-free">Calendly Free</span>
+                <span class="tool-tag tag-free">TidyCal</span>
+                <span class="tool-tag tag-full">GoHighLevel</span>
+              </div>
+            </div>
+            <div class="tooltip"><strong>Booking tools</strong>Calendly free tier handles confirmation + reminder emails natively. TidyCal ($29 one-time) adds SMS reminders. GoHighLevel automates the full post-booking sequence including no-show recovery.</div>
+          </div>
+          <div class="arrow-right" style="margin-top:20px;">›</div>
+          <div class="node node-exit-win" style="min-width:120px;">
+            <div class="node-label">OUTCOME</div>
+            <div class="node-title">Call Booked</div>
+            <div class="node-sub">Move to post-call sequence</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NO BRANCH -->
+      <div>
+        <div class="branch-label branch-no">NO — NO RESPONSE AFTER 7 DAYS</div>
+        <div class="flow-row" style="gap:10px;margin-top:6px;">
+          <div class="tooltip-wrap">
+            <div class="node node-action" style="min-width:150px;">
+              <div class="node-label">ACTION</div>
+              <div class="node-title">Re-tag Contact</div>
+              <div class="node-sub">Remove "New Lead" — add "Cold"</div>
+            </div>
+            <div class="tooltip"><strong>Why re-tag?</strong>Keeps your active lead list clean. Cold contacts stay in your list but exit the new-lead sequence. They're candidates for the Reactivation Sequence in 60+ days.</div>
+          </div>
+          <div class="arrow-right" style="margin-top:20px;">›</div>
+          <div class="node node-exit-lose" style="min-width:150px;">
+            <div class="node-label">OUTCOME</div>
+            <div class="node-title">Enter Cold Segment</div>
+            <div class="node-sub">Eligible for Reactivation Sequence in 60 days</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ARROW DOWN -->
+<div class="arrow-down-center" style="font-size:22px;margin:4px 0;">↓</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- STAGE 4: POST-BOOKING -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+  <div class="section-eyebrow" style="color:#9B59FF;">STAGE 4 — POST-BOOKING FLOW</div>
+
+  <div class="flow-row" style="align-items:flex-start;gap:10px;">
+
+    <div class="tooltip-wrap">
+      <div class="node node-sequence" style="min-width:150px;">
+        <div class="node-label">TOUCH 01</div>
+        <div class="node-title">Booking Confirmation</div>
+        <div class="node-sub">Instant. Calendar invite + confirmation email.</div>
+      </div>
+      <div class="tooltip"><strong>What to include</strong>Date, time, Zoom/call link, and one sentence setting expectations: "We'll spend 20 minutes looking at [topic] and I'll share what I'd recommend." Reduces no-shows by setting a frame.</div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <div class="tooltip-wrap">
+      <div class="node node-sequence" style="min-width:150px;">
+        <div class="node-label">TOUCH 02</div>
+        <div class="node-title">24hr Reminder</div>
+        <div class="node-sub">Email + SMS. Reconfirm and build anticipation.</div>
+      </div>
+      <div class="tooltip"><strong>Message tone</strong>Not just "reminder." Add a line that builds anticipation: "Looking forward to our call tomorrow — I've been thinking about what you shared and have a few ideas." Makes them feel the call is already valuable.</div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <div class="tooltip-wrap">
+      <div class="node node-sequence" style="min-width:150px;">
+        <div class="node-label">TOUCH 03</div>
+        <div class="node-title">1hr Reminder</div>
+        <div class="node-sub">SMS only. Short. Just the link.</div>
+      </div>
+      <div class="tooltip"><strong>Message</strong>"Hey [Name], our call is in an hour. Here's the link: [link]. See you soon!" That's it. No fluff. They're busy — just give them the link.</div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <!-- NO SHOW BRANCH -->
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="node node-decision" style="min-width:150px;">
+        <div class="node-label">DECISION</div>
+        <div class="node-title">Did they show?</div>
+        <div class="node-sub">Call completed vs. no-show</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start;">
+          <div class="branch-label branch-yes">SHOWED</div>
+          <div class="node node-exit-win" style="min-width:120px;">
+            <div class="node-label">WIN</div>
+            <div class="node-title">Call Completed</div>
+            <div class="node-sub">Send post-call follow-up within 2hr</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start;">
+          <div class="branch-label branch-no">NO-SHOW</div>
+          <div class="node node-sequence" style="min-width:120px;">
+            <div class="node-label">SEQUENCE</div>
+            <div class="node-title">No-Show Recovery</div>
+            <div class="node-sub">4-message sequence from Component 01</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ARROW DOWN -->
+<div class="arrow-down-center" style="font-size:22px;margin:4px 0;">↓</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- STAGE 5: REACTIVATION LOOP -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+  <div class="section-eyebrow" style="color:#FF8C32;">STAGE 5 — DEAD LIST REACTIVATION (runs independently)</div>
+
+  <div class="detail-panel" style="margin-top:0;margin-bottom:14px;border-color:rgba(255,140,50,.15);background:rgba(255,140,50,.04);">
+    <div class="detail-title" style="color:#FF8C32;">Start here for fastest results.</div>
+    <div class="detail-row">
+      <div class="detail-icon">→</div>
+      <div class="detail-text">This sequence runs <strong>independently</strong> of the inbound flow. You send it manually to your "Cold" segment — contacts who haven't heard from you in 60+ days.</div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon">→</div>
+      <div class="detail-text">Load it into your email tool this afternoon. Send to your cold segment. The 5 messages run over 7 days automatically after you hit send once.</div>
+    </div>
+  </div>
+
+  <div class="flow-row" style="align-items:flex-start;gap:10px;flex-wrap:wrap;">
+
+    <div class="node node-action" style="min-width:150px;">
+      <div class="node-label">TRIGGER</div>
+      <div class="node-title">You hit Send Once</div>
+      <div class="node-sub">To "Cold" segment — 60+ days silent</div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div class="seq-timeline" style="align-items:center;">
+        <div class="seq-step" style="min-width:70px;">
+          <div class="seq-dot teal">01</div>
+          <div class="seq-info"><span class="timing">DAY 0</span><br>Warm Re-Intro</div>
+        </div>
+        <div class="seq-line" style="min-width:12px;"></div>
+        <div class="seq-step" style="min-width:70px;">
+          <div class="seq-dot blue">02</div>
+          <div class="seq-info"><span class="timing">DAY 1</span><br>Value Drop</div>
+        </div>
+        <div class="seq-line" style="min-width:12px;"></div>
+        <div class="seq-step" style="min-width:70px;">
+          <div class="seq-dot purple">03</div>
+          <div class="seq-info"><span class="timing">DAY 3</span><br>Soft Pitch</div>
+        </div>
+        <div class="seq-line" style="min-width:12px;"></div>
+        <div class="seq-step" style="min-width:70px;">
+          <div class="seq-dot orange">04</div>
+          <div class="seq-info"><span class="timing">DAY 5</span><br>Objection Handle</div>
+        </div>
+        <div class="seq-line" style="min-width:12px;"></div>
+        <div class="seq-step" style="min-width:70px;">
+          <div class="seq-dot green">05</div>
+          <div class="seq-info"><span class="timing">DAY 7</span><br>The Close</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-right" style="margin-top:28px;">›</div>
+
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div class="node node-exit-win" style="min-width:130px;">
+        <div class="node-label">OUTCOME A</div>
+        <div class="node-title">They buy or book</div>
+        <div class="node-sub">Remove from cold. Enter active flow.</div>
+      </div>
+      <div class="node node-exit-lose" style="min-width:130px;">
+        <div class="node-label">OUTCOME B</div>
+        <div class="node-title">No response</div>
+        <div class="node-sub">Stay in cold. Re-run in 90 days.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOOL TIER REFERENCE -->
+<div class="section-wrap" style="margin-bottom:0;">
+  <div class="section-eyebrow" style="color:#666677;">TOOL REFERENCE — PICK YOUR TIER</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
+
+    <div style="background:#080812;border-radius:10px;padding:14px;border:1px solid rgba(29,158,117,.2);">
+      <div style="font-size:9px;font-weight:800;letter-spacing:1px;color:#1D9E75;margin-bottom:8px;">FREE TIER — $0/month</div>
+      <div class="detail-row"><div class="detail-icon">✉️</div><div class="detail-text"><strong>Email:</strong> Mailchimp (500 contacts), MailerLite (1,000 contacts)</div></div>
+      <div class="detail-row"><div class="detail-icon">💬</div><div class="detail-text"><strong>SMS:</strong> Google Voice + Zapier (manual, limited)</div></div>
+      <div class="detail-row"><div class="detail-icon">🔗</div><div class="detail-text"><strong>Automation:</strong> Zapier Free (100 tasks/mo)</div></div>
+      <div class="detail-row"><div class="detail-icon">📅</div><div class="detail-text"><strong>Booking:</strong> Calendly Free, Cal.com</div></div>
+      <div class="detail-row"><div class="detail-icon">💬</div><div class="detail-text"><strong>DMs:</strong> Manychat Free (1,000 contacts)</div></div>
+    </div>
+
+    <div style="background:#080812;border-radius:10px;padding:14px;border:1px solid rgba(74,111,255,.2);">
+      <div style="font-size:9px;font-weight:800;letter-spacing:1px;color:#4A6FFF;margin-bottom:8px;">MID TIER — $30-$100/month</div>
+      <div class="detail-row"><div class="detail-icon">✉️</div><div class="detail-text"><strong>Email:</strong> ConvertKit ($25), ActiveCampaign ($29)</div></div>
+      <div class="detail-row"><div class="detail-icon">💬</div><div class="detail-text"><strong>SMS:</strong> SimpleTexting ($31), EZTexting</div></div>
+      <div class="detail-row"><div class="detail-icon">🔗</div><div class="detail-text"><strong>Automation:</strong> Zapier Starter ($20/mo)</div></div>
+      <div class="detail-row"><div class="detail-icon">📅</div><div class="detail-text"><strong>Booking:</strong> TidyCal ($29 one-time)</div></div>
+      <div class="detail-row"><div class="detail-icon">💬</div><div class="detail-text"><strong>DMs:</strong> Manychat Pro ($15/mo)</div></div>
+    </div>
+
+    <div style="background:#080812;border-radius:10px;padding:14px;border:1px solid rgba(255,140,50,.2);">
+      <div style="font-size:9px;font-weight:800;letter-spacing:1px;color:#FF8C32;margin-bottom:8px;">FULL STACK — $97-$397/month</div>
+      <div class="detail-row"><div class="detail-icon">⚡</div><div class="detail-text"><strong>All-in-one:</strong> GoHighLevel ($97) — email, SMS, booking, CRM, pipelines</div></div>
+      <div class="detail-row"><div class="detail-icon">⚡</div><div class="detail-text"><strong>CRM + Email:</strong> HubSpot Starter ($20+)</div></div>
+      <div class="detail-row"><div class="detail-icon">⚡</div><div class="detail-text"><strong>Multi-channel AI:</strong> Calyntis — voice, email, SMS, ringless VM, booking</div></div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- end diagram -->
+</div><!-- end diagram-wrap -->
+
+<div class="dl-bar">
+  <button class="dl-btn" onclick="window.print()">🖨 Print Blueprint</button>
+</div>
+
+</body>
+</html>

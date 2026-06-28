@@ -3,836 +3,241 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clairen Haus — 30-Day Content Calendar</title>
+<title>Clairen Haus — Tools & Systems</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#080812;color:#F0F0F8;min-height:100vh;}
-button,select,input,textarea{font-family:'Plus Jakarta Sans',sans-serif;}
 .gbar{height:3px;background:linear-gradient(90deg,#00C2B7,#4A6FFF,#9B59FF,#FF8C32);}
 .logo{font-size:12px;font-weight:800;letter-spacing:2px;color:#00C2B7;}
 .logo em{color:#FF8C32;font-style:normal;}
-.err{background:rgba(232,93,74,.1);border:1px solid rgba(232,93,74,.3);border-radius:8px;padding:9px 13px;font-size:12px;color:#E85D4A;margin-top:6px;}
 
-/* GATE */
-.gate{min-height:100vh;display:flex;flex-direction:column;}
-.gate-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;background:radial-gradient(ellipse at 50% 0%,rgba(0,194,183,.18) 0%,transparent 65%);}
-.gate-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,140,50,.1);border:1px solid rgba(255,140,50,.25);border-radius:20px;padding:4px 14px;font-size:11px;color:#FF8C32;font-weight:700;letter-spacing:.5px;margin-bottom:20px;}
-.gate h1{font-size:clamp(22px,4vw,40px);font-weight:800;text-align:center;line-height:1.2;max-width:600px;margin-bottom:10px;}
-.gate h1 span{background:linear-gradient(90deg,#00C2B7,#4A6FFF 50%,#9B59FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.gate p{color:#888899;font-size:14px;text-align:center;max-width:440px;line-height:1.7;margin-bottom:36px;}
-.gate-form{width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px;}
-.field label{display:block;font-size:10px;font-weight:800;letter-spacing:1.2px;color:#666677;margin-bottom:5px;}
-.field input{width:100%;background:#0D0D1A;border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 15px;color:#F0F0F8;font-size:14px;transition:border-color .2s;}
-.field input:focus{outline:none;border-color:#00C2B7;}
-.field input::placeholder{color:#444455;}
-.btn-primary{width:100%;padding:14px;background:linear-gradient(90deg,#FF8C32,#E86A00);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;margin-top:6px;transition:opacity .2s;}
-.btn-primary:hover{opacity:.9;}
-.gate-foot{font-size:11px;color:#444455;text-align:center;margin-top:10px;}
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid rgba(255,255,255,.05);}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-links a{font-size:12px;font-weight:700;letter-spacing:.5px;color:#666677;text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:#F0F0F8;}
+.nav-cta{padding:8px 18px;background:linear-gradient(90deg,#FF8C32,#E86A00);border-radius:8px;color:#fff;font-size:12px;font-weight:800;text-decoration:none;transition:opacity .2s;}
+.nav-cta:hover{opacity:.9;color:#fff;}
 
-/* WIZARD */
-.wizard{min-height:100vh;display:flex;flex-direction:column;}
-.wiz-body{flex:1;padding:32px 24px;max-width:700px;margin:0 auto;width:100%;}
-.wiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;}
-.wiz-prog{display:flex;gap:5px;align-items:center;}
-.wdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1);transition:all .3s;}
-.wdot.active{background:#FF8C32;width:22px;border-radius:4px;}
-.wdot.done{background:#00C2B7;}
-.step-anim{animation:fadeUp .3s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.step-num{font-size:10px;font-weight:800;letter-spacing:1.2px;color:#666677;margin-bottom:7px;}
-.step-q{font-size:clamp(18px,3vw,26px);font-weight:800;margin-bottom:6px;line-height:1.25;}
-.step-sub{font-size:13px;color:#888899;margin-bottom:28px;line-height:1.6;}
-.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px;margin-bottom:26px;}
-.opt{padding:12px 14px;background:#0D0D1A;border:1.5px solid rgba(255,255,255,.07);border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;color:#AAAACC;transition:all .15s;text-align:left;}
-.opt:hover{border-color:#4A6FFF;color:#F0F0F8;}
-.opt.sel{border-color:#FF8C32;background:rgba(255,140,50,.08);color:#FF8C32;}
-.opt.msel{border-color:#00C2B7;background:rgba(0,194,183,.08);color:#00C2B7;}
-.plat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:26px;}
-.plat-opt{padding:14px 10px;background:#0D0D1A;border:1.5px solid rgba(255,255,255,.07);border-radius:10px;cursor:pointer;text-align:center;transition:all .15s;}
-.plat-opt:hover{border-color:#4A6FFF;}
-.plat-opt.sel{border-color:#00C2B7;background:rgba(0,194,183,.08);}
-.plat-ico{font-size:22px;margin-bottom:5px;}
-.plat-nm{font-size:11px;font-weight:700;color:#AAAACC;}
-.plat-opt.sel .plat-nm{color:#00C2B7;}
-.voice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:26px;}
-.voice-opt{padding:14px;background:#0D0D1A;border:1.5px solid rgba(255,255,255,.07);border-radius:10px;cursor:pointer;transition:all .15s;}
-.voice-opt:hover{border-color:#9B59FF;}
-.voice-opt.sel{border-color:#9B59FF;background:rgba(155,89,255,.1);}
-.voice-t{font-size:13px;font-weight:700;margin-bottom:4px;color:#F0F0F8;}
-.voice-opt.sel .voice-t{color:#9B59FF;}
-.voice-d{font-size:11px;color:#666677;line-height:1.5;}
-.ta-input{width:100%;background:#0D0D1A;border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:13px 15px;color:#F0F0F8;font-size:13px;resize:vertical;min-height:90px;line-height:1.6;margin-bottom:26px;}
-.ta-input:focus{outline:none;border-color:#00C2B7;}
-.ta-input::placeholder{color:#444455;}
-.wiz-nav{display:flex;gap:10px;}
-.btn-back{padding:12px 20px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.08);border-radius:10px;color:#888899;font-size:13px;font-weight:700;cursor:pointer;}
-.btn-next{flex:1;padding:12px;background:linear-gradient(90deg,#FF8C32,#E86A00);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;transition:opacity .2s;}
-.btn-next:hover{opacity:.9;}
-.btn-next:disabled{opacity:.35;cursor:not-allowed;}
+/* HERO */
+.hero{text-align:center;padding:72px 24px 56px;background:radial-gradient(ellipse at 50% 0%,rgba(0,194,183,.14) 0%,transparent 65%);}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(0,194,183,.1);border:1px solid rgba(0,194,183,.25);border-radius:20px;padding:5px 16px;font-size:11px;color:#00C2B7;font-weight:700;letter-spacing:.5px;margin-bottom:22px;}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:800;line-height:1.15;max-width:680px;margin:0 auto 16px;}
+.hero h1 span{background:linear-gradient(90deg,#00C2B7,#4A6FFF 50%,#9B59FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{font-size:15px;color:#888899;max-width:480px;margin:0 auto;line-height:1.7;}
 
-/* GENERATING */
-.gen-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;background:radial-gradient(ellipse at 50% 30%,rgba(74,111,255,.12) 0%,transparent 65%);}
-.spinner{width:56px;height:56px;border-radius:50%;border:3px solid rgba(0,194,183,.15);border-top-color:#00C2B7;animation:spin 1s linear infinite;margin:0 auto 22px;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.gen-t{font-size:20px;font-weight:800;margin-bottom:8px;}
-.gen-s{font-size:13px;color:#888899;margin-bottom:36px;}
-.gen-steps{display:flex;flex-direction:column;gap:10px;max-width:320px;margin-bottom:20px;}
-.gstep{display:flex;align-items:center;gap:10px;font-size:13px;color:#888899;opacity:.4;transition:all .4s;}
-.gstep.act{color:#00C2B7;opacity:1;}
-.gstep.done{color:#1D9E75;opacity:1;}
-.gdot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0;}
-.debug-box{font-size:11px;color:#666677;max-width:380px;background:#0D0D1A;border-radius:8px;padding:10px 14px;text-align:left;}
+/* SECTIONS */
+.section{max-width:1060px;margin:0 auto;padding:56px 24px;}
+.section-hdr{display:flex;align-items:center;gap:16px;margin-bottom:36px;}
+.section-label{font-size:10px;font-weight:800;letter-spacing:2px;color:#00C2B7;background:rgba(0,194,183,.1);border:1px solid rgba(0,194,183,.2);border-radius:20px;padding:4px 14px;white-space:nowrap;}
+.section-line{flex:1;height:1px;background:rgba(255,255,255,.06);}
+.section-title{font-size:22px;font-weight:800;color:#F0F0F8;margin-bottom:6px;}
+.section-sub{font-size:13px;color:#666677;line-height:1.6;}
 
-/* PILLARS */
-.pillars-screen{min-height:100vh;display:flex;flex-direction:column;}
-.pillars-body{flex:1;max-width:660px;margin:0 auto;width:100%;padding:32px 24px;}
-.pr-t{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:6px;}
-.pr-s{font-size:13px;color:#888899;margin-bottom:28px;line-height:1.6;}
-.pillar-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;}
-.pillar-row{display:flex;align-items:center;gap:14px;padding:14px 16px;background:#0D0D1A;border-radius:12px;border:1.5px solid rgba(255,255,255,.06);}
-.p-swatch{width:38px;height:38px;border-radius:9px;flex-shrink:0;}
-.p-info{flex:1;}
-.p-name{font-size:14px;font-weight:700;margin-bottom:3px;}
-.p-desc{font-size:11px;color:#888899;line-height:1.5;}
-.p-count{font-size:22px;font-weight:800;color:#FF8C32;flex-shrink:0;}
-.pr-nav{display:flex;gap:10px;}
+/* DIVIDER */
+.section-divider{max-width:1060px;margin:0 auto 0;padding:0 24px;}
+.divider-line{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);}
 
-/* CALENDAR */
-.cal-app{min-height:100vh;display:flex;flex-direction:column;}
-.cal-hd{background:#0D0D1A;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;}
-.cal-hinner{max-width:1020px;margin:0 auto;padding:14px 20px 0;}
-.cal-htop{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.cal-info{flex:1;}
-.cal-title{font-size:14px;font-weight:800;color:#F0F0F8;}
-.cal-meta{font-size:11px;color:#666677;margin-top:2px;}
-.cal-tabs{display:flex;gap:2px;overflow-x:auto;}
-.ctab{padding:8px 14px;border:none;border-radius:8px 8px 0 0;cursor:pointer;font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;white-space:nowrap;background:rgba(255,255,255,.04);color:#888899;transition:all .15s;border-bottom:2px solid transparent;}
-.ctab.active{background:rgba(255,255,255,.09);color:#F0F0F8;border-bottom-color:#FF8C32;}
-.tbadge{background:rgba(255,255,255,.08);border-radius:8px;padding:1px 6px;font-size:10px;}
-.ctab.active .tbadge{background:#FF8C32;color:#fff;}
-.cal-filters{background:#080812;border-bottom:1px solid rgba(255,255,255,.05);padding:9px 20px;flex-shrink:0;}
-.cf-inner{max-width:1020px;margin:0 auto;display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
-.cf-lbl{font-size:10px;font-weight:800;letter-spacing:1px;color:#444455;margin-right:2px;}
-.cf-btn{padding:3px 11px;border-radius:16px;border:none;cursor:pointer;font-size:11px;font-weight:700;background:rgba(255,255,255,.05);color:#888899;transition:all .15s;}
-.cf-btn.act{background:#FF8C32;color:#fff;}
-.cf-sep{width:1px;height:14px;background:rgba(255,255,255,.08);margin:0 4px;}
-.cal-body{flex:1;max-width:1020px;margin:0 auto;width:100%;padding:24px 20px 80px;}
-.plat-empty{text-align:center;padding:60px 24px;}
-.plat-ico2{font-size:44px;margin-bottom:16px;}
-.plat-et{font-size:18px;font-weight:800;margin-bottom:8px;}
-.plat-es{font-size:13px;color:#888899;margin-bottom:24px;line-height:1.6;}
-.gen-plat-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:linear-gradient(90deg,#00C2B7,#4A6FFF);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;transition:opacity .2s;}
-.gen-plat-btn:hover{opacity:.9;}
-.week-sec{margin-bottom:32px;}
-.week-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.wline{flex:1;height:1px;background:rgba(255,255,255,.05);}
-.wlbl{font-size:10px;font-weight:800;letter-spacing:1.5px;color:#FF8C32;}
-.wtheme{font-size:11px;color:#444455;}
-.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:11px;}
+/* FREE TOOLS GRID */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.tool-card{background:#0D0D1A;border:1.5px solid rgba(255,255,255,.06);border-radius:16px;padding:28px;transition:border-color .2s;position:relative;overflow:hidden;}
+.tool-card:hover{border-color:rgba(0,194,183,.3);}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#00C2B7,#4A6FFF);}
+.tool-icon{font-size:28px;margin-bottom:14px;}
+.tool-badge{display:inline-block;background:rgba(0,194,183,.1);border:1px solid rgba(0,194,183,.2);color:#00C2B7;font-size:10px;font-weight:800;letter-spacing:.5px;border-radius:6px;padding:2px 10px;margin-bottom:12px;}
+.tool-name{font-size:17px;font-weight:800;margin-bottom:8px;color:#F0F0F8;}
+.tool-desc{font-size:13px;color:#888899;line-height:1.65;margin-bottom:20px;}
+.tool-features{display:flex;flex-direction:column;gap:6px;margin-bottom:22px;}
+.tool-feat{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#AAAACC;}
+.tool-feat-dot{width:5px;height:5px;border-radius:50%;background:#00C2B7;flex-shrink:0;margin-top:5px;}
+.btn-tool{display:block;text-align:center;padding:12px;background:rgba(0,194,183,.08);border:1.5px solid rgba(0,194,183,.25);border-radius:10px;color:#00C2B7;font-size:13px;font-weight:800;text-decoration:none;transition:all .2s;cursor:pointer;}
+.btn-tool:hover{background:rgba(0,194,183,.15);color:#00C2B7;}
 
-/* CARD */
-.pcard{background:#0D0D1A;border-radius:12px;border:1.5px solid rgba(255,255,255,.05);cursor:pointer;overflow:hidden;transition:border-color .2s;}
-.pcard:hover{border-color:rgba(255,255,255,.1);}
-.pcard.exp{border-color:var(--pc,#FF8C32);}
-.card-h{padding:11px 13px 9px;}
-.card-m{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
-.cbadges{display:flex;gap:5px;flex-wrap:wrap;}
-.dbadge{background:#FF8C32;color:#080812;border-radius:5px;padding:2px 7px;font-size:10px;font-weight:800;}
-.fbadge{background:rgba(255,255,255,.06);color:#AAAACC;border-radius:5px;padding:2px 7px;font-size:10px;font-weight:600;}
-.plbl{font-size:9px;font-weight:800;letter-spacing:.4px;}
-.chook{font-size:12px;font-weight:700;color:#F0F0F8;line-height:1.4;margin:0;}
-.card-p{padding:7px 13px 9px;display:flex;justify-content:space-between;align-items:center;}
-.card-p span:first-child{font-size:11px;color:#444455;}
-.sbadge{font-size:10px;font-weight:700;border-radius:5px;padding:2px 8px;}
-.s-draft{background:rgba(255,255,255,.05);color:#666677;}
-.s-scheduled{background:rgba(74,111,255,.15);color:#4A6FFF;}
-.s-published{background:rgba(29,158,117,.15);color:#1D9E75;}
-.card-b{padding:12px;}
-.ctabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap;}
-.ctab2{padding:4px 10px;border-radius:6px;border:none;cursor:pointer;font-size:11px;font-weight:700;background:rgba(255,255,255,.05);color:#888899;transition:all .15s;}
-.ctab2.act{background:#FF8C32;color:#fff;}
-.ctab2.design{background:rgba(155,89,255,.1);color:#9B59FF;}
-.ctab2.design.act{background:#9B59FF;color:#fff;}
-.cbox{background:#080812;border-radius:8px;padding:11px;margin-bottom:8px;max-height:190px;overflow-y:auto;}
-.cbox p{font-size:12px;color:#CCCCDD;line-height:1.85;white-space:pre-wrap;margin:0;}
-.cc{font-size:10px;font-weight:700;margin-bottom:7px;}
-.cc-ok{color:#1D9E75;}.cc-warn{color:#F4A91E;}.cc-over{color:#E85D4A;}
-.ebox{border-radius:8px;padding:11px;margin-bottom:8px;}
-.ebox-lbl{font-size:10px;font-weight:800;letter-spacing:.5px;margin-bottom:5px;}
-.ebox p{font-size:12px;color:#CCCCDD;line-height:1.6;margin:0;}
-.e-alt{background:rgba(74,111,255,.08);border:1px solid rgba(74,111,255,.2);}
-.e-hash{background:rgba(0,194,183,.08);border:1px solid rgba(0,194,183,.2);}
-.dbox-h{background:linear-gradient(135deg,#0D0D1A,#111128);border-radius:8px;padding:9px 12px;margin-bottom:7px;border:1px solid rgba(155,89,255,.2);}
-.dbox-t{font-size:10px;font-weight:800;letter-spacing:1px;color:#9B59FF;margin-bottom:3px;}
-.dbox-s{font-size:10px;color:#888899;}
-.codebox{background:#050510;border-radius:8px;padding:11px;margin-bottom:8px;max-height:200px;overflow-y:auto;}
-.codebox pre{font-size:11px;color:#90FFD0;line-height:1.8;white-space:pre-wrap;font-family:monospace;margin:0;}
-.card-acts{display:flex;gap:6px;flex-wrap:wrap;}
-.act-btn{flex:1;padding:8px 6px;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;min-width:70px;transition:all .2s;}
-.btn-cpy{background:#FF8C32;color:#fff;}
-.btn-cpy.cpd{background:#1D9E75;}
-.btn-regen{background:rgba(255,255,255,.05);color:#888899;border:1px solid rgba(255,255,255,.08);}
-.btn-regen:hover{background:rgba(255,255,255,.1);color:#F0F0F8;}
-.sselect{flex:1;padding:7px 8px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#CCCCDD;font-size:11px;font-weight:600;cursor:pointer;min-width:70px;}
-.export-bar{position:fixed;bottom:18px;right:18px;z-index:50;}
-.exp-btn{padding:9px 16px;background:#0D0D1A;border:1.5px solid rgba(0,194,183,.3);border-radius:10px;color:#00C2B7;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
-.exp-btn:hover{background:rgba(0,194,183,.08);}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;}
-.modal{background:#111128;border-radius:14px;padding:26px;max-width:500px;width:100%;border:1.5px solid rgba(255,255,255,.09);}
-.modal h3{font-size:15px;font-weight:800;margin-bottom:10px;}
-.modal p{font-size:12px;color:#888899;line-height:1.65;margin-bottom:10px;}
-.modal input{width:100%;background:#080812;border:1.5px solid rgba(255,255,255,.09);border-radius:8px;padding:11px 13px;color:#F0F0F8;font-size:13px;margin-bottom:10px;}
-.modal input:focus{outline:none;border-color:#00C2B7;}
-.m-lbl{display:block;font-size:10px;font-weight:800;letter-spacing:1px;color:#666677;margin-bottom:5px;}
-.m-acts{display:flex;gap:9px;margin-top:14px;}
-.btn-cancel{padding:10px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:9px;color:#888899;font-size:12px;font-weight:700;cursor:pointer;}
-@media(max-width:560px){.voice-grid{grid-template-columns:1fr;}.opt-grid{grid-template-columns:1fr 1fr;}.plat-grid{grid-template-columns:repeat(3,1fr);}}
+/* KITS GRID */
+.kits-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
+.kit-card{background:#0D0D1A;border:1.5px solid rgba(255,140,50,.15);border-radius:16px;overflow:hidden;transition:border-color .2s;position:relative;}
+.kit-card:hover{border-color:rgba(255,140,50,.35);}
+.kit-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#FF8C32,#E86A00);}
+.kit-top{padding:28px 28px 20px;}
+.kit-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.kit-badge-new{background:rgba(255,140,50,.15);border:1px solid rgba(255,140,50,.3);color:#FF8C32;font-size:10px;font-weight:800;letter-spacing:.5px;border-radius:6px;padding:2px 10px;}
+.kit-price{font-size:13px;font-weight:800;color:#FF8C32;margin-left:auto;}
+.kit-name{font-size:19px;font-weight:800;color:#F0F0F8;margin-bottom:6px;line-height:1.3;}
+.kit-tagline{font-size:13px;color:#888899;line-height:1.6;margin-bottom:18px;}
+.kit-includes{display:flex;flex-direction:column;gap:7px;margin-bottom:0;}
+.kit-inc{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:#CCCCDD;}
+.kit-inc-icon{color:#FF8C32;flex-shrink:0;font-size:13px;margin-top:1px;}
+.kit-bottom{padding:20px 28px 24px;border-top:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.01);}
+.kit-outcome{font-size:11px;font-weight:700;letter-spacing:.5px;color:#666677;margin-bottom:8px;}
+.kit-outcome-val{font-size:13px;color:#F0F0F8;line-height:1.5;margin-bottom:16px;}
+.btn-kit{display:block;text-align:center;padding:14px;background:linear-gradient(90deg,#FF8C32,#E86A00);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer;transition:opacity .2s;}
+.btn-kit:hover{opacity:.9;color:#fff;}
+.kit-note{font-size:11px;color:#444455;text-align:center;margin-top:8px;}
+
+/* COMING SOON CARD */
+.kit-card.coming{border-color:rgba(255,255,255,.06);opacity:.6;}
+.kit-card.coming::before{background:linear-gradient(90deg,#666677,#444455);}
+.kit-card.coming .kit-price{color:#666677;}
+.kit-card.coming .kit-badge-new{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#666677;}
+.btn-kit-ghost{display:block;text-align:center;padding:14px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:10px;color:#666677;font-size:13px;font-weight:800;cursor:default;}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.05);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.foot-note{font-size:11px;color:#444455;}
+.foot-links{display:flex;gap:20px;}
+.foot-links a{font-size:11px;color:#444455;text-decoration:none;}
+.foot-links a:hover{color:#888899;}
+
+@media(max-width:600px){
+  nav{padding:16px 20px;}
+  .nav-links{gap:16px;}
+  .section{padding:40px 16px;}
+  footer{padding:24px 20px;flex-direction:column;align-items:flex-start;}
+}
 </style>
 </head>
 <body>
-<div id="app"></div>
-<script>
-var CFG = { portalId:'', formGuid:'' };
+<div class="gbar"></div>
 
-var S = {
-  screen:'gate', modal:null,
-  gErr:null, wErr:null,
-  user:{name:'',email:'',business:''},
-  wStep:0,
-  ans:{industry:'',audience:'',offer:'',voice:'',goals:[],platforms:[]},
-  pillars:[],
-  pillarErr:null, genStep:0, debugMsg:'Starting...',
-  posts:{}, genBusy:{}, postErr:{},
-  expanded:null, ctab:{}, pstatus:{},
-  activePlat:null,
-  filters:{pillar:'all',format:'all'},
-  cpState:{}, portalId:'', formGuid:''
-};
+<nav>
+  <div class="logo">CLAIREN<em>HAUS</em></div>
+  <div class="nav-links">
+    <a href="https://clairenhaus.com">Home</a>
+    <a href="https://clairenhaus.com/#services">Services</a>
+    <a href="https://tools.clairenhaus.com" style="color:#00C2B7">Tools</a>
+    <a href="https://clairenhaus.com/#contact" class="nav-cta">Work With Us</a>
+  </div>
+</nav>
 
-var PLATS = [
-  {id:'ig',label:'Instagram',icon:'📸',color:'#E1306C',limit:2200,formats:['Carousel','Reel','Static Post','Story']},
-  {id:'li',label:'LinkedIn',icon:'💼',color:'#0A66C2',limit:3000,formats:['Text Post','Carousel/Doc','Video','Image+Text']},
-  {id:'fb',label:'Facebook',icon:'📘',color:'#1877F2',limit:5000,formats:['Text Post','Video','Image Post']},
-  {id:'tt',label:'TikTok',icon:'🎵',color:'#FF2D55',limit:2200,formats:['Hook/Script','Talking Head','Trending Audio','Stitch/Duet']},
-  {id:'th',label:'Threads',icon:'🧵',color:'#AAAAAA',limit:500,formats:['Text Thread','Quote Post','Poll','Image Post']},
-  {id:'x',label:'X (Twitter)',icon:'🐦',color:'#1DA1F2',limit:280,formats:['Tweet','Thread','Quote Tweet','Poll']}
-];
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-pill">⚡ Built by Clairen Haus</div>
+  <h1>AI Tools & Systems <span>Built for the Way You Actually Work</span></h1>
+  <p>Free tools to get you started. Paid systems to put your operations on autopilot.</p>
+</div>
 
-var WIZ = [
-  {id:'industry',num:'STEP 1 OF 6',type:'select',q:'What type of business do you run?',sub:'This shapes your content topics and tone across all platforms.',
-   opts:['Retail / E-commerce','Restaurant / Food','Health & Wellness','Beauty / Personal Care','Professional Services','Real Estate','Coaching / Consulting','Creative Services','Tech / SaaS','Construction / Trades','Non-profit','Other']},
-  {id:'audience',num:'STEP 2 OF 6',type:'text',q:'Who is your ideal customer?',sub:'Describe them: who they are, what they struggle with, and what they want.',ph:'Example: Small business owners who struggle to get consistent clients and want to build steady revenue without spending a lot on ads.'},
-  {id:'offer',num:'STEP 3 OF 6',type:'text',q:'What is your core offer?',sub:'The main product or service you want this content to drive people toward.',ph:'Example: A 6-week coaching program for first-time entrepreneurs launching their first offer online.'},
-  {id:'voice',num:'STEP 4 OF 6',type:'voice',q:'How does your brand sound?',sub:'Pick the voice that feels most like you.',
-   opts:[{v:'bold',t:'Bold & Direct',d:'No fluff. Straight to the point. You say what others are afraid to say.'},{v:'warm',t:'Warm & Relatable',d:'Conversational and human. Like a trusted friend who has all the answers.'},{v:'expert',t:'Expert & Authoritative',d:'Credible, research-backed, professional. You lead with depth and knowledge.'},{v:'inspirational',t:'Inspirational & Story-Driven',d:'Motivating, narrative-heavy, emotionally resonant. You move people to act.'},{v:'educational',t:'Educational & Clear',d:'Simple breakdowns and step-by-step. You make the complex feel easy.'},{v:'playful',t:'Playful & Energetic',d:'Fun, light, pop-culture aware. You make people smile while they learn.'}]},
-  {id:'goals',num:'STEP 5 OF 6',type:'multi',q:'What are your top content goals?',sub:'Select all that apply.',opts:['Generate leads','Drive sales','Build brand awareness','Grow community','Establish thought leadership','Increase website traffic','Build email list','Showcase work']},
-  {id:'platforms',num:'STEP 6 OF 6',type:'platforms',q:'Which platforms do you post on?',sub:'Select all that apply. We will generate 30 tailored posts for each one.'}
-];
+<!-- FREE TOOLS SECTION -->
+<div class="section">
+  <div class="section-hdr">
+    <div class="section-label">FREE TOOLS</div>
+    <div class="section-line"></div>
+  </div>
+  <div style="margin-bottom:28px;">
+    <div class="section-title">Start here. No credit card.</div>
+    <div class="section-sub">AI-powered tools you can use right now to generate content, plan your calendar, and save hours every week.</div>
+  </div>
 
-var WEEKS = [
-  {label:'Week 1',days:[1,2,3,4,5,6,7],theme:'Establish + Educate'},
-  {label:'Week 2',days:[8,9,10,11,12,13,14],theme:'Build Trust + Go Deeper'},
-  {label:'Week 3',days:[15,16,17,18,19,20,21],theme:'Authority + Social Proof'},
-  {label:'Week 4',days:[22,23,24,25,26,27,28],theme:'Conversion + Offers'},
-  {label:'Final Push',days:[29,30],theme:'Final Push'}
-];
+  <div class="tools-grid">
 
-function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function ea(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n').replace(/"/g,'&quot;'); }
-function h2r(hex,a){ var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16); return 'rgba('+r+','+g+','+b+','+a+')'; }
-function getPl(id){ for(var i=0;i<PLATS.length;i++){if(PLATS[i].id===id) return PLATS[i];} return null; }
-function getPillar(key){ for(var i=0;i<S.pillars.length;i++){if(S.pillars[i].key===key) return S.pillars[i];} return S.pillars[0]||{key:'x',label:'Content',color:'#FF8C32',emoji:''}; }
+    <!-- Content Calendar Generator -->
+    <div class="tool-card">
+      <div class="tool-icon">📅</div>
+      <div class="tool-badge">FREE TOOL</div>
+      <div class="tool-name">30-Day Content Calendar Generator</div>
+      <div class="tool-desc">Answer 6 questions about your business and get a complete, custom 30-day content calendar for every platform you post on.</div>
+      <div class="tool-features">
+        <div class="tool-feat"><div class="tool-feat-dot"></div>30 posts per platform, tailored to your offer</div>
+        <div class="tool-feat"><div class="tool-feat-dot"></div>Instagram, Facebook, LinkedIn, TikTok, X, Threads</div>
+        <div class="tool-feat"><div class="tool-feat-dot"></div>5 custom content pillars built for your business</div>
+        <div class="tool-feat"><div class="tool-feat-dot"></div>Export to CSV for any scheduler</div>
+      </div>
+      <a href="/calendar" class="btn-tool">Build My Calendar →</a>
+    </div>
 
-function render(){
-  var app=document.getElementById('app');
-  var html='';
-  if(S.screen==='gate') html=rGate();
-  else if(S.screen==='wizard') html=rWizard();
-  else if(S.screen==='generating') html=rGenerating();
-  else if(S.screen==='pillars') html=rPillars();
-  else if(S.screen==='calendar') html=rCalendar();
-  if(S.modal==='webhook') html+=rModal();
-  app.innerHTML=html;
-  bindListeners();
-}
+    <!-- E-Commerce Content Generator -->
+    <div class="tool-card">
+      <div class="tool-icon">🛍️</div>
+      <div class="tool-badge">FREE TOOL</div>
+      <div class="tool-name">E-Commerce Content Generator</div>
+      <div class="tool-desc">Upload a product photo and get AI-generated captions, hooks, and hashtags optimized for your platform and audience.</div>
+      <div class="tool-features">
+        <div class="tool-feat"><div class="tool-feat-dot"></div>Claude Vision analyzes your actual product photo</div>
+        <div class="tool-feat"><div class="tool-feat-dot"></div>Platform-optimized copy for IG, FB, TikTok</div>
+        <div class="tool-feat"><div class="tool-feat-dot"></div>Multiple caption styles per product</div>
+        <div class="tool-feat"><div class="tool-feat-dot"></div>Hashtag sets included</div>
+      </div>
+      <a href="/ecommerce" class="btn-tool">Generate Product Content →</a>
+    </div>
 
-function rGate(){
-  return '<div class="gate"><div class="gbar"></div><div class="gate-body">'+
-    '<div class="gate-pill">✨ Free Tool by Clairen Haus</div>'+
-    '<div class="logo" style="margin-bottom:16px">CLAIREN<em>HAUS</em></div>'+
-    '<h1>Your 30-Day Content Calendar. <span>Built by AI. Built for Your Business.</span></h1>'+
-    '<p>Answer 6 quick questions about your business and get a complete, custom 30-day content calendar for every platform you use.</p>'+
-    '<div class="gate-form">'+
-    '<div class="field"><label>YOUR NAME</label><input id="gn" type="text" placeholder="First name" value="'+esc(S.user.name)+'"></div>'+
-    '<div class="field"><label>BUSINESS NAME</label><input id="gb" type="text" placeholder="Your business or brand name" value="'+esc(S.user.business)+'"></div>'+
-    '<div class="field"><label>EMAIL ADDRESS</label><input id="ge" type="email" placeholder="your@email.com" value="'+esc(S.user.email)+'"></div>'+
-    (S.gErr?'<div class="err">'+S.gErr+'</div>':'')+
-    '<button class="btn-primary" onclick="submitGate()">Build My Content Calendar →</button>'+
-    '</div><p class="gate-foot">No spam. No credit card. Just your calendar.</p>'+
-    '</div></div>';
-}
+  </div>
+</div>
 
-function submitGate(){
-  var name=document.getElementById('gn').value.trim();
-  var biz=document.getElementById('gb').value.trim();
-  var email=document.getElementById('ge').value.trim();
-  if(!name||!biz||!email){S.gErr='Please fill in all fields.';render();return;}
-  if(!email.includes('@')){S.gErr='Please enter a valid email.';render();return;}
-  S.user={name:name,business:biz,email:email};S.gErr=null;
-  var pid=S.portalId||CFG.portalId;
-  var fguid=S.formGuid||CFG.formGuid;
-  if(pid&&fguid){
-    fetch('https://api.hsforms.com/submissions/v3/integration/submit/'+pid+'/'+fguid,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({fields:[{name:'firstname',value:name},{name:'email',value:email},{name:'company',value:biz}],context:{pageUri:'https://tools.clairenhaus.com/calendar',pageName:'30-Day Content Calendar Generator'}})
-    }).catch(function(){});
-  }
-  S.screen='wizard';S.wStep=0;render();
-}
+<div class="section-divider"><div class="divider-line"></div></div>
 
-function rWizard(){
-  var step=WIZ[S.wStep];
-  var dots='';
-  for(var i=0;i<WIZ.length;i++){
-    var cls=i<S.wStep?'done':i===S.wStep?'active':'';
-    dots+='<div class="wdot '+cls+'"></div>';
-  }
-  var body='';
-  if(step.type==='select'){
-    var opts='';
-    for(var i=0;i<step.opts.length;i++){
-      var sel=S.ans.industry===step.opts[i]?' sel':'';
-      opts+='<div class="opt'+sel+'" onclick="pickInd(\''+ea(step.opts[i])+'\')">'+esc(step.opts[i])+'</div>';
-    }
-    body='<div class="opt-grid">'+opts+'</div>';
-  } else if(step.type==='text'){
-    body='<textarea class="ta-input" id="ta" placeholder="'+esc(step.ph)+'" onkeyup="taSync()" oninput="taSync()" onpaste="setTimeout(taSync,10)">'+esc(S.ans[step.id]||'')+'</textarea>';
-  } else if(step.type==='voice'){
-    var vopts='';
-    for(var i=0;i<step.opts.length;i++){
-      var o=step.opts[i];
-      var sel=S.ans.voice===o.v?' sel':'';
-      vopts+='<div class="voice-opt'+sel+'" onclick="pickVoice(\''+o.v+'\')"><div class="voice-t">'+esc(o.t)+'</div><div class="voice-d">'+esc(o.d)+'</div></div>';
-    }
-    body='<div class="voice-grid">'+vopts+'</div>';
-  } else if(step.type==='multi'){
-    var mopts='';
-    for(var i=0;i<step.opts.length;i++){
-      var g=step.opts[i];
-      var sel=(S.ans.goals||[]).indexOf(g)>-1?' msel':'';
-      mopts+='<div class="opt'+sel+'" onclick="togGoal(\''+ea(g)+'\')">'+esc(g)+'</div>';
-    }
-    body='<div class="opt-grid">'+mopts+'</div>';
-  } else if(step.type==='platforms'){
-    var popts='';
-    for(var i=0;i<PLATS.length;i++){
-      var p=PLATS[i];
-      var sel=(S.ans.platforms||[]).indexOf(p.id)>-1?' sel':'';
-      popts+='<div class="plat-opt'+sel+'" onclick="togPlat(\''+p.id+'\')"><div class="plat-ico">'+p.icon+'</div><div class="plat-nm">'+p.label+'</div></div>';
-    }
-    body='<div class="plat-grid">'+popts+'</div>';
-  }
-  var ok=canNext();
-  return '<div class="wizard"><div class="gbar"></div><div class="wiz-body">'+
-    '<div class="wiz-top"><div class="logo">CLAIREN<em>HAUS</em></div><div class="wiz-prog">'+dots+'</div></div>'+
-    '<div class="step-anim">'+
-    '<div class="step-num">'+step.num+'</div>'+
-    '<div class="step-q">'+esc(step.q)+'</div>'+
-    '<div class="step-sub">'+esc(step.sub)+'</div>'+
-    body+
-    (S.wErr?'<div class="err">'+S.wErr+'</div>':'')+
-    '<div class="wiz-nav">'+
-    (S.wStep>0?'<button class="btn-back" onclick="wizBack()">← Back</button>':'')+
-    '<button class="btn-next" onclick="wizNext()"'+(ok?'':' disabled')+'>'+
-    (S.wStep===WIZ.length-1?'Generate My Calendar →':'Continue →')+
-    '</button></div></div></div></div>';
-}
+<!-- SYSTEMS + KITS SECTION -->
+<div class="section">
+  <div class="section-hdr">
+    <div class="section-label" style="color:#FF8C32;background:rgba(255,140,50,.1);border-color:rgba(255,140,50,.2);">SYSTEMS + KITS</div>
+    <div class="section-line"></div>
+  </div>
+  <div style="margin-bottom:28px;">
+    <div class="section-title">Ready-to-deploy systems. Set up in an afternoon.</div>
+    <div class="section-sub">Not courses. Not PDFs. Plug-and-play operations systems with the sequences, blueprints, and walkthroughs to go live fast.</div>
+  </div>
 
-function taSync(){
-  var ta=document.getElementById('ta');
-  if(!ta) return;
-  var step=WIZ[S.wStep];
-  S.ans[step.id]=ta.value;
-  var ok=canNext();
-  var btn=document.querySelector('.btn-next');
-  if(btn) btn.disabled=!ok;
-}
+  <div class="kits-grid">
 
-function pickInd(v){ S.ans.industry=v; S.wErr=null; render(); }
-function pickVoice(v){ S.ans.voice=v; S.wErr=null; render(); }
-function togGoal(v){
-  var a=S.ans.goals||[];
-  var i=a.indexOf(v);
-  if(i>-1) a.splice(i,1); else a.push(v);
-  S.ans.goals=a; render();
-}
-function togPlat(id){
-  var a=S.ans.platforms||[];
-  var i=a.indexOf(id);
-  if(i>-1) a.splice(i,1); else a.push(id);
-  S.ans.platforms=a; render();
-}
+    <!-- The 5-Minute Follow-Up System -->
+    <div class="kit-card">
+      <div class="kit-top">
+        <div class="kit-eyebrow">
+          <div class="kit-badge-new">NEW</div>
+          <div class="kit-price">$27</div>
+        </div>
+        <div class="kit-name">The 5-Minute Follow-Up System</div>
+        <div class="kit-tagline">Your next lead gets a response in under 5 minutes. Without you touching your phone.</div>
+        <div class="kit-includes">
+          <div class="kit-inc"><div class="kit-inc-icon">▸</div>SMS + Email sequences for 3 lead scenarios</div>
+          <div class="kit-inc"><div class="kit-inc-icon">▸</div>Automation blueprint — visual, tool-agnostic</div>
+          <div class="kit-inc"><div class="kit-inc-icon">▸</div>Dead List Reactivation — 5 messages, done</div>
+          <div class="kit-inc"><div class="kit-inc-icon">▸</div>Setup Day checklist — live in one afternoon</div>
+          <div class="kit-inc"><div class="kit-inc-icon">▸</div>Loom walkthroughs — see it done, step by step</div>
+        </div>
+      </div>
+      <div class="kit-bottom">
+        <div class="kit-outcome">WHAT YOU WALK AWAY WITH</div>
+        <div class="kit-outcome-val">A fully automated lead response system that works whether you're in a meeting, on a job, or asleep.</div>
+        <a href="/systems/follow-up-kit/checkout" class="btn-kit">Get Instant Access — $27</a>
+        <div class="kit-note">Instant delivery. Works with any email or SMS tool.</div>
+      </div>
+    </div>
 
-function canNext(){
-  var s=WIZ[S.wStep];
-  if(s.type==='select') return !!S.ans.industry;
-  if(s.type==='text') return (S.ans[s.id]||'').trim().length>2;
-  if(s.type==='voice') return !!S.ans.voice;
-  if(s.type==='multi') return (S.ans.goals||[]).length>0;
-  if(s.type==='platforms') return (S.ans.platforms||[]).length>0;
-  return true;
-}
+    <!-- Coming Soon: The Booking Kit -->
+    <div class="kit-card coming">
+      <div class="kit-top">
+        <div class="kit-eyebrow">
+          <div class="kit-badge-new">COMING SOON</div>
+          <div class="kit-price">$27</div>
+        </div>
+        <div class="kit-name">The Booking Kit</div>
+        <div class="kit-tagline">Turn your calendar into a lead-closing machine. Automated confirmations, reminders, and no-show follow-up.</div>
+        <div class="kit-includes">
+          <div class="kit-inc"><div class="kit-inc-icon">▸</div>Booking confirmation sequences</div>
+          <div class="kit-inc"><div class="kit-inc-icon">▸</div>Pre-call reminder flow (24hr + 1hr)</div>
+          <div class="kit-inc"><div class="kit-inc-icon">▸</div>No-show recovery sequence</div>
+          <div class="kit-inc"><div class="kit-inc-icon">▸</div>Post-call follow-up templates</div>
+        </div>
+      </div>
+      <div class="kit-bottom">
+        <div class="kit-outcome">NOTIFY ME</div>
+        <div class="kit-outcome-val">Drop your email and be first when this drops.</div>
+        <div class="btn-kit-ghost">Coming Soon</div>
+      </div>
+    </div>
 
-function wizBack(){ S.wStep=Math.max(0,S.wStep-1); S.wErr=null; render(); }
-function wizNext(){
-  if(!canNext()){ S.wErr='Please make a selection to continue.'; render(); return; }
-  if(S.wStep<WIZ.length-1){ S.wStep++; S.wErr=null; render(); }
-  else { S.screen='generating'; render(); genPillars(); }
-}
+  </div>
+</div>
 
-function rGenerating(){
-  var steps=['Analyzing your business type and audience','Building your 5 custom content pillars','Finalizing your calendar framework'];
-  var stepsHtml='';
-  for(var i=0;i<steps.length;i++){
-    var cls=S.genStep===i?'act':S.genStep>i?'done':'';
-    stepsHtml+='<div class="gstep '+cls+'"><div class="gdot"></div>'+steps[i]+'</div>';
-  }
-  return '<div class="gen-screen">'+
-    '<div class="spinner"></div>'+
-    '<div class="gen-t">Building your custom content pillars...</div>'+
-    '<div class="gen-s">Analyzing your business, audience, and goals</div>'+
-    '<div class="gen-steps">'+stepsHtml+'</div>'+
-    '<div class="debug-box" id="dbg">'+esc(S.debugMsg)+'</div>'+
-    (S.pillarErr?'<div class="err" style="max-width:380px;margin-top:16px">'+S.pillarErr+'<br><button class="btn-back" style="margin-top:10px" onclick="genPillars()">Try Again</button></div>':'')+
-    '</div>';
-}
+<footer>
+  <div class="logo">CLAIREN<em>HAUS</em></div>
+  <div class="foot-note">© 2025 Clairen Haus LLC. Operations, built to run without you.</div>
+  <div class="foot-links">
+    <a href="https://clairenhaus.com/privacy">Privacy</a>
+    <a href="https://clairenhaus.com/terms">Terms</a>
+    <a href="mailto:hello@clairenhaus.com">Contact</a>
+  </div>
+</footer>
 
-function setDebug(msg){
-  S.debugMsg=msg;
-  var el=document.getElementById('dbg');
-  if(el) el.textContent=msg;
-}
-
-function genPillars(){
-  S.genStep=0; S.pillarErr=null; S.debugMsg='Initializing...'; render();
-  var platNames=[];
-  for(var i=0;i<S.ans.platforms.length;i++){
-    var p=getPl(S.ans.platforms[i]);
-    if(p) platNames.push(p.label);
-  }
-  var prompt='You are a social media content strategist. Based on this business profile, create exactly 5 distinct content pillars for a 30-day social media calendar.\n\n'+
-    'Business: '+S.user.business+'\nIndustry: '+S.ans.industry+'\nTarget Audience: '+S.ans.audience+'\nCore Offer: '+S.ans.offer+'\nBrand Voice: '+S.ans.voice+'\nContent Goals: '+(S.ans.goals||[]).join(', ')+'\nPlatforms: '+platNames.join(', ')+'\n\n'+
-    'Return ONLY valid JSON. No markdown, no explanation:\n{"pillars":[{"key":"slug","label":"Pillar Name","description":"One sentence on what this covers and why it matters for this specific business.","color":"#hexcolor","emoji":"emoji"}]}\n\n'+
-    'Rules:\n- Exactly 5 pillars. Each serves a distinct purpose.\n- Include at least one education pillar, one trust/social proof pillar, one direct CTA/offer pillar.\n- Make labels specific to this business, not generic.\n- Colors must be distinct and vibrant hex values.\n- No em dashes anywhere. Use commas or periods instead.';
-
-  var t1=setTimeout(function(){S.genStep=1;setDebug('Calling AI...');},700);
-  var t2=setTimeout(function(){S.genStep=2;setDebug('Waiting for response...');},1400);
-  var timedOut=false;
-  var timer=setTimeout(function(){
-    timedOut=true;
-    clearTimeout(t1);clearTimeout(t2);
-    S.pillarErr='Request timed out. Please try again.';
-    render();
-  },45000);
-
-  setDebug('Sending request...');
-  fetch('/api/claude',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
-  }).then(function(res){
-    if(timedOut) return;
-    clearTimeout(timer);clearTimeout(t1);clearTimeout(t2);
-    setDebug('Response received. Status: '+res.status);
-    if(!res.ok) throw new Error('API error '+res.status);
-    return res.json();
-  }).then(function(d){
-    if(!d||timedOut) return;
-    setDebug('Parsing pillars...');
-    if(d.error) throw new Error(d.error.message||'API error');
-    var txt='';
-    if(d.content){for(var i=0;i<d.content.length;i++){if(d.content[i].type==='text'){txt=d.content[i].text;break;}}}
-    if(!txt) throw new Error('Empty response');
-    var clean=txt.replace(/```json|```/g,'').trim();
-    var parsed=JSON.parse(clean);
-    if(!parsed.pillars||!parsed.pillars.length) throw new Error('No pillars in response');
-    S.pillars=parsed.pillars;
-    S.screen='pillars';
-    render();
-  }).catch(function(e){
-    if(timedOut) return;
-    clearTimeout(timer);clearTimeout(t1);clearTimeout(t2);
-    S.pillarErr=e.message||'Something went wrong. Please try again.';
-    render();
-  });
-}
-
-function rPillars(){
-  var rows='';
-  for(var i=0;i<S.pillars.length;i++){
-    var p=S.pillars[i];
-    rows+='<div class="pillar-row">'+
-      '<div class="p-swatch" style="background:'+p.color+'"></div>'+
-      '<div class="p-info"><div class="p-name">'+(p.emoji||'')+' '+esc(p.label)+'</div><div class="p-desc">'+esc(p.description)+'</div></div>'+
-      '<div class="p-count">6</div></div>';
-  }
-  return '<div class="pillars-screen"><div class="gbar"></div><div class="pillars-body">'+
-    '<div class="logo" style="margin-bottom:24px">CLAIREN<em>HAUS</em></div>'+
-    '<div class="pr-t">Your 5 Content Pillars</div>'+
-    '<div class="pr-s">Built specifically for '+esc(S.user.business)+'. Each pillar gets 6 posts across your 30-day calendar.</div>'+
-    '<div class="pillar-list">'+rows+'</div>'+
-    (S.pillarErr?'<div class="err">'+S.pillarErr+'</div>':'')+
-    '<div class="pr-nav">'+
-    '<button class="btn-back" onclick="regenPillars()">Regenerate</button>'+
-    '<button class="btn-next" style="flex:2" onclick="goCalendar()">Build My Calendar →</button>'+
-    '</div></div></div>';
-}
-
-function regenPillars(){ S.screen='generating'; render(); genPillars(); }
-function goCalendar(){ S.screen='calendar'; S.activePlat=S.ans.platforms[0]; render(); }
-
-function rCalendar(){
-  var selPlats=[];
-  for(var i=0;i<S.ans.platforms.length;i++){
-    var p=getPl(S.ans.platforms[i]);
-    if(p) selPlats.push(p);
-  }
-  var ap=getPl(S.activePlat)||selPlats[0];
-  var posts=S.posts[ap.id]||[];
-  var isBusy=S.genBusy[ap.id];
-  var hasErr=S.postErr[ap.id];
-
-  var tabs='';
-  for(var i=0;i<selPlats.length;i++){
-    var p=selPlats[i];
-    var cnt=(S.posts[p.id]||[]).length;
-    tabs+='<button class="ctab'+(p.id===ap.id?' active':'')+'" onclick="swPlat(\''+p.id+'\')">'+p.icon+' '+p.label+'<span class="tbadge">'+cnt+'</span></button>';
-  }
-
-  var pillarFilters='';
-  for(var i=0;i<S.pillars.length;i++){
-    var p=S.pillars[i];
-    var act=S.filters.pillar===p.key;
-    pillarFilters+='<button class="cf-btn'+(act?' act':'')+'"'+(act?' style="background:'+p.color+';"':'')+' onclick="setF(\'pillar\',\''+p.key+'\')">'+(p.emoji||'')+' '+esc(p.label)+'</button>';
-  }
-  var fmtFilters='';
-  for(var i=0;i<ap.formats.length;i++){
-    var f=ap.formats[i];
-    var act=S.filters.format===f;
-    fmtFilters+='<button class="cf-btn'+(act?' act':'')+'" onclick="setF(\'format\',\''+ea(f)+'\')">'+esc(f)+'</button>';
-  }
-
-  var bodyHtml='';
-  if(isBusy){
-    bodyHtml='<div class="plat-empty">'+
-      '<div class="spinner" style="margin:0 auto 16px"></div>'+
-      '<div class="plat-et">Writing your '+ap.label+' posts...</div>'+
-      '<div class="plat-es">Generating in two batches. This takes 60-90 seconds.<br>Do not close or refresh this tab.</div>'+
-      '<div style="margin-top:20px;max-width:320px;margin-left:auto;margin-right:auto">'+
-      '<div style="display:flex;justify-content:space-between;font-size:11px;color:#666677;margin-bottom:6px"><span>Batch 1: Days 1-15</span><span>Batch 2: Days 16-30</span></div>'+
-      '<div style="height:4px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden">'+
-      '<div id="gen-progress" style="height:100%;background:linear-gradient(90deg,#00C2B7,#4A6FFF);border-radius:4px;transition:width 1s ease;width:'+(S.genProgress||0)+'%"></div>'+
-      '</div></div></div>';
-  } else if(!posts.length){
-    bodyHtml='<div class="plat-empty">'+
-      '<div class="plat-ico2">'+ap.icon+'</div>'+
-      '<div class="plat-et">Ready to generate your '+ap.label+' posts</div>'+
-      '<div class="plat-es">30 custom posts for '+esc(S.user.business)+', built around your 5 pillars.</div>'+
-      (hasErr?'<div class="err" style="max-width:420px;margin:0 auto 16px">'+hasErr+'</div>':'')+
-      '<button class="gen-plat-btn" onclick="genPosts(\''+ap.id+'\')">✨ Generate '+ap.label+' Posts</button></div>';
-  } else {
-    var filtered=[];
-    for(var i=0;i<posts.length;i++){
-      var p=posts[i];
-      var okP=S.filters.pillar==='all'||p.pillar===S.filters.pillar;
-      var okF=S.filters.format==='all'||p.format===S.filters.format;
-      if(okP&&okF) filtered.push(p);
-    }
-    for(var w=0;w<WEEKS.length;w++){
-      var week=WEEKS[w];
-      var wp=[];
-      for(var i=0;i<filtered.length;i++){
-        if(week.days.indexOf(filtered[i].day)>-1) wp.push(filtered[i]);
-      }
-      if(!wp.length) continue;
-      var cards='';
-      for(var i=0;i<wp.length;i++) cards+=rCard(wp[i],ap);
-      bodyHtml+='<div class="week-sec">'+
-        '<div class="week-hdr"><div class="wline"></div><span class="wlbl">'+week.label.toUpperCase()+'</span><span class="wtheme">— '+week.theme+'</span><div class="wline"></div></div>'+
-        '<div class="posts-grid">'+cards+'</div></div>';
-    }
-  }
-
-  return '<div class="cal-app"><div class="gbar"></div>'+
-    '<div class="cal-hd"><div class="cal-hinner">'+
-    '<div class="cal-htop">'+
-    '<div class="logo">CLAIREN<em>HAUS</em></div>'+
-    '<div class="cal-info"><div class="cal-title">'+esc(S.user.business)+' — 30-Day Content Calendar</div><div class="cal-meta">'+selPlats.length+' platform'+(selPlats.length!==1?'s':'')+' selected</div></div>'+
-    '<button class="exp-btn" onclick="S.modal=\'webhook\';render()" style="font-size:11px;padding:7px 13px">⚙ Setup</button>'+
-    '</div><div class="cal-tabs">'+tabs+'</div></div></div>'+
-    '<div class="cal-filters"><div class="cf-inner">'+
-    '<span class="cf-lbl">PILLAR:</span>'+
-    '<button class="cf-btn'+(S.filters.pillar==='all'?' act':'')+'" onclick="setF(\'pillar\',\'all\')">All</button>'+pillarFilters+
-    '<div class="cf-sep"></div>'+
-    '<span class="cf-lbl">FORMAT:</span>'+
-    '<button class="cf-btn'+(S.filters.format==='all'?' act':'')+'" onclick="setF(\'format\',\'all\')">All</button>'+fmtFilters+
-    '</div></div>'+
-    '<div class="cal-body">'+bodyHtml+'</div>'+
-    (posts.length?'<div class="export-bar"><button class="exp-btn" onclick="exportCSV(\''+ap.id+'\')">⬇ Export for Buffer</button></div>':'')+
-    '</div>';
-}
-
-function rCard(post,platform){
-  var id=platform.id+'-'+post.day;
-  var pillar=getPillar(post.pillar);
-  var isExp=S.expanded===id;
-  var tab=S.ctab[id]||'content';
-  var status=S.pstatus[id]||'draft';
-  var content=post.content||'';
-  var cl=content.length;
-  var lim=platform.limit;
-  var pct=cl/lim;
-  var ccls=pct<0.8?'cc-ok':pct<1?'cc-warn':'cc-over';
-  var isIG=platform.id==='ig';
-  var hdBg=h2r(pillar.color,.09);
-  var sLabel=status.charAt(0).toUpperCase()+status.slice(1);
-
-  var expandedHtml='';
-  if(isExp){
-    var tabList=[{k:'content',l:'📝 Post'}];
-    if(isIG) tabList.push({k:'alt',l:'🏷 Alt Text'});
-    tabList.push({k:'hashtags',l:'# Hashtags'});
-    tabList.push({k:'design',l:'🤖 Design Bot'});
-    var tabHtml='';
-    for(var i=0;i<tabList.length;i++){
-      var t=tabList[i];
-      var isDesign=t.k==='design';
-      tabHtml+='<button class="ctab2'+(tab===t.k?' act':'')+(isDesign?' design':'')+'" onclick="setCTab(\''+id+'\',\''+t.k+'\');event.stopPropagation()">'+t.l+'</button>';
-    }
-    var tc='';
-    var cid='c-'+id;
-    if(tab==='content'){
-      tc='<div class="cbox"><p>'+esc(content)+'</p></div>'+
-        '<div class="'+ccls+' cc">'+cl.toLocaleString()+' / '+lim.toLocaleString()+' characters</div>'+
-        '<div class="card-acts">'+
-        '<button id="'+cid+'" class="act-btn btn-cpy" onclick="cpyText(\''+cid+'\',\''+ea(post.hook+'\\n\\n'+content)+'\',\'Copy Post\');event.stopPropagation()">Copy Post</button>'+
-        '<button class="act-btn btn-regen" onclick="regenPost(\''+platform.id+'\','+post.day+');event.stopPropagation()">↻ Rewrite</button>'+
-        '<select class="sselect" onchange="setPStat(\''+id+'\',this.value)" onclick="event.stopPropagation()">'+
-        '<option value="draft"'+(status==='draft'?' selected':'')+'>Draft</option>'+
-        '<option value="scheduled"'+(status==='scheduled'?' selected':'')+'>Scheduled</option>'+
-        '<option value="published"'+(status==='published'?' selected':'')+'>Published</option>'+
-        '</select></div>';
-    } else if(tab==='alt'&&isIG){
-      var aid='a-'+id;
-      tc='<div class="ebox e-alt"><div class="ebox-lbl" style="color:#4A6FFF">INSTAGRAM ALT TEXT</div><p>'+esc(post.alttext||'No alt text generated.')+
-        '</p></div><div class="card-acts"><button id="'+aid+'" class="act-btn btn-cpy" onclick="cpyText(\''+aid+'\',\''+ea(post.alttext||'')+'\',\'Copy Alt Text\');event.stopPropagation()">Copy Alt Text</button></div>';
-    } else if(tab==='hashtags'){
-      var hid='h-'+id;
-      tc='<div class="ebox e-hash"><div class="ebox-lbl" style="color:#00C2B7">HASHTAGS</div><p>'+esc(post.hashtags||'')+
-        '</p></div><div class="card-acts"><button id="'+hid+'" class="act-btn btn-cpy" onclick="cpyText(\''+hid+'\',\''+ea(post.hashtags||'')+'\',\'Copy Hashtags\');event.stopPropagation()">Copy Hashtags</button></div>';
-    } else if(tab==='design'){
-      var dp=buildDP(post,platform,pillar);
-      var did='d-'+id;
-      tc='<div class="dbox-h"><div class="dbox-t">🤖 CLAIREN HAUS DESIGN BOT</div><div class="dbox-s">Paste into your custom GPT with your brand reference photo</div></div>'+
-        '<div class="codebox"><pre>'+esc(dp)+'</pre></div>'+
-        '<div class="card-acts"><button id="'+did+'" class="act-btn btn-cpy" style="background:#9B59FF" onclick="cpyText(\''+did+'\',\''+ea(dp)+'\',\'Copy Prompt\');event.stopPropagation()">Copy Design Prompt</button></div>';
-    }
-    expandedHtml='<div class="card-b" onclick="event.stopPropagation()"><div class="ctabs">'+tabHtml+'</div>'+tc+'</div>';
-  }
-
-  return '<div class="pcard'+(isExp?' exp':'')+'" style="--pc:'+pillar.color+'" onclick="togCard(\''+id+'\')">'+
-    '<div class="card-h" style="background:'+hdBg+'">'+
-    '<div class="card-m"><div class="cbadges"><span class="dbadge">Day '+post.day+'</span><span class="fbadge">'+esc(post.format)+'</span></div>'+
-    '<span class="plbl" style="color:'+pillar.color+'">'+(pillar.emoji||'')+' '+esc(pillar.label)+'</span></div>'+
-    '<p class="chook">'+esc(post.hook)+'</p></div>'+
-    (isExp?expandedHtml:'<div class="card-p"><span>Click to expand →</span><span class="sbadge s-'+status+'">'+sLabel+'</span></div>')+
-    '</div>';
-}
-
-function buildDP(post,platform,pillar){
-  var dims={ig:'1080x1350px (4:5)',li:'1200x628px (1.91:1)',fb:'1200x628px (1.91:1)',tt:'1080x1920px (9:16)',th:'1080x1080px (1:1)',x:'1200x628px (1.91:1)'};
-  return 'BRAND: '+S.user.business+'\nPLATFORM: '+platform.label+'\nFORMAT: '+post.format+'\nDIMENSIONS: '+(dims[platform.id]||'1080x1080px')+'\nCONTENT PILLAR: '+pillar.label+'\n\nHEADLINE:\n'+post.hook+'\n\nSUBTEXT:\n'+((post.content||'').split('\n')[0]||'')+'\n\nBRAND VOICE: '+S.ans.voice+'\nPILLAR ACCENT COLOR: '+pillar.color+'\n\nVISUAL DIRECTION:\nDark background. Bold typography. Clean editorial composition.\nHigh contrast between background and type. No clutter.\n\nAVOID:\nStock photo clichés. Light backgrounds unless specifically requested.\nGeneric layouts that could belong to any brand.\n\nINSTRUCTIONS:\nGenerate ONE design. Wait for YES before proceeding.';
-}
-
-function genPosts(pid){
-  S.genBusy[pid]=true; S.postErr[pid]=null; S.genProgress=5; render();
-
-  // Animate progress bar during generation
-  var progInterval=setInterval(function(){
-    var bar=document.getElementById('gen-progress');
-    if(bar&&S.genProgress<45){S.genProgress+=2;bar.style.width=S.genProgress+'%';}
-  },1500);
-  var p=getPl(pid);
-  var pillarLines='';
-  for(var i=0;i<S.pillars.length;i++){
-    var pl=S.pillars[i];
-    pillarLines+='- key:"'+pl.key+'" label:"'+pl.label+'" desc:"'+pl.description+'"\n';
-  }
-  var isIG=pid==='ig';
-  var isShort=pid==='th'||pid==='x';
-  var altField=isIG?',"alttext":"Descriptive alt text under 80 words."':'';
-
-  function makePrompt(startDay,endDay){
-    return 'You are a professional social media strategist. Create exactly '+(endDay-startDay+1)+' '+p.label+' posts for this business. Days '+startDay+' through '+endDay+' only.\n\n'+
-      'BUSINESS: '+S.user.business+'\nINDUSTRY: '+S.ans.industry+'\nAUDIENCE: '+S.ans.audience+'\nCORE OFFER: '+S.ans.offer+'\nBRAND VOICE: '+S.ans.voice+'\nGOALS: '+(S.ans.goals||[]).join(', ')+'\n\n'+
-      'CONTENT PILLARS:\n'+pillarLines+'\n'+
-      'PLATFORM: '+p.label+'\nFORMATS: '+p.formats.join(', ')+'\nCHARACTER LIMIT: '+p.limit+' chars for content field\n\n'+
-      'Return ONLY valid JSON, no markdown:\n{"posts":[{"day":'+startDay+',"pillar":"pillar_key","format":"format name","hook":"12 words max.","content":"Under '+p.limit+' chars. No em dashes.","hashtags":"'+(isShort?'3-5':'8-15')+' hashtags"'+altField+'}]}\n\n'+
-      'REQUIREMENTS:\n- Exactly '+(endDay-startDay+1)+' posts, days '+startDay+' to '+endDay+'.\n- Distribute pillars across these days.\n- Every post specific to '+S.user.business+'.\n- No em dashes anywhere.\n'+
-      (startDay===1?'- Days 1-7: Establish and educate. Days 8-15: Build trust.\n':'- Days 16-21: Authority. Days 22-28: Conversion. Days 29-30: Final push.\n');
-  }
-
-  function fetchBatch(startDay,endDay){
-    return fetch('/api/claude',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:8000,messages:[{role:'user',content:makePrompt(startDay,endDay)}]})
-    }).then(function(res){
-      if(!res.ok) throw new Error('API error '+res.status);
-      return res.json();
-    }).then(function(d){
-      if(d.error) throw new Error(d.error.message||'API error');
-      var txt='';
-      if(d.content){for(var i=0;i<d.content.length;i++){if(d.content[i].type==='text'){txt=d.content[i].text;break;}}}
-      if(!txt) throw new Error('Empty response');
-      var parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
-      return parsed.posts||[];
-    });
-  }
-
-  fetchBatch(1,15).then(function(batch1){
-    S.genProgress=50;
-    var bar=document.getElementById('gen-progress');
-    if(bar) bar.style.width='50%';
-    return fetchBatch(16,30).then(function(batch2){
-      return batch1.concat(batch2);
-    });
-  }).then(function(allPosts){
-    clearInterval(progInterval);
-    S.genProgress=100;
-    S.posts[pid]=allPosts;
-    S.genBusy[pid]=false;
-    render();
-  }).catch(function(e){
-    clearInterval(progInterval);
-    S.genBusy[pid]=false;
-    S.postErr[pid]=e.message||'Generation failed. Please try again.';
-    render();
-  });
-}
-
-function regenPost(pid,day){
-  var p=getPl(pid);
-  var posts=S.posts[pid]||[];
-  var idx=-1;
-  for(var i=0;i<posts.length;i++){if(posts[i].day===day){idx=i;break;}}
-  if(idx<0) return;
-  var old=posts[idx];
-  var pillar=getPillar(old.pillar);
-  posts[idx]=Object.assign({},old,{hook:'Rewriting...',content:'One moment...',_busy:true});
-  S.posts[pid]=posts; render();
-
-  var prompt='Rewrite this single '+p.label+' post for '+S.user.business+'. Make it completely different.\n\nPillar: '+pillar.label+'\nFormat: '+old.format+'\nVoice: '+S.ans.voice+'\nAudience: '+S.ans.audience+'\nPrevious hook (do NOT reuse): '+old.hook+'\n\nReturn ONLY valid JSON:\n{"day":'+day+',"pillar":"'+old.pillar+'","format":"'+old.format+'","hook":"New hook. 12 words max.","content":"Full body. Under '+p.limit+' chars. No em dashes.","hashtags":"Relevant hashtags"'+(pid==='ig'?',"alttext":"Alt text under 80 words."':'')+'}';
-
-  fetch('/api/claude',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
-  }).then(function(res){ return res.json(); })
-  .then(function(d){
-    var txt='';
-    if(d.content){for(var i=0;i<d.content.length;i++){if(d.content[i].type==='text'){txt=d.content[i].text;break;}}}
-    var np=JSON.parse(txt.replace(/```json|```/g,'').trim());
-    var upd=S.posts[pid]||[];
-    for(var i=0;i<upd.length;i++){if(upd[i].day===day){upd[i]=np;break;}}
-    S.posts[pid]=upd; render();
-  }).catch(function(){
-    var upd=S.posts[pid]||[];
-    for(var i=0;i<upd.length;i++){if(upd[i].day===day){upd[i]=old;break;}}
-    S.posts[pid]=upd; render();
-  });
-}
-
-function exportCSV(pid){
-  var posts=S.posts[pid]||[];
-  var p=getPl(pid);
-  var isIG=pid==='ig';
-  var headers=['Day','Pillar','Format','Hook','Content','Hashtags'];
-  if(isIG) headers.push('Alt Text');
-  var rows=[headers];
-  for(var i=0;i<posts.length;i++){
-    var r=posts[i];
-    var row=[r.day,r.pillar,r.format,r.hook,r.content,r.hashtags];
-    if(isIG) row.push(r.alttext||'');
-    rows.push(row);
-  }
-  var csv=rows.map(function(r){return r.map(function(c){return '"'+(c||'').toString().replace(/"/g,'""')+'"';}).join(',');}).join('\n');
-  var a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download=S.user.business.replace(/\s+/g,'-')+'-'+p.label+'-30day.csv';
-  a.click();
-}
-
-function rModal(){
-  return '<div class="overlay" onclick="closeModal()">'+
-    '<div class="modal" onclick="event.stopPropagation()">'+
-    '<h3>⚙ HubSpot Connection</h3>'+
-    '<p>You need two things from HubSpot. No API key required.</p>'+
-    '<p><strong style="color:#F0F0F8">Portal ID:</strong> Settings > Account Setup > Account ID.</p>'+
-    '<p><strong style="color:#F0F0F8">Form GUID:</strong> Marketing > Forms > create a form with First Name, Email, and Company fields. The GUID is in the embed code.</p>'+
-    '<label class="m-lbl" for="hspid">HUBSPOT PORTAL ID</label>'+
-    '<input type="text" id="hspid" placeholder="e.g. 12345678" value="'+esc(S.portalId||CFG.portalId)+'">'+
-    '<label class="m-lbl" for="hsfid">FORM GUID</label>'+
-    '<input type="text" id="hsfid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" value="'+esc(S.formGuid||CFG.formGuid)+'">'+
-    '<div class="m-acts">'+
-    '<button class="btn-cancel" onclick="closeModal()">Cancel</button>'+
-    '<button class="btn-next" style="flex:1;padding:10px" onclick="saveHS()">Save Connection</button>'+
-    '</div></div></div>';
-}
-
-function closeModal(){ S.modal=null; render(); }
-function saveHS(){
-  S.portalId=document.getElementById('hspid').value.trim();
-  S.formGuid=document.getElementById('hsfid').value.trim();
-  CFG.portalId=S.portalId; CFG.formGuid=S.formGuid;
-  closeModal();
-}
-
-function swPlat(id){ S.activePlat=id; S.expanded=null; S.filters={pillar:'all',format:'all'}; render(); }
-function setF(k,v){ S.filters[k]=v; render(); }
-function togCard(id){ S.expanded=S.expanded===id?null:id; if(S.expanded&&!S.ctab[id]) S.ctab[id]='content'; render(); }
-function setCTab(id,t){ S.ctab[id]=t; render(); }
-function setPStat(id,v){ S.pstatus[id]=v; render(); }
-
-function cpyText(btnId,text,label){
-  var decoded=text.replace(/\\n/g,'\n').replace(/\\'/g,"'");
-  navigator.clipboard.writeText(decoded).then(function(){
-    var b=document.getElementById(btnId);
-    if(!b) return;
-    b.textContent='✓ Copied!';b.classList.add('cpd');
-    clearTimeout(S.cpState[btnId]);
-    S.cpState[btnId]=setTimeout(function(){
-      var x=document.getElementById(btnId);
-      if(x){x.textContent=label;x.classList.remove('cpd');}
-    },2000);
-  });
-}
-
-function bindListeners(){
-  if(S.screen==='wizard'){
-    var s=WIZ[S.wStep];
-    if(s.type==='text'){
-      var ta=document.getElementById('ta');
-      if(ta){
-        ta.addEventListener('input',taSync);
-        ta.addEventListener('keyup',taSync);
-      }
-    }
-  }
-}
-
-S.postErr={};S.genBusy={};S.cpState={};
-render();
-</script>
 </body>
 </html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 5-Minute Follow-Up System — Clairen Haus</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#080812;color:#F0F0F8;min-height:100vh;}
+.gbar{height:3px;background:linear-gradient(90deg,#00C2B7,#4A6FFF,#9B59FF,#FF8C32);}
+.logo{font-size:12px;font-weight:800;letter-spacing:2px;color:#00C2B7;}
+.logo em{color:#FF8C32;font-style:normal;}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid rgba(255,255,255,.05);}
+.nav-back{font-size:12px;color:#666677;text-decoration:none;font-weight:700;transition:color .2s;}
+.nav-back:hover{color:#F0F0F8;}
+
+.page{max-width:960px;margin:0 auto;padding:56px 24px;display:grid;grid-template-columns:1fr 420px;gap:48px;align-items:start;}
+
+/* LEFT — PRODUCT DETAILS */
+.product-eyebrow{font-size:10px;font-weight:800;letter-spacing:2px;color:#FF8C32;margin-bottom:14px;}
+.product-name{font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.2;margin-bottom:10px;}
+.product-tagline{font-size:15px;color:#888899;line-height:1.7;margin-bottom:32px;max-width:460px;}
+
+.includes-title{font-size:11px;font-weight:800;letter-spacing:1.5px;color:#666677;margin-bottom:14px;}
+.includes-list{display:flex;flex-direction:column;gap:14px;margin-bottom:36px;}
+.inc-item{display:flex;gap:14px;align-items:flex-start;}
+.inc-icon{width:36px;height:36px;border-radius:8px;background:rgba(255,140,50,.1);border:1px solid rgba(255,140,50,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.inc-body{}
+.inc-name{font-size:14px;font-weight:700;color:#F0F0F8;margin-bottom:3px;}
+.inc-desc{font-size:12px;color:#888899;line-height:1.5;}
+
+.social-proof{background:#0D0D1A;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:20px;margin-top:8px;}
+.sp-label{font-size:10px;font-weight:800;letter-spacing:1px;color:#666677;margin-bottom:10px;}
+.sp-quote{font-size:13px;color:#CCCCDD;line-height:1.7;font-style:italic;margin-bottom:10px;}
+.sp-attr{font-size:11px;font-weight:700;color:#FF8C32;}
+
+/* RIGHT — CHECKOUT */
+.checkout-box{background:#0D0D1A;border:1.5px solid rgba(255,140,50,.2);border-radius:16px;overflow:hidden;position:sticky;top:32px;}
+.checkout-box::before{content:'';display:block;height:2px;background:linear-gradient(90deg,#FF8C32,#E86A00);}
+.checkout-inner{padding:28px;}
+.checkout-title{font-size:16px;font-weight:800;margin-bottom:4px;}
+.checkout-sub{font-size:12px;color:#888899;margin-bottom:24px;}
+
+.price-row{display:flex;align-items:center;justify-content:space-between;padding:16px;background:rgba(255,140,50,.06);border:1px solid rgba(255,140,50,.15);border-radius:10px;margin-bottom:20px;}
+.price-label{font-size:13px;font-weight:700;color:#F0F0F8;}
+.price-val{font-size:28px;font-weight:800;color:#FF8C32;}
+.price-note{font-size:10px;color:#666677;margin-top:2px;}
+
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:10px;font-weight:800;letter-spacing:1px;color:#666677;margin-bottom:6px;}
+.field input{width:100%;background:#080812;border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:13px 15px;color:#F0F0F8;font-size:14px;transition:border-color .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+.field input:focus{outline:none;border-color:#FF8C32;}
+.field input::placeholder{color:#444455;}
+
+#card-element{background:#080812;border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:13px 15px;transition:border-color .2s;}
+#card-element.focused{border-color:#FF8C32;}
+#card-errors{color:#E85D4A;font-size:12px;margin-top:6px;min-height:18px;}
+
+.btn-pay{width:100%;padding:15px;background:linear-gradient(90deg,#FF8C32,#E86A00);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;margin-top:6px;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-pay:hover{opacity:.9;}
+.btn-pay:disabled{opacity:.4;cursor:not-allowed;}
+.btn-pay .spinner{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;animation:spin 1s linear infinite;display:none;}
+.btn-pay.loading .spinner{display:block;}
+.btn-pay.loading .btn-text{opacity:.6;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.trust-row{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;}
+.trust-item{display:flex;align-items:center;gap:5px;font-size:10px;color:#666677;font-weight:700;}
+.trust-dot{width:5px;height:5px;border-radius:50%;background:#00C2B7;}
+
+.success-screen{display:none;text-align:center;padding:40px 28px;}
+.success-screen.show{display:block;}
+.success-icon{font-size:48px;margin-bottom:16px;}
+.success-title{font-size:20px;font-weight:800;margin-bottom:8px;}
+.success-sub{font-size:13px;color:#888899;line-height:1.65;margin-bottom:24px;}
+.btn-access{display:block;padding:14px;background:linear-gradient(90deg,#00C2B7,#4A6FFF);border-radius:10px;color:#fff;font-size:13px;font-weight:800;text-decoration:none;transition:opacity .2s;}
+.btn-access:hover{opacity:.9;color:#fff;}
+
+@media(max-width:760px){
+  .page{grid-template-columns:1fr;gap:32px;}
+  .checkout-box{position:static;}
+  nav{padding:16px 20px;}
+}
+</style>
+</head>
+<body>
+<div class="gbar"></div>
+
+<nav>
+  <div class="logo">CLAIREN<em>HAUS</em></div>
+  <a href="/index.html" class="nav-back">← Back to Tools</a>
+</nav>
+
+<div class="page">
+
+  <!-- LEFT: PRODUCT -->
+  <div>
+    <div class="product-eyebrow">SYSTEMS + KITS</div>
+    <div class="product-name">The 5-Minute Follow-Up System</div>
+    <div class="product-tagline">Your next lead gets a response in under 5 minutes. Without you touching your phone. Set up in one afternoon.</div>
+
+    <div class="includes-title">WHAT'S INSIDE</div>
+    <div class="includes-list">
+      <div class="inc-item">
+        <div class="inc-icon">✉️</div>
+        <div class="inc-body">
+          <div class="inc-name">Lead Response Sequence Library</div>
+          <div class="inc-desc">Copy-paste SMS + email sequences for 3 scenarios: new inbound lead, no-show, and cold contact. Timing logic and psychology notes included.</div>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon">🗺️</div>
+        <div class="inc-body">
+          <div class="inc-name">Automation Blueprint</div>
+          <div class="inc-desc">Visual flowchart showing your full lead journey from opt-in to booked call, with tool options at every step. Tool-agnostic — works with what you already have.</div>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon">🔄</div>
+        <div class="inc-body">
+          <div class="inc-name">Dead List Reactivation Sequence</div>
+          <div class="inc-desc">5 messages. Send Tuesday. Book calls by Thursday. Full copy written — just swap in your offer and go.</div>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon">✅</div>
+        <div class="inc-body">
+          <div class="inc-name">Setup Day Checklist</div>
+          <div class="inc-desc">Everything you need to go live, in order, in one afternoon. Includes a 3-question tool decision guide so you use what's right for your stack.</div>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon">🎥</div>
+        <div class="inc-body">
+          <div class="inc-name">Loom Walkthrough Videos</div>
+          <div class="inc-desc">Step-by-step screen recordings showing setup inside real email and SMS tools. See it done, not just described.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="social-proof">
+      <div class="sp-label">WHAT HAPPENS AFTER YOU SET THIS UP</div>
+      <div class="sp-quote">"I sent the reactivation sequence to my cold list on a Tuesday afternoon. By Thursday I had three discovery calls booked from people I hadn't talked to in months."</div>
+      <div class="sp-attr">Early adopter, service-based business owner</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: CHECKOUT -->
+  <div class="checkout-box">
+    <div class="checkout-inner" id="checkout-form-wrap">
+      <div class="checkout-title">Get Instant Access</div>
+      <div class="checkout-sub">Delivered immediately after purchase.</div>
+
+      <div class="price-row">
+        <div>
+          <div class="price-label">The 5-Minute Follow-Up System</div>
+          <div class="price-note">One-time payment. Yours forever.</div>
+        </div>
+        <div class="price-val">$27</div>
+      </div>
+
+      <div class="field">
+        <label>YOUR NAME</label>
+        <input type="text" id="buyer-name" placeholder="First name" autocomplete="given-name">
+      </div>
+      <div class="field">
+        <label>EMAIL ADDRESS</label>
+        <input type="email" id="buyer-email" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label>CARD DETAILS</label>
+        <div id="card-element"></div>
+        <div id="card-errors"></div>
+      </div>
+
+      <button class="btn-pay" id="pay-btn" onclick="handlePay()">
+        <div class="spinner"></div>
+        <span class="btn-text">Get Instant Access — $27</span>
+      </button>
+
+      <div class="trust-row">
+        <div class="trust-item"><div class="trust-dot"></div>Secure checkout</div>
+        <div class="trust-item"><div class="trust-dot"></div>Instant delivery</div>
+        <div class="trust-item"><div class="trust-dot"></div>Clairen Haus LLC</div>
+      </div>
+    </div>
+
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">You're in!</div>
+      <div class="success-sub">Check your email for your access link. You can also click below to go straight to the system.</div>
+      <a href="/systems/follow-up-kit" class="btn-access">Access The System →</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────
+// Replace with your live publishable key before deploying
+var STRIPE_PK = 'pk_live_REPLACE_WITH_YOUR_KEY';
+
+var stripe = Stripe(STRIPE_PK);
+var elements = stripe.elements({
+  appearance: {
+    theme: 'night',
+    variables: {
+      colorPrimary: '#FF8C32',
+      colorBackground: '#080812',
+      colorText: '#F0F0F8',
+      colorDanger: '#E85D4A',
+      fontFamily: 'Plus Jakarta Sans, sans-serif',
+      borderRadius: '8px',
+    }
+  }
+});
+
+var card = elements.create('card', {
+  style: {
+    base: {
+      color: '#F0F0F8',
+      fontFamily: '"Plus Jakarta Sans", sans-serif',
+      fontSize: '14px',
+      '::placeholder': { color: '#444455' }
+    }
+  }
+});
+card.mount('#card-element');
+card.on('focus', function(){ document.getElementById('card-element').classList.add('focused'); });
+card.on('blur',  function(){ document.getElementById('card-element').classList.remove('focused'); });
+card.on('change', function(e){
+  document.getElementById('card-errors').textContent = e.error ? e.error.message : '';
+});
+
+function setLoading(on){
+  var btn = document.getElementById('pay-btn');
+  btn.disabled = on;
+  if(on) btn.classList.add('loading'); else btn.classList.remove('loading');
+}
+
+function showSuccess(){
+  document.getElementById('checkout-form-wrap').style.display = 'none';
+  document.getElementById('success-screen').classList.add('show');
+}
+
+function handlePay(){
+  var name  = document.getElementById('buyer-name').value.trim();
+  var email = document.getElementById('buyer-email').value.trim();
+  if(!name || !email){ document.getElementById('card-errors').textContent = 'Please fill in your name and email.'; return; }
+  if(!email.includes('@')){ document.getElementById('card-errors').textContent = 'Please enter a valid email address.'; return; }
+  setLoading(true);
+
+  // Create PaymentIntent on your server
+  fetch('/api/create-payment-intent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount: 2700, currency: 'usd', name: name, email: email, product: '5min-followup-system' })
+  })
+  .then(function(res){ return res.json(); })
+  .then(function(data){
+    if(data.error){ throw new Error(data.error); }
+    return stripe.confirmCardPayment(data.clientSecret, {
+      payment_method: {
+        card: card,
+        billing_details: { name: name, email: email }
+      }
+    });
+  })
+  .then(function(result){
+    if(result.error){
+      document.getElementById('card-errors').textContent = result.error.message;
+      setLoading(false);
+    } else {
+      // Payment succeeded — send access email via your server
+      fetch('/api/send-kit-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, paymentIntent: result.paymentIntent.id })
+      }).catch(function(){});
+      showSuccess();
+    }
+  })
+  .catch(function(err){
+    document.getElementById('card-errors').textContent = err.message || 'Something went wrong. Please try again.';
+    setLoading(false);
+  });
+}
+</script>
+</body>
+</html>

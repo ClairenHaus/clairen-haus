@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 5-Minute Follow-Up System — Clairen Haus</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#080812;color:#F0F0F8;min-height:100vh;}
+.gbar{height:3px;background:linear-gradient(90deg,#00C2B7,#4A6FFF,#9B59FF,#FF8C32);}
+.logo{font-size:12px;font-weight:800;letter-spacing:2px;color:#00C2B7;}
+.logo em{color:#FF8C32;font-style:normal;}
+
+/* GATE */
+.gate{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;background:radial-gradient(ellipse at 50% 0%,rgba(255,140,50,.1) 0%,transparent 65%);}
+.gate-box{width:100%;max-width:400px;}
+.gate-logo{margin-bottom:28px;}
+.gate h2{font-size:24px;font-weight:800;margin-bottom:8px;}
+.gate p{font-size:13px;color:#888899;line-height:1.65;margin-bottom:28px;}
+.field label{display:block;font-size:10px;font-weight:800;letter-spacing:1px;color:#666677;margin-bottom:6px;}
+.field input{width:100%;background:#0D0D1A;border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:13px 15px;color:#F0F0F8;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;transition:border-color .2s;margin-bottom:12px;}
+.field input:focus{outline:none;border-color:#FF8C32;}
+.field input::placeholder{color:#444455;}
+.btn-enter{width:100%;padding:14px;background:linear-gradient(90deg,#FF8C32,#E86A00);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .2s;}
+.btn-enter:hover{opacity:.9;}
+.gate-err{color:#E85D4A;font-size:12px;margin-top:6px;}
+
+/* APP */
+.app{display:none;}
+.app.show{display:block;}
+
+/* HEADER */
+header{background:#0D0D1A;border-bottom:1px solid rgba(255,255,255,.06);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;}
+.welcome{font-size:12px;color:#666677;}
+.welcome strong{color:#FF8C32;}
+
+/* HERO BANNER */
+.kit-hero{background:radial-gradient(ellipse at 50% 0%,rgba(255,140,50,.1) 0%,transparent 70%);padding:48px 32px 40px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);}
+.kit-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,140,50,.1);border:1px solid rgba(255,140,50,.25);border-radius:20px;padding:4px 14px;font-size:11px;color:#FF8C32;font-weight:700;letter-spacing:.5px;margin-bottom:16px;}
+.kit-hero h1{font-size:clamp(22px,4vw,36px);font-weight:800;margin-bottom:8px;line-height:1.25;}
+.kit-hero h1 span{background:linear-gradient(90deg,#FF8C32,#E86A00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.kit-hero p{font-size:14px;color:#888899;max-width:500px;margin:0 auto;line-height:1.7;}
+
+/* PROGRESS TRACK */
+.progress-track{max-width:900px;margin:32px auto;padding:0 32px;}
+.progress-label{font-size:10px;font-weight:800;letter-spacing:1px;color:#666677;margin-bottom:10px;}
+.progress-steps{display:flex;gap:6px;}
+.prog-step{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.07);transition:background .3s;}
+.prog-step.done{background:#FF8C32;}
+
+/* CONTENT */
+.kit-body{max-width:900px;margin:0 auto;padding:0 32px 80px;}
+
+/* NAV TABS */
+.kit-tabs{display:flex;gap:4px;margin-bottom:32px;border-bottom:1px solid rgba(255,255,255,.06);overflow-x:auto;}
+.ktab{padding:12px 18px;border:none;background:none;color:#666677;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;}
+.ktab:hover{color:#F0F0F8;}
+.ktab.active{color:#FF8C32;border-bottom-color:#FF8C32;}
+
+/* SECTION CARDS */
+.section-card{background:#0D0D1A;border:1.5px solid rgba(255,255,255,.06);border-radius:14px;margin-bottom:20px;overflow:hidden;}
+.sc-head{padding:20px 22px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .15s;}
+.sc-head:hover{background:rgba(255,255,255,.02);}
+.sc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.sc-icon.orange{background:rgba(255,140,50,.12);border:1px solid rgba(255,140,50,.2);}
+.sc-icon.teal{background:rgba(0,194,183,.1);border:1px solid rgba(0,194,183,.2);}
+.sc-icon.blue{background:rgba(74,111,255,.1);border:1px solid rgba(74,111,255,.2);}
+.sc-icon.purple{background:rgba(155,89,255,.1);border:1px solid rgba(155,89,255,.2);}
+.sc-info{flex:1;}
+.sc-num{font-size:10px;font-weight:800;letter-spacing:1px;color:#666677;margin-bottom:3px;}
+.sc-title{font-size:15px;font-weight:800;color:#F0F0F8;}
+.sc-sub{font-size:12px;color:#888899;margin-top:2px;}
+.sc-chevron{color:#666677;font-size:18px;transition:transform .2s;flex-shrink:0;}
+.section-card.open .sc-chevron{transform:rotate(90deg);}
+.sc-body{display:none;padding:0 22px 22px;}
+.section-card.open .sc-body{display:block;}
+.sc-divider{height:1px;background:rgba(255,255,255,.05);margin-bottom:20px;}
+
+/* SEQUENCE BLOCKS */
+.seq-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;}
+.stab{padding:6px 14px;border-radius:8px;border:1.5px solid rgba(255,255,255,.08);background:none;color:#888899;font-size:11px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;}
+.stab:hover{border-color:rgba(255,255,255,.15);color:#F0F0F8;}
+.stab.active{background:rgba(255,140,50,.1);border-color:rgba(255,140,50,.3);color:#FF8C32;}
+.seq-panel{display:none;}
+.seq-panel.active{display:block;}
+
+.msg-block{background:#080812;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:16px;margin-bottom:12px;}
+.msg-meta{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.msg-num{width:26px;height:26px;border-radius:6px;background:rgba(255,140,50,.12);border:1px solid rgba(255,140,50,.2);color:#FF8C32;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.msg-timing{font-size:10px;font-weight:700;color:#666677;letter-spacing:.5px;}
+.msg-type{margin-left:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;}
+.msg-type.sms{background:rgba(0,194,183,.1);color:#00C2B7;}
+.msg-type.email{background:rgba(74,111,255,.1);color:#4A6FFF;}
+.msg-label{font-size:12px;font-weight:700;color:#F0F0F8;margin-bottom:8px;}
+.msg-copy{background:#0D0D1A;border-radius:8px;padding:13px;font-size:12px;color:#CCCCDD;line-height:1.75;white-space:pre-wrap;border:1px solid rgba(255,255,255,.05);margin-bottom:10px;}
+.msg-note{font-size:11px;color:#444455;line-height:1.6;font-style:italic;}
+.btn-copy{padding:7px 14px;background:#FF8C32;border:none;border-radius:7px;color:#fff;font-size:11px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
+.btn-copy:hover{opacity:.9;}
+.btn-copy.copied{background:#1D9E75;}
+
+/* BLUEPRINT */
+.blueprint-embed{background:#080812;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:24px;text-align:center;margin-bottom:16px;}
+.bp-icon{font-size:40px;margin-bottom:12px;}
+.bp-title{font-size:15px;font-weight:800;margin-bottom:6px;}
+.bp-desc{font-size:12px;color:#888899;line-height:1.6;margin-bottom:16px;}
+.btn-blueprint{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:rgba(0,194,183,.1);border:1.5px solid rgba(0,194,183,.25);border-radius:9px;color:#00C2B7;font-size:12px;font-weight:800;text-decoration:none;transition:all .2s;}
+.btn-blueprint:hover{background:rgba(0,194,183,.18);color:#00C2B7;}
+
+/* CHECKLIST */
+.checklist-section{margin-bottom:20px;}
+.cl-period{font-size:11px;font-weight:800;letter-spacing:1px;color:#FF8C32;margin-bottom:12px;}
+.cl-items{display:flex;flex-direction:column;gap:8px;}
+.cl-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:#080812;border-radius:9px;border:1px solid rgba(255,255,255,.05);cursor:pointer;transition:border-color .15s;}
+.cl-item:hover{border-color:rgba(255,255,255,.1);}
+.cl-item.checked{border-color:rgba(29,158,117,.3);background:rgba(29,158,117,.04);}
+.cl-check{width:20px;height:20px;border-radius:5px;border:1.5px solid rgba(255,255,255,.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;margin-top:1px;}
+.cl-item.checked .cl-check{background:#1D9E75;border-color:#1D9E75;color:#fff;}
+.cl-text{font-size:13px;color:#CCCCDD;line-height:1.5;}
+.cl-item.checked .cl-text{color:#666677;text-decoration:line-through;}
+
+/* LOOM */
+.loom-list{display:flex;flex-direction:column;gap:12px;}
+.loom-item{background:#080812;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:16px;display:flex;align-items:center;gap:14px;}
+.loom-thumb{width:64px;height:40px;border-radius:6px;background:linear-gradient(135deg,rgba(255,140,50,.15),rgba(74,111,255,.15));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.loom-info{flex:1;}
+.loom-title{font-size:13px;font-weight:700;color:#F0F0F8;margin-bottom:3px;}
+.loom-dur{font-size:11px;color:#666677;}
+.btn-loom{padding:8px 16px;background:rgba(255,140,50,.1);border:1.5px solid rgba(255,140,50,.25);border-radius:8px;color:#FF8C32;font-size:11px;font-weight:800;text-decoration:none;white-space:nowrap;transition:all .2s;}
+.btn-loom:hover{background:rgba(255,140,50,.2);color:#FF8C32;}
+
+/* UPSELL */
+.upsell-card{background:linear-gradient(135deg,#0D0D1A,#111128);border:1.5px solid rgba(0,194,183,.2);border-radius:14px;padding:28px;text-align:center;margin-top:40px;}
+.upsell-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(0,194,183,.1);border:1px solid rgba(0,194,183,.25);border-radius:20px;padding:4px 14px;font-size:10px;color:#00C2B7;font-weight:800;letter-spacing:.5px;margin-bottom:14px;}
+.upsell-title{font-size:19px;font-weight:800;margin-bottom:8px;}
+.upsell-desc{font-size:13px;color:#888899;line-height:1.65;max-width:480px;margin:0 auto 20px;}
+.btn-upsell{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:linear-gradient(90deg,#00C2B7,#4A6FFF);border-radius:10px;color:#fff;font-size:13px;font-weight:800;text-decoration:none;transition:opacity .2s;}
+.btn-upsell:hover{opacity:.9;color:#fff;}
+
+@media(max-width:600px){
+  header{padding:14px 16px;}
+  .kit-hero{padding:32px 16px;}
+  .kit-body{padding:0 16px 60px;}
+  .progress-track{padding:0 16px;}
+}
+</style>
+</head>
+<body>
+<div class="gbar"></div>
+
+<!-- ACCESS GATE -->
+<div id="gate-screen" class="gate">
+  <div class="gate-box">
+    <div class="gate-logo"><div class="logo">CLAIREN<em>HAUS</em></div></div>
+    <h2>Access Your System</h2>
+    <p>Enter the email you used at checkout to access The 5-Minute Follow-Up System.</p>
+    <div class="field">
+      <label>EMAIL ADDRESS</label>
+      <input type="email" id="gate-email" placeholder="your@email.com" onkeydown="if(event.key==='Enter')checkAccess()">
+    </div>
+    <button class="btn-enter" onclick="checkAccess()">Access My System →</button>
+    <div class="gate-err" id="gate-err"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="kit-app" class="app">
+
+  <header>
+    <div class="logo">CLAIREN<em>HAUS</em></div>
+    <div class="welcome">Welcome back, <strong id="user-name-display">—</strong></div>
+  </header>
+
+  <div class="kit-hero">
+    <div class="kit-pill">⚡ YOUR SYSTEM IS READY</div>
+    <h1>The <span>5-Minute Follow-Up System</span></h1>
+    <p>Work through each component in order. The reactivation sequence alone can generate results in 48 hours — start there.</p>
+  </div>
+
+  <div class="progress-track">
+    <div class="progress-label">YOUR PROGRESS</div>
+    <div class="progress-steps" id="progress-steps">
+      <div class="prog-step" id="prog-0"></div>
+      <div class="prog-step" id="prog-1"></div>
+      <div class="prog-step" id="prog-2"></div>
+      <div class="prog-step" id="prog-3"></div>
+      <div class="prog-step" id="prog-4"></div>
+    </div>
+  </div>
+
+  <div class="kit-body">
+
+    <!-- COMPONENT 1: SEQUENCE LIBRARY -->
+    <div class="section-card" id="sc-0">
+      <div class="sc-head" onclick="toggleCard(0)">
+        <div class="sc-icon orange">✉️</div>
+        <div class="sc-info">
+          <div class="sc-num">COMPONENT 01</div>
+          <div class="sc-title">Lead Response Sequence Library</div>
+          <div class="sc-sub">Copy-paste SMS + email sequences for 3 lead scenarios</div>
+        </div>
+        <div class="sc-chevron">›</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-divider"></div>
+
+        <div class="seq-tabs">
+          <button class="stab active" onclick="switchSeq('new',this)">New Inbound Lead</button>
+          <button class="stab" onclick="switchSeq('noshow',this)">No-Show / Ghost</button>
+          <button class="stab" onclick="switchSeq('reactivation',this)">Dead List Reactivation</button>
+        </div>
+
+        <!-- NEW LEAD -->
+        <div class="seq-panel active" id="seq-new">
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">01</div>
+              <div class="msg-timing">IMMEDIATELY</div>
+              <div class="msg-type sms">SMS</div>
+            </div>
+            <div class="msg-label">The Warm Opener</div>
+            <div class="msg-copy" id="nl-1">Hey [Name]! Just saw your message about [your offer]. I'd love to connect — what does [Day/Day] look like for a quick call?</div>
+            <div class="msg-note">Keep it short. One question. The goal is a reply, not a close.</div>
+            <button class="btn-copy" onclick="copyMsg('nl-1',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">02</div>
+              <div class="msg-timing">2 HOURS LATER</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Value Introduction</div>
+            <div class="msg-copy" id="nl-2">Subject: Quick question, [Name]
+
+Hi [Name],
+
+Thanks for reaching out about [your offer]. I wanted to follow up and make sure you got my earlier message.
+
+While I have you — a lot of people come to me because [main pain point your offer solves]. If that's where you're at, I think we'd have a really useful conversation.
+
+Here's what working together typically looks like: [2-3 sentence overview of your process/outcome].
+
+I have a few spots open this week. Here's my calendar: [booking link]
+
+Looking forward to connecting.
+
+[Your name]</div>
+            <div class="msg-note">This email sets context and delivers one clear next step. One CTA only — the booking link.</div>
+            <button class="btn-copy" onclick="copyMsg('nl-2',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">03</div>
+              <div class="msg-timing">24 HOURS LATER</div>
+              <div class="msg-type sms">SMS</div>
+            </div>
+            <div class="msg-label">The Light Check-In</div>
+            <div class="msg-copy" id="nl-3">Hey [Name], just checking in — did my earlier message come through okay? Happy to answer any questions before we connect.</div>
+            <div class="msg-note">Assume technical issues, not disinterest. One question. No pressure.</div>
+            <button class="btn-copy" onclick="copyMsg('nl-3',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">04</div>
+              <div class="msg-timing">3 DAYS LATER</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Social Proof Angle</div>
+            <div class="msg-copy" id="nl-4">Subject: What [a client / someone in your position] said after working together
+
+Hi [Name],
+
+I know you're busy — so I'll keep this short.
+
+[Client first name or "A recent client"] came to me with [their situation before working together]. After [your process / timeframe], [the result they got].
+
+I think we could do something similar for [their business / their situation].
+
+If you're open to a 20-minute call, here's my calendar: [booking link]
+
+Either way, I hope things are going well.
+
+[Your name]</div>
+            <div class="msg-note">Social proof resets the conversation without being pushy. Swap in a real result if you have one — even a small win works.</div>
+            <button class="btn-copy" onclick="copyMsg('nl-4',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">05</div>
+              <div class="msg-timing">7 DAYS LATER</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Graceful Close</div>
+            <div class="msg-copy" id="nl-5">Subject: Closing the loop
+
+Hi [Name],
+
+I don't want to keep filling your inbox, so this is my last follow-up.
+
+If the timing isn't right — no problem at all. I'll be here when it is.
+
+If you do want to connect, here's my calendar: [booking link]
+
+Rooting for you either way.
+
+[Your name]</div>
+            <div class="msg-note">Closing the loop creates urgency without desperation. A lot of people book after this email because it removes the pressure.</div>
+            <button class="btn-copy" onclick="copyMsg('nl-5',this)">Copy</button>
+          </div>
+        </div>
+
+        <!-- NO SHOW -->
+        <div class="seq-panel" id="seq-noshow">
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">01</div>
+              <div class="msg-timing">SAME DAY</div>
+              <div class="msg-type sms">SMS</div>
+            </div>
+            <div class="msg-label">The Benefit of the Doubt</div>
+            <div class="msg-copy" id="ns-1">Hey [Name], I had us down for [time] today — I may have the wrong link or time zone. Totally fine if something came up. Want to find another time?</div>
+            <div class="msg-note">Assume the best. Never make them feel guilty. One question to re-open.</div>
+            <button class="btn-copy" onclick="copyMsg('ns-1',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">02</div>
+              <div class="msg-timing">NEXT DAY</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Easy Rebook</div>
+            <div class="msg-copy" id="ns-2">Subject: Rescheduling — [Name]
+
+Hi [Name],
+
+Hoping everything's okay on your end. I wanted to make it easy to find another time if you're still interested.
+
+Here's my calendar: [booking link]
+
+Grab any slot that works. Looking forward to it.
+
+[Your name]</div>
+            <div class="msg-note">Short. Easy. One link. No guilt-tripping.</div>
+            <button class="btn-copy" onclick="copyMsg('ns-2',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">03</div>
+              <div class="msg-timing">3 DAYS LATER</div>
+              <div class="msg-type sms">SMS</div>
+            </div>
+            <div class="msg-label">The Value Re-Touch</div>
+            <div class="msg-copy" id="ns-3">Hey [Name] — no pressure at all. I wanted to share something quick that might be helpful: [one useful tip or resource related to your offer]. Hope things are going well.</div>
+            <div class="msg-note">Give before you ask again. A useful tip resets the relationship.</div>
+            <button class="btn-copy" onclick="copyMsg('ns-3',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">04</div>
+              <div class="msg-timing">7 DAYS LATER</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Soft Close</div>
+            <div class="msg-copy" id="ns-4">Subject: Still here if you need me
+
+Hi [Name],
+
+I'll keep this short. I'm going to stop following up after this — I don't want to be in your inbox if the timing isn't right.
+
+If you'd like to reconnect at some point, my calendar is always open: [booking link]
+
+Wishing you all the best.
+
+[Your name]</div>
+            <div class="msg-note">Leave the door open. Some of these people will book 2-3 months later when the timing shifts.</div>
+            <button class="btn-copy" onclick="copyMsg('ns-4',this)">Copy</button>
+          </div>
+        </div>
+
+        <!-- REACTIVATION -->
+        <div class="seq-panel" id="seq-reactivation">
+          <div style="background:rgba(255,140,50,.06);border:1px solid rgba(255,140,50,.2);border-radius:10px;padding:14px;margin-bottom:20px;font-size:12px;color:#CCCCDD;line-height:1.65;">
+            <strong style="color:#FF8C32;">Start here.</strong> This sequence is your fastest path to results. Load it into your email or SMS tool, send to contacts who haven't heard from you in 60+ days, and watch what happens. Full walkthrough video in Component 5.
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">01</div>
+              <div class="msg-timing">DAY 0</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Warm Re-Intro</div>
+            <div class="msg-copy" id="ra-1">Subject: Hey [Name] — checking in
+
+Hi [Name],
+
+It's been a while. No pitch, no agenda — I just wanted to check in and see how things are going in your business.
+
+What's the biggest thing on your plate right now?
+
+I'd love to hear what you've been up to.
+
+[Your name]</div>
+            <div class="msg-note">Open with a question, not a pitch. You're re-opening the relationship, not asking for a sale. Response rate on this message is usually 15-25% with a warm list.</div>
+            <button class="btn-copy" onclick="copyMsg('ra-1',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">02</div>
+              <div class="msg-timing">DAY 1</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Value Drop</div>
+            <div class="msg-copy" id="ra-2">Subject: Something that might help
+
+Hi [Name],
+
+I've been thinking about [common challenge your audience faces] a lot lately.
+
+Here's something I've seen work really well: [one concrete tip, framework, or insight you can share for free].
+
+No strings. Just something I thought you'd find useful.
+
+Talk soon,
+[Your name]</div>
+            <div class="msg-note">Give before you ask. This email builds goodwill and gets opens for the next message. Swap in your best free insight — the more specific, the better.</div>
+            <button class="btn-copy" onclick="copyMsg('ra-2',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">03</div>
+              <div class="msg-timing">DAY 3</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Soft Pitch</div>
+            <div class="msg-copy" id="ra-3">Subject: For business owners dealing with [pain point]
+
+Hi [Name],
+
+I put together something for people who are struggling with [specific problem your offer solves].
+
+Here's what it covers:
+- [Benefit 1]
+- [Benefit 2]
+- [Benefit 3]
+
+It's [your offer name] and it's [price/format]. Here's where to grab it: [link]
+
+[Your name]</div>
+            <div class="msg-note">One offer. One link. No multiple options. Make the decision easy.</div>
+            <button class="btn-copy" onclick="copyMsg('ra-3',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">04</div>
+              <div class="msg-timing">DAY 5</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Objection Handler</div>
+            <div class="msg-copy" id="ra-4">Subject: "I don't have time to set it up"
+
+Hi [Name],
+
+I hear this a lot.
+
+The thing is — [your offer] is designed specifically for the person who doesn't have time. That's the whole point. [1-2 sentences on how fast/easy it is to implement].
+
+The people getting the best results from it are the ones who felt like they didn't have time to deal with it. They set it up in [timeframe] and haven't had to think about [problem] since.
+
+Still available here: [link]
+
+[Your name]</div>
+            <div class="msg-note">Address the most common reason they haven't bought yet. Reframe the objection rather than dismissing it.</div>
+            <button class="btn-copy" onclick="copyMsg('ra-4',this)">Copy</button>
+          </div>
+          <div class="msg-block">
+            <div class="msg-meta">
+              <div class="msg-num">05</div>
+              <div class="msg-timing">DAY 7</div>
+              <div class="msg-type email">EMAIL</div>
+            </div>
+            <div class="msg-label">The Close</div>
+            <div class="msg-copy" id="ra-5">Subject: Last one
+
+Hi [Name],
+
+This is the last time I'll mention this — I know your inbox is full.
+
+If the timing's right, here's where to grab it: [link]
+
+If it's not, no worries at all. I'll still be here.
+
+Either way, I'm rooting for you.
+
+[Your name]</div>
+            <div class="msg-note">Last-chance energy without desperation. "I'm rooting for you" closes with warmth. A lot of people buy on this message because the pressure is completely off.</div>
+            <button class="btn-copy" onclick="copyMsg('ra-5',this)">Copy</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COMPONENT 2: BLUEPRINT -->
+    <div class="section-card" id="sc-1">
+      <div class="sc-head" onclick="toggleCard(1)">
+        <div class="sc-icon teal">🗺️</div>
+        <div class="sc-info">
+          <div class="sc-num">COMPONENT 02</div>
+          <div class="sc-title">Automation Blueprint</div>
+          <div class="sc-sub">Visual lead flow — opt-in to booked call, zero manual steps</div>
+        </div>
+        <div class="sc-chevron">›</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-divider"></div>
+        <div class="blueprint-embed">
+          <div class="bp-icon">🗺️</div>
+          <div class="bp-title">The Lead Response Automation Blueprint</div>
+          <div class="bp-desc">A visual flowchart showing your complete lead journey from opt-in to booked call, with tool options at every step. Works with Zapier, Make, GoHighLevel, ActiveCampaign, Mailchimp, and more.</div>
+          <!-- Replace this href with your actual Canva view-only link -->
+          <a href="CANVA_BLUEPRINT_LINK" target="_blank" class="btn-blueprint">Open Blueprint ↗</a>
+        </div>
+        <div style="background:#080812;border-radius:10px;padding:16px;font-size:12px;color:#888899;line-height:1.7;">
+          <strong style="color:#F0F0F8;">What the blueprint shows:</strong> Entry points (Facebook lead ad, website form, DM, missed call text-back) — Immediate auto-response trigger — Tag and segment logic — Sequence branch selection — Booking link delivery — Post-booking confirmation and reminders — No-show branch — Closed/won exit. Each step is annotated with compatible tools at free, mid, and full-stack tiers.
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPONENT 3: CHECKLIST -->
+    <div class="section-card" id="sc-2">
+      <div class="sc-head" onclick="toggleCard(2)">
+        <div class="sc-icon blue">✅</div>
+        <div class="sc-info">
+          <div class="sc-num">COMPONENT 03</div>
+          <div class="sc-title">Setup Day Checklist</div>
+          <div class="sc-sub">Go live in one afternoon — in order</div>
+        </div>
+        <div class="sc-chevron">›</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-divider"></div>
+        <div class="checklist-section">
+          <div class="cl-period">MORNING — CHOOSE YOUR TOOLS (1-2 hrs)</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Pick your email tool. Free: Mailchimp or MailerLite. Mid: ActiveCampaign or ConvertKit. Full stack: GoHighLevel or HubSpot.</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Pick your SMS tool. Free: Google Voice + Zapier. Low-cost: SimpleTexting or EZTexting trial. Full stack: GoHighLevel or Twilio.</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Export your existing contact list from wherever it lives (Facebook, spreadsheet, old CRM). Save as CSV.</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Import your contact list into your chosen email tool. Tag cold contacts as "Reactivation."</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Load the Dead List Reactivation sequence into your email tool (5 messages, timing set to Day 0, 1, 3, 5, 7).</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Test the sequence with your own email address. Confirm all 5 messages fire correctly.</div></div>
+          </div>
+        </div>
+        <div class="checklist-section">
+          <div class="cl-period">AFTERNOON — SET UP INBOUND AUTOMATION (1-2 hrs)</div>
+          <div class="cl-items">
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Set up your lead capture trigger: Facebook Lead Ad form, website contact form, or DM keyword automation (Manychat free).</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Connect trigger to your email tool via Zapier (free tier: 100 tasks/month) or native integration.</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Load the New Inbound Lead sequence (5 messages) and set it to fire when a new contact is tagged "New Lead."</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Connect your booking tool (Calendly free, TidyCal, or Cal.com) and add your booking link to messages 2 and 5.</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Test the full inbound flow: submit a fake lead form entry, confirm the immediate response fires.</div></div>
+            <div class="cl-item" onclick="toggleCheck(this)"><div class="cl-check"></div><div class="cl-text">Send the Dead List Reactivation sequence to your "Reactivation" segment. You're live.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPONENT 4: LOOM VIDEOS -->
+    <div class="section-card" id="sc-3">
+      <div class="sc-head" onclick="toggleCard(3)">
+        <div class="sc-icon purple">🎥</div>
+        <div class="sc-info">
+          <div class="sc-num">COMPONENT 04</div>
+          <div class="sc-title">Loom Walkthrough Videos</div>
+          <div class="sc-sub">Step-by-step setup inside real tools</div>
+        </div>
+        <div class="sc-chevron">›</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-divider"></div>
+        <div class="loom-list">
+          <div class="loom-item">
+            <div class="loom-thumb">▶</div>
+            <div class="loom-info">
+              <div class="loom-title">Video 1: Loading the Reactivation Sequence</div>
+              <div class="loom-dur">10-12 min — Mailchimp, ConvertKit, or ActiveCampaign</div>
+            </div>
+            <!-- Replace LOOM_LINK_1 with your actual Loom URL -->
+            <a href="LOOM_LINK_1" target="_blank" class="btn-loom">Watch →</a>
+          </div>
+          <div class="loom-item">
+            <div class="loom-thumb">▶</div>
+            <div class="loom-info">
+              <div class="loom-title">Video 2: Setting Up Your Inbound Lead Trigger</div>
+              <div class="loom-dur">8-10 min — Zapier free tier + Facebook Lead Ads</div>
+            </div>
+            <a href="LOOM_LINK_2" target="_blank" class="btn-loom">Watch →</a>
+          </div>
+          <div class="loom-item">
+            <div class="loom-thumb">▶</div>
+            <div class="loom-info">
+              <div class="loom-title">Video 3: Connecting Your Booking Tool</div>
+              <div class="loom-dur">6-8 min — Calendly + sequence end point</div>
+            </div>
+            <a href="LOOM_LINK_3" target="_blank" class="btn-loom">Watch →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPSELL -->
+    <div class="upsell-card">
+      <div class="upsell-pill">✨ UPGRADE YOUR SYSTEM</div>
+      <div class="upsell-title">Want sequences written specifically for your business?</div>
+      <div class="upsell-desc">The Sequence Generator uses AI to build a custom follow-up sequence for your exact offer, audience, and lead source — in under 60 seconds. Copy and paste directly into your tool.</div>
+      <a href="/systems/sequence-generator" class="btn-upsell">Get the Sequence Generator →</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── ACCESS GATE ──────────────────────────────────────────
+// Replace with your actual validation logic.
+// Simplest version: check against a hardcoded list or call your server.
+// Your Railway server's /api/verify-access endpoint should validate the email
+// against Stripe purchase records.
+
+var BUYER_DATA = {};
+
+function checkAccess(){
+  var email = document.getElementById('gate-email').value.trim().toLowerCase();
+  if(!email || !email.includes('@')){
+    document.getElementById('gate-err').textContent = 'Please enter a valid email address.';
+    return;
+  }
+
+  fetch('/api/verify-access', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, product: '5min-followup-system' })
+  })
+  .then(function(res){ return res.json(); })
+  .then(function(data){
+    if(data.valid){
+      BUYER_DATA = data;
+      document.getElementById('gate-screen').style.display = 'none';
+      document.getElementById('kit-app').classList.add('show');
+      if(data.name) document.getElementById('user-name-display').textContent = data.name;
+      loadProgress();
+    } else {
+      document.getElementById('gate-err').textContent = 'That email wasn\'t found. Check your purchase confirmation and try again, or email hello@clairenhaus.com.';
+    }
+  })
+  .catch(function(){
+    document.getElementById('gate-err').textContent = 'Something went wrong. Please try again.';
+  });
+}
+
+// ── PROGRESS ─────────────────────────────────────────────
+var PROGRESS_KEY = 'ch_followup_progress';
+
+function loadProgress(){
+  var saved = localStorage.getItem(PROGRESS_KEY);
+  if(!saved) return;
+  var prog = JSON.parse(saved);
+  for(var i = 0; i < 5; i++){
+    if(prog[i]) document.getElementById('prog-' + i).classList.add('done');
+  }
+}
+
+function saveProgress(idx){
+  var saved = localStorage.getItem(PROGRESS_KEY);
+  var prog = saved ? JSON.parse(saved) : {};
+  prog[idx] = true;
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(prog));
+  document.getElementById('prog-' + idx).classList.add('done');
+}
+
+// ── ACCORDION ────────────────────────────────────────────
+function toggleCard(idx){
+  var card = document.getElementById('sc-' + idx);
+  var isOpen = card.classList.contains('open');
+  // Close all
+  for(var i = 0; i < 5; i++){
+    var c = document.getElementById('sc-' + i);
+    if(c) c.classList.remove('open');
+  }
+  if(!isOpen){
+    card.classList.add('open');
+    saveProgress(idx);
+  }
+}
+
+// ── SEQUENCE TABS ────────────────────────────────────────
+function switchSeq(id, btn){
+  var panels = document.querySelectorAll('.seq-panel');
+  var tabs = document.querySelectorAll('.stab');
+  for(var i = 0; i < panels.length; i++) panels[i].classList.remove('active');
+  for(var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+  document.getElementById('seq-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── COPY ─────────────────────────────────────────────────
+function copyMsg(id, btn){
+  var el = document.getElementById(id);
+  if(!el) return;
+  navigator.clipboard.writeText(el.textContent).then(function(){
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function(){
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// ── CHECKLIST ────────────────────────────────────────────
+function toggleCheck(el){
+  el.classList.toggle('checked');
+  var check = el.querySelector('.cl-check');
+  check.textContent = el.classList.contains('checked') ? '✓' : '';
+}
+</script>
+</body>
+</html>

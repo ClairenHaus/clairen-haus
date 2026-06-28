@@ -118,8 +118,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 3
 
 /* TOOLTIP */
 .tooltip-wrap{position:relative;}
-.tooltip-wrap:hover .tooltip{opacity:1;pointer-events:auto;transform:translateY(0);}
-.tooltip{position:absolute;bottom:calc(100% + 8px);left:0;background:#111128;border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:10px 13px;width:220px;font-size:11px;color:#CCCCDD;line-height:1.6;opacity:0;pointer-events:none;transform:translateY(4px);transition:all .2s;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.6);}
+.tooltip{position:fixed;background:#111128;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;width:230px;font-size:11px;color:#CCCCDD;line-height:1.65;opacity:0;pointer-events:none;transition:opacity .15s;z-index:1000;box-shadow:0 12px 40px rgba(0,0,0,.85);}
+.tooltip.visible{opacity:1;}
 .tooltip strong{color:#F0F0F8;display:block;margin-bottom:4px;}
 
 /* DETAIL PANEL */
@@ -230,7 +230,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 3
         <div class="tool-tags">
           <span class="tool-tag tag-mid">SimpleTexting</span>
           <span class="tool-tag tag-full">GoHighLevel</span>
-          <span class="tool-tag tag-full">Calyntis</span>
+          
         </div>
       </div>
       <div class="tooltip"><strong>How it connects</strong>Missed call detected → auto-SMS fires within 60 seconds: "Hey, just missed your call — happy to connect. What's the best time?" → reply triggers full sequence.</div>
@@ -591,7 +591,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 3
       <div style="font-size:9px;font-weight:800;letter-spacing:1px;color:#FF8C32;margin-bottom:8px;">FULL STACK — $97-$397/month</div>
       <div class="detail-row"><div class="detail-icon">⚡</div><div class="detail-text"><strong>All-in-one:</strong> GoHighLevel ($97) — email, SMS, booking, CRM, pipelines</div></div>
       <div class="detail-row"><div class="detail-icon">⚡</div><div class="detail-text"><strong>CRM + Email:</strong> HubSpot Starter ($20+)</div></div>
-      <div class="detail-row"><div class="detail-icon">⚡</div><div class="detail-text"><strong>Multi-channel AI:</strong> Calyntis — voice, email, SMS, ringless VM, booking</div></div>
     </div>
 
   </div>
@@ -604,5 +603,49 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 3
   <button class="dl-btn" onclick="window.print()">🖨 Print Blueprint</button>
 </div>
 
+
+<script>
+(function(){
+  var tip = document.createElement('div');
+  tip.className = 'tooltip';
+  document.body.appendChild(tip);
+
+  var current = null;
+
+  document.querySelectorAll('.tooltip-wrap').forEach(function(wrap){
+    var inner = wrap.querySelector('.tooltip');
+    if(!inner) return;
+    var html = inner.innerHTML;
+    inner.remove(); // remove inline tooltip, we use the floating one
+
+    wrap.addEventListener('mouseenter', function(e){
+      tip.innerHTML = html;
+      current = wrap;
+      position(e);
+      tip.classList.add('visible');
+    });
+    wrap.addEventListener('mousemove', position);
+    wrap.addEventListener('mouseleave', function(){
+      tip.classList.remove('visible');
+      current = null;
+    });
+  });
+
+  function position(e){
+    var tw = 230, th = tip.offsetHeight || 120;
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var x = e.clientX + 14;
+    var y = e.clientY - th - 10;
+    // flip right if near right edge
+    if(x + tw > vw - 8) x = e.clientX - tw - 14;
+    // flip below if near top
+    if(y < 8) y = e.clientY + 20;
+    // clamp bottom
+    if(y + th > vh - 8) y = vh - th - 8;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  }
+})();
+</script>
 </body>
 </html>

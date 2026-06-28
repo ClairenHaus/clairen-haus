@@ -201,7 +201,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:20px 4
 <script>
 // ── CONFIG ────────────────────────────────────────────────
 // Replace with your live publishable key before deploying
-var STRIPE_PK = 'pk_live_REPLACE_WITH_YOUR_KEY';
+var STRIPE_PK = 'pk_live_51SYY9lJQOpmS2MxAQeMMZwyz52oPLTAY0c28fdfcJYU1SSQAXJ72aKR4tKqL9VAhLs3yjctZwr0gupSUdauYsqVf00uVFY1f9D';
 
 var stripe = Stripe(STRIPE_PK);
 var elements = stripe.elements({

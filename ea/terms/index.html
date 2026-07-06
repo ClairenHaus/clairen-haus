@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — Clairen Haus EA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #08080e;
+    --bg-card: #111122;
+    --teal: #00d4c8;
+    --blue: #3c8cff;
+    --purple: #8c50ff;
+    --text-white: #f0f0f8;
+    --text-muted: #8888aa;
+    --text-dim: #555570;
+    --gradient: linear-gradient(90deg, var(--teal), var(--blue), var(--purple));
+    --font-display: 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text-white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .gradient-bar { height: 3px; background: var(--gradient); width: 100%; display: block; }
+  nav {
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--text-muted); font-weight: 400; }
+  .page-wrap { max-width: 760px; margin: 0 auto; padding: 52px 24px 96px; }
+  .page-eyebrow {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .page-eyebrow::before { content: ''; display: inline-block; width: 24px; height: 2px; background: var(--teal); }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .intro { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.65; }
+  .effective { font-size: 13px; color: var(--text-dim); margin-bottom: 48px; }
+  .section {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 32px;
+    margin-bottom: 4px;
+  }
+  .section-label {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  p { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  ul { margin: 10px 0 14px 0; list-style: none; }
+  ul li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 6px 0;
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.6;
+  }
+  ul li:last-child { border-bottom: none; }
+  ul li::before { content: '→'; color: var(--teal); font-weight: 700; flex-shrink: 0; }
+  strong { color: var(--text-white); font-weight: 600; }
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .divider { height: 1px; background: linear-gradient(90deg, rgba(0,212,200,0.2), transparent); margin: 4px 0; }
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 28px 24px;
+    margin-top: 48px;
+  }
+  .footer-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-logo { font-family: var(--font-display); font-size: 13px; font-weight: 800; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 12px; color: var(--text-dim); text-decoration: none; }
+  .footer-links a:hover { color: var(--teal); }
+  .footer-copy { font-size: 12px; color: var(--text-dim); width: 100%; }
+  @media (max-width: 560px) { .page-wrap { padding: 32px 16px 72px; } .section { padding: 24px 20px; } }
+</style>
+</head>
+<body>
+<span class="gradient-bar"></span>
+<nav>
+  <a href="https://clairenhaus.com/ea" class="nav-logo">Clairen Haus <span>/ EA Service</span></a>
+</nav>
+
+<div class="page-wrap">
+  <p class="page-eyebrow">Legal</p>
+  <h1>Terms of Service</h1>
+  <p class="intro">These Terms of Service govern your use of the Clairen Haus AI Executive Assistant (EA) service, including the 30-day pilot and any ongoing retainer arrangement. By purchasing the pilot or signing the pilot agreement, you agree to these terms.</p>
+  <p class="effective">Effective Date: July 5, 2026. Governing law: State of Georgia, United States.</p>
+
+  <div class="section">
+    <p class="section-label">Section 1</p>
+    <p class="section-title">The Service</p>
+    <p>Clairen Haus LLC provides an AI-powered executive assistant service that connects to your Gmail account and Google Calendar via Google OAuth to perform inbox triage, draft email responses, prepare daily briefings, and generate weekly executive summaries. The service is delivered through a combination of AI automation and the Clairen Haus client portal at portal.clairenhaus.com.</p>
+    <p>The EA service is not a replacement for human judgment. You are responsible for reviewing all AI-drafted communications before sending them and for any business decisions made based on EA-generated information.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 2</p>
+    <p class="section-title">The 30-Day Pilot</p>
+    <p>The pilot is a fixed-term 30-day engagement at a fee of <strong>$749 USD</strong>, paid in full at the time of purchase. The pilot includes:</p>
+    <ul>
+      <li>Custom configuration of your EA system during the build period (48 to 72 hours after onboarding)</li>
+      <li>Daily morning briefings and evening debriefs via email and Telegram</li>
+      <li>Weekly executive summary reports</li>
+      <li>Inbox triage and AI-drafted responses during the pilot period</li>
+      <li>Access to the Clairen Haus client portal for the duration of the pilot</li>
+    </ul>
+    <p>The pilot does not automatically convert to a retainer. At day 30, you may elect to continue on a monthly retainer or end the engagement with no further obligation.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 3</p>
+    <p class="section-title">Google Account Access</p>
+    <p>To deliver the EA service, you will be asked to connect your Gmail and Google Calendar via Google OAuth during portal onboarding. By connecting your account, you authorize Clairen Haus to:</p>
+    <ul>
+      <li>Read your Gmail inbox to triage, prioritize, and draft responses</li>
+      <li>Read your Google Calendar to prepare briefings and meeting context</li>
+      <li>Store your OAuth access and refresh tokens in our secure database for the duration of your pilot</li>
+    </ul>
+    <p>You may revoke this access at any time through your <a href="https://myaccount.google.com/permissions" target="_blank">Google Account Permissions</a>. Revoking access will suspend EA service delivery. Your OAuth tokens will be deleted from our systems within 48 hours of revocation.</p>
+    <p>Your OAuth tokens are automatically deleted within 30 days of your pilot end date if you do not continue on retainer.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 4</p>
+    <p class="section-title">Client Responsibilities</p>
+    <p>To ensure your system goes live within the 48 to 72 hour target, you agree to:</p>
+    <ul>
+      <li>Complete the portal onboarding flow, including connecting your Gmail account, within 24 hours of purchase</li>
+      <li>Respond to any configuration questions within one business day during the build period</li>
+      <li>Notify Clairen Haus of any changes to your tools or workflows during the pilot</li>
+      <li>Review weekly summaries and flag any issues within 48 hours</li>
+    </ul>
+    <p>Delays in completing onboarding will extend the build timeline proportionally. The 30-day pilot period begins when your system goes live, not at the time of purchase.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 5</p>
+    <p class="section-title">Refund Policy</p>
+    <p>If your EA system is not operational within 5 business days of completing onboarding (connecting your Gmail and providing all required information), you are entitled to a full refund of the $749 pilot fee.</p>
+    <p>No refunds are issued once the system is operational and in use. If you revoke Google access or fail to complete onboarding within 7 days of purchase, the pilot fee is non-refundable.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 6</p>
+    <p class="section-title">AI Limitations and Disclaimer</p>
+    <p>The EA service is powered by AI and may occasionally produce errors, misclassifications, or drafts that require correction. You acknowledge that:</p>
+    <ul>
+      <li>AI-generated email drafts require your review before sending</li>
+      <li>Briefings and summaries may not capture every email or calendar event</li>
+      <li>The EA cannot make binding commitments or decisions on your behalf</li>
+      <li>AI outputs should not be relied upon as legal, financial, or medical advice</li>
+    </ul>
+    <p>Clairen Haus is not liable for any business outcomes resulting from reliance on EA-generated content without independent verification.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 7</p>
+    <p class="section-title">Confidentiality</p>
+    <p>Both parties agree to keep the other's business information, system access, and operational details confidential. Clairen Haus will not share, sell, or use your data for any purpose outside of delivering the agreed services. This obligation survives termination of the pilot.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 8</p>
+    <p class="section-title">Intellectual Property</p>
+    <p>All workflows, automations, and system configurations built during the pilot remain your property upon full payment of the pilot fee. Clairen Haus retains the right to use anonymized, non-identifying process documentation for internal training and product development purposes only.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 9</p>
+    <p class="section-title">Limitation of Liability</p>
+    <p>Clairen Haus's total liability under these terms is limited to the pilot fee paid ($749 USD). Clairen Haus is not liable for any indirect, incidental, special, or consequential damages arising from use of the EA service, including but not limited to lost business, missed communications, or decisions made based on AI-generated content.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 10</p>
+    <p class="section-title">Governing Law</p>
+    <p>These terms are governed by the laws of the State of Georgia, United States. Any disputes arising under these terms will be subject to the exclusive jurisdiction of the courts of Fulton County, Georgia.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 11</p>
+    <p class="section-title">Contact</p>
+    <p>Clairen Haus LLC<br>
+    Atlanta, Georgia<br>
+    <a href="mailto:hello@clairenhaus.com">hello@clairenhaus.com</a><br>
+    <a href="https://clairenhaus.com">clairenhaus.com</a></p>
+  </div>
+</div>
+
+<span class="gradient-bar"></span>
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Clairen Haus</span>
+    <div class="footer-links">
+      <a href="https://clairenhaus.com/ea/privacy-policy">Privacy Policy</a>
+      <a href="https://clairenhaus.com/privacy-policy">Main Privacy Policy</a>
+    </div>
+    <span class="footer-copy">clairenhaus.com — Atlanta, GA — hello@clairenhaus.com</span>
+  </div>
+</footer>
+</body>
+</html>

@@ -991,11 +991,11 @@
       email:      email,
       business:   clientBiz || 'Not provided',
       timestamp:  timestamp,
-      agreement:  '30-Day Executive AI Assistant Pilot — $750.00 USD',
+      agreement:  '30-Day Executive AI Assistant Pilot — $749.00 USD',
       _replyto:   email
     };
 
-    fetch('https://formspree.io/f/YOUR_FORM_ID', {
+    fetch('https://n8n-production-7c11.up.railway.app/webhook/ea-agreement-signed', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(payload)

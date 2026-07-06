@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Clairen Haus EA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #08080e;
+    --bg-card: #111122;
+    --teal: #00d4c8;
+    --blue: #3c8cff;
+    --purple: #8c50ff;
+    --text-white: #f0f0f8;
+    --text-muted: #8888aa;
+    --text-dim: #555570;
+    --gradient: linear-gradient(90deg, var(--teal), var(--blue), var(--purple));
+    --font-display: 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text-white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .gradient-bar { height: 3px; background: var(--gradient); width: 100%; display: block; }
+  nav {
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--text-muted); font-weight: 400; }
+  .page-wrap { max-width: 760px; margin: 0 auto; padding: 52px 24px 96px; }
+  .page-eyebrow {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .page-eyebrow::before { content: ''; display: inline-block; width: 24px; height: 2px; background: var(--teal); }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .intro {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    line-height: 1.65;
+  }
+  .effective {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 48px;
+  }
+  .section {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 32px;
+    margin-bottom: 4px;
+  }
+  .section-label {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  p { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  ul { margin: 10px 0 14px 0; list-style: none; }
+  ul li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 6px 0;
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.6;
+  }
+  ul li:last-child { border-bottom: none; }
+  ul li::before { content: '→'; color: var(--teal); font-weight: 700; flex-shrink: 0; }
+  strong { color: var(--text-white); font-weight: 600; }
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .divider { height: 1px; background: linear-gradient(90deg, rgba(0,212,200,0.2), transparent); margin: 4px 0; }
+  .highlight-box {
+    background: rgba(0,212,200,0.05);
+    border: 1px solid rgba(0,212,200,0.15);
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 28px 24px;
+    margin-top: 48px;
+  }
+  .footer-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-logo { font-family: var(--font-display); font-size: 13px; font-weight: 800; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 12px; color: var(--text-dim); text-decoration: none; }
+  .footer-links a:hover { color: var(--teal); }
+  .footer-copy { font-size: 12px; color: var(--text-dim); width: 100%; }
+  @media (max-width: 560px) { .page-wrap { padding: 32px 16px 72px; } .section { padding: 24px 20px; } }
+</style>
+</head>
+<body>
+<span class="gradient-bar"></span>
+<nav>
+  <a href="https://clairenhaus.com/ea" class="nav-logo">Clairen Haus <span>/ EA Service</span></a>
+</nav>
+
+<div class="page-wrap">
+  <p class="page-eyebrow">Legal</p>
+  <h1>Privacy Policy</h1>
+  <p class="intro">This Privacy Policy applies to the Clairen Haus AI Executive Assistant (EA) service, including the EA client portal at portal.clairenhaus.com. It explains what data we collect, how we use it, and how you can control it.</p>
+  <p class="effective">Effective Date: July 5, 2026. Governing law: State of Georgia, United States.</p>
+
+  <div class="section">
+    <p class="section-label">Section 1</p>
+    <p class="section-title">Who We Are</p>
+    <p>This policy is issued by <strong>Clairen Haus LLC</strong>, an Atlanta, Georgia-based AI operations company. Contact us at <a href="mailto:hello@clairenhaus.com">hello@clairenhaus.com</a> with any privacy questions.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 2</p>
+    <p class="section-title">What Data We Access</p>
+    <p>To deliver the EA service, we request access to your Google account via OAuth 2.0. Specifically, we access:</p>
+    <ul>
+      <li><strong>Gmail (read and draft access):</strong> We read your inbox to triage, prioritize, and draft responses. We do not send emails without your review unless you explicitly authorize automated sending.</li>
+      <li><strong>Google Calendar (read access):</strong> We read your calendar to prepare daily briefings, meeting prep summaries, and scheduling context.</li>
+      <li><strong>Google account email address:</strong> Used to identify your account and link it to your portal record.</li>
+    </ul>
+    <div class="highlight-box">
+      We access only the minimum data necessary to deliver the agreed service. We do not access Google Drive, Contacts, or any other Google service beyond Gmail and Calendar unless you explicitly request it during onboarding.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 3</p>
+    <p class="section-title">How We Use Your Data</p>
+    <p>We use your Gmail and Calendar data exclusively to:</p>
+    <ul>
+      <li>Triage and prioritize your inbox on your behalf</li>
+      <li>Draft email responses in your voice for your review</li>
+      <li>Generate your daily morning briefing and evening debrief</li>
+      <li>Prepare pre-meeting context summaries</li>
+      <li>Produce your weekly executive summary report</li>
+      <li>Log EA activity in your client portal dashboard</li>
+    </ul>
+    <p>Your email and calendar content is processed by Claude, Anthropic's AI model, via the Anthropic API. Prompts sent to the API include relevant email and calendar data needed to generate outputs. Anthropic's data handling is governed by <a href="https://www.anthropic.com/privacy" target="_blank">Anthropic's Privacy Policy</a>.</p>
+    <p>We do not use your data for advertising, model training, or any purpose outside of delivering your EA service.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 4</p>
+    <p class="section-title">How We Store Your Data</p>
+    <p>Your OAuth access and refresh tokens are stored encrypted in a secure Supabase database hosted in the United States. We store:</p>
+    <ul>
+      <li>Your Google OAuth access token and refresh token</li>
+      <li>Your connected email address</li>
+      <li>Your portal account information (name, business, timezone, notification preferences)</li>
+      <li>EA activity logs and briefing history for your portal dashboard</li>
+    </ul>
+    <p>We do not store the full content of your emails or calendar events. Email and calendar data is fetched in real time when needed and used only to generate your briefings and reports.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 5</p>
+    <p class="section-title">Data Retention and Deletion</p>
+    <p>We retain your data only as long as your EA service is active. Specifically:</p>
+    <ul>
+      <li><strong>During your pilot:</strong> All data is retained to power your EA service.</li>
+      <li><strong>Within 30 days of pilot completion:</strong> Your OAuth tokens are automatically deleted from our systems. This is enforced by an automated process that runs on your pilot end date.</li>
+      <li><strong>Portal account data:</strong> Retained for 90 days after pilot completion, then deleted unless you continue on retainer.</li>
+      <li><strong>If you revoke access:</strong> Your OAuth tokens are deleted within 48 hours of revocation.</li>
+    </ul>
+    <p>You can revoke our access to your Gmail and Calendar at any time by visiting <a href="https://myaccount.google.com/permissions" target="_blank">Google Account Permissions</a> and removing Clairen Haus EA.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 6</p>
+    <p class="section-title">Data Sharing</p>
+    <p>We do not sell your data. We do not share your data with third parties for marketing or advertising purposes. Your data is shared only with the following infrastructure providers who process it on our behalf:</p>
+    <ul>
+      <li><strong>Anthropic:</strong> AI processing of email and calendar content to generate briefings and responses.</li>
+      <li><strong>Supabase:</strong> Secure database storage for your account and OAuth tokens.</li>
+      <li><strong>n8n (Railway):</strong> Workflow automation that powers scheduled briefings and EA tasks.</li>
+      <li><strong>Google:</strong> OAuth authentication and API access to Gmail and Calendar.</li>
+    </ul>
+    <p>All providers are bound by their own privacy policies and data processing agreements.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 7</p>
+    <p class="section-title">Your Rights</p>
+    <p>You have the right to:</p>
+    <ul>
+      <li>Request a copy of the data we hold about you</li>
+      <li>Request correction of inaccurate data</li>
+      <li>Request deletion of your data at any time</li>
+      <li>Revoke Google OAuth access at any time via Google Account Permissions</li>
+      <li>Opt out of Telegram notifications or email briefings at any time through your portal settings</li>
+    </ul>
+    <p>To exercise any of these rights, email <a href="mailto:hello@clairenhaus.com">hello@clairenhaus.com</a>. We will respond within 5 business days.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 8</p>
+    <p class="section-title">Security</p>
+    <p>We take reasonable technical and organizational measures to protect your data, including encrypted token storage, row-level security on our database, and access controls that limit who can read your data. No method of transmission over the internet is 100% secure. If you have security concerns, contact us immediately at <a href="mailto:hello@clairenhaus.com">hello@clairenhaus.com</a>.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 9</p>
+    <p class="section-title">Changes to This Policy</p>
+    <p>We may update this Privacy Policy from time to time. Material changes will be communicated via email to active clients at least 7 days before taking effect. The effective date at the top of this page will always reflect the most recent version.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <p class="section-label">Section 10</p>
+    <p class="section-title">Contact</p>
+    <p>Clairen Haus LLC<br>
+    Atlanta, Georgia<br>
+    <a href="mailto:hello@clairenhaus.com">hello@clairenhaus.com</a><br>
+    <a href="https://clairenhaus.com">clairenhaus.com</a></p>
+  </div>
+</div>
+
+<span class="gradient-bar"></span>
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Clairen Haus</span>
+    <div class="footer-links">
+      <a href="https://clairenhaus.com/ea/terms">Terms of Service</a>
+      <a href="https://clairenhaus.com/privacy-policy">Main Privacy Policy</a>
+    </div>
+    <span class="footer-copy">clairenhaus.com — Atlanta, GA — hello@clairenhaus.com</span>
+  </div>
+</footer>
+</body>
+</html>

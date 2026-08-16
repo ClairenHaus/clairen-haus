@@ -3367,5 +3367,240 @@ Do not rename or replace those keys until the user's completed assessment
 has been successfully recovered and submitted from clairenhaus.com.
 -->
 
+
+<script id="v10-responses-first-recovery">
+/*
+  RESPONSES-FIRST RECOVERY
+  ------------------------
+  Preserve the existing v10 localStorage and IndexedDB keys so the completed
+  clairenhaus.com assessment can be recovered.
+
+  Important change:
+  1. Save the assessment row FIRST.
+  2. Attempt voice uploads only AFTER the row is confirmed saved.
+  3. Voice upload failure never discards or blocks the questionnaire responses.
+*/
+
+function expectedVoicePaths(submissionId){
+  return Object.entries(notes).map(([questionId,note])=>{
+    const extension=fileExt(note.type);
+    return {
+      question_id:questionId,
+      path:`${submissionId}/${questionId}.${extension}`,
+      mime_type:note.type||"audio/webm",
+      recorded_at:note.at,
+      upload_status:"expected"
+    };
+  });
+}
+
+async function insertAssessmentRowFirst(scores,recs,submissionId){
+  const plannedVoicePaths=expectedVoicePaths(submissionId);
+
+  const payload={
+    id:submissionId,
+    respondent_name:A.name,
+    company_name:A.company,
+    email:A.email,
+    phone:A.phone||null,
+    website:A.website||null,
+    overall_score:scores.overall,
+    maturity_level:scores.level,
+    category_scores:scores.categories,
+    recommendations:recs,
+    responses:{...A,_roi_inputs:estimateROIInputs()},
+    voice_note_paths:plannedVoicePaths,
+    completed_at:new Date().toISOString(),
+    user_agent:navigator.userAgent
+  };
+
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/staging_inventory_assessments`,{
+    method:"POST",
+    headers:{
+      "apikey":SUPABASE_ANON_KEY,
+      "Authorization":`Bearer ${SUPABASE_ANON_KEY}`,
+      "Content-Type":"application/json",
+      "Prefer":"return=minimal"
+    },
+    body:JSON.stringify(payload)
+  });
+
+  if(res.ok){
+    return {saved:true,duplicate:false};
+  }
+
+  const body=await res.text();
+
+  if(res.status===409){
+    let parsed=null;
+    try{parsed=JSON.parse(body)}catch(e){}
+    const duplicatePrimaryKey =
+      parsed?.code==="23505" ||
+      /duplicate key|unique constraint|staging_inventory_assessments_pkey/i.test(body);
+
+    if(duplicatePrimaryKey){
+      return {saved:true,duplicate:true};
+    }
+  }
+
+  throw new Error(`Assessment row save failed (${res.status}): ${body.slice(0,260)}`);
+}
+
+async function uploadVoiceAfterAssessmentSaved(submissionId){
+  if(!Object.keys(notes).length){
+    return {ok:true,count:0};
+  }
+
+  try{
+    const paths=await uploadVoiceNotes(submissionId);
+    return {ok:true,count:paths.length};
+  }catch(e){
+    return {ok:false,count:0,error:e};
+  }
+}
+
+saveAssessment=async function(scores,recs){
+  sanitizeBranches();
+
+  const submissionId=window.__submissionId||crypto.randomUUID();
+  window.__submissionId=submissionId;
+  saveLocal();
+
+  // Critical recovery change: database row is committed before Storage is touched.
+  const rowResult=await insertAssessmentRowFirst(scores,recs,submissionId);
+
+  // Voice upload is now secondary and non-blocking.
+  const voiceResult=await uploadVoiceAfterAssessmentSaved(submissionId);
+
+  return {
+    id:submissionId,
+    rowSaved:true,
+    duplicate:rowResult.duplicate,
+    voice:voiceResult
+  };
+};
+
+persistResults=async function(scores,recs){
+  const node=document.querySelector("#submitStatus");
+  const retry=document.querySelector("#retryWrap");
+  if(!node)return;
+
+  if(!canSubmitToProduction()){
+    node.className="submit-status";
+    node.textContent="Submission is disabled on this URL. Your completed responses remain saved in this browser.";
+    if(retry)retry.innerHTML="";
+    return;
+  }
+
+  if(V5_SUBMITTED && (window.__lastSubmissionId||window.__submissionId)){
+    const savedId=window.__lastSubmissionId||window.__submissionId;
+    node.className="submit-status ok";
+    node.textContent="Assessment saved successfully. Reference: "+String(savedId).slice(0,8).toUpperCase();
+    if(retry)retry.innerHTML="";
+    return;
+  }
+
+  node.className="submit-status";
+  node.textContent="Saving assessment responses…";
+  if(retry)retry.innerHTML="";
+
+  try{
+    const result=await saveAssessment(scores,recs);
+    const id=result.id;
+
+    window.__lastSubmissionId=id;
+    V5_SUBMITTED=true;
+    saveLocal();
+
+    node.className="submit-status ok";
+
+    if(result.voice.ok){
+      node.textContent=
+        "Assessment saved successfully. Reference: "+
+        id.slice(0,8).toUpperCase()+
+        (result.voice.count ? " Voice note saved." : "");
+      if(retry)retry.innerHTML="";
+    }else{
+      node.innerHTML=
+        "Assessment responses saved successfully. Reference: <b>"+
+        id.slice(0,8).toUpperCase()+
+        "</b><br><span class=small>Your voice note could not be uploaded. Your questionnaire responses are safely saved.</span>";
+
+      if(retry){
+        retry.innerHTML=
+          `<button class="btn secondary" style="margin-top:10px" onclick="retryVoiceOnly()">Retry voice upload</button>`;
+      }
+      window.__lastVoiceUploadError=String(result.voice.error||"Voice upload failed");
+    }
+  }catch(e){
+    V5_SUBMITTED=false;
+    saveLocal();
+
+    node.className="submit-status bad";
+    node.textContent="The assessment responses could not be saved. Your completed responses are still preserved in this browser.";
+
+    if(retry){
+      retry.innerHTML=
+        `<button class="btn secondary" style="margin-top:10px" onclick="retrySubmission()">Retry save</button>`;
+    }
+    console.error(e);
+  }
+};
+
+retryVoiceOnly=async function(){
+  const node=document.querySelector("#submitStatus");
+  const retry=document.querySelector("#retryWrap");
+  const id=window.__lastSubmissionId||window.__submissionId;
+
+  if(!id){
+    if(node){
+      node.className="submit-status bad";
+      node.textContent="The saved assessment reference is unavailable. Do not start a new assessment.";
+    }
+    return;
+  }
+
+  if(node){
+    node.className="submit-status";
+    node.textContent="Retrying voice upload…";
+  }
+
+  try{
+    const result=await uploadVoiceAfterAssessmentSaved(id);
+
+    if(result.ok){
+      if(node){
+        node.className="submit-status ok";
+        node.textContent=
+          "Assessment saved successfully. Reference: "+
+          String(id).slice(0,8).toUpperCase()+
+          (result.count ? " Voice note saved." : "");
+      }
+      if(retry)retry.innerHTML="";
+    }else{
+      throw result.error||new Error("Voice upload failed.");
+    }
+  }catch(e){
+    if(node){
+      node.className="submit-status ok";
+      node.innerHTML=
+        "Assessment responses are saved. Reference: <b>"+
+        String(id).slice(0,8).toUpperCase()+
+        "</b><br><span class=small>The voice note is still stored locally in this browser but has not uploaded to Supabase.</span>";
+    }
+    if(retry){
+      retry.innerHTML=
+        `<button class="btn secondary" style="margin-top:10px" onclick="retryVoiceOnly()">Retry voice upload</button>`;
+    }
+    console.error(e);
+  }
+};
+
+// Do not automatically delete the saved local assessment after successful row save.
+// The user can clear it later with Start New Assessment after confirming the Supabase row.
+rebuild();
+setTimeout(()=>welcome(),80);
+</script>
+
 </body>
 </html>

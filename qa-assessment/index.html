@@ -3143,8 +3143,16 @@ setTimeout(()=>welcome(),50);
 
 
 <script id="qa-exact-url-guard">
-const QA_ALLOWED_ORIGIN = "https://clairenhaus.github.io";
-const QA_ALLOWED_PATH = "/clairen-haus/qa-assessment";
+const QA_ALLOWED_LOCATIONS = [
+  {
+    origin: "https://clairenhaus.github.io",
+    path: "/clairen-haus/qa-assessment"
+  },
+  {
+    origin: "https://clairenhaus.com",
+    path: "/qa-assessment"
+  }
+];
 
 canSubmitToProduction = function(){
   if(SUBMISSION_MODE !== "production") return false;
@@ -3153,7 +3161,9 @@ canSubmitToProduction = function(){
   const origin = window.location.origin;
   const path = (window.location.pathname || "/").replace(/\/+$/,"");
 
-  return origin === QA_ALLOWED_ORIGIN && path === QA_ALLOWED_PATH;
+  return QA_ALLOWED_LOCATIONS.some(
+    location => location.origin === origin && location.path === path
+  );
 };
 </script>
 
@@ -3348,6 +3358,14 @@ record=async function(id){
 rebuild();
 setTimeout(()=>welcome(),60);
 </script>
+
+
+<!--
+RECOVERY BUILD:
+This file intentionally preserves the v10 localStorage and IndexedDB keys.
+Do not rename or replace those keys until the user's completed assessment
+has been successfully recovered and submitted from clairenhaus.com.
+-->
 
 </body>
 </html>

@@ -1,46 +1,3353 @@
-#!/usr/bin/env node
-/**
- * GHL MCP Server
- *
- * An MCP server providing full-coverage tools for the GoHighLevel (GHL) API:
- *  - Contacts: get, search, create, update, upsert, delete, tags, notes
- *  - Opportunities: get, search, create, update, status, delete, pipelines
- *  - Conversations: get, search, create, messages, send, update
- *  - Calendars: list, get, slots, appointments (CRUD)
- *
- * Authentication: Set GHL_API_KEY environment variable to your Private Integration Token.
- */
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { registerContactTools } from "./tools/contacts.js";
-import { registerOpportunityTools } from "./tools/opportunities.js";
-import { registerConversationTools } from "./tools/conversations.js";
-import { registerCalendarTools } from "./tools/calendars.js";
-// ── Create server ──────────────────────────────────────────────────────────
-const server = new McpServer({
-    name: "ghl-mcp-server",
-    version: "1.0.0",
-});
-// ── Register all tool domains ──────────────────────────────────────────────
-registerContactTools(server);
-registerOpportunityTools(server);
-registerConversationTools(server);
-registerCalendarTools(server);
-// ── Start server ───────────────────────────────────────────────────────────
-async function main() {
-    const apiKey = process.env.GHL_API_KEY;
-    if (!apiKey) {
-        console.error("ERROR: GHL_API_KEY environment variable is required.\n" +
-            "Set it to your GoHighLevel Private Integration Token.\n" +
-            "Get one at: Settings > Integrations > Private Integrations in your GHL sub-account.");
-        process.exit(1);
-    }
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
-    console.error("GHL MCP server running via stdio");
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home Staging Inventory Operations Assessment</title>
+<style>
+:root{--bg:#f5f2ed;--card:#fffdfa;--text:#23231f;--muted:#6d6962;--line:#ddd6cc;--brand:#32483f;--soft:#e8eee9;--bad:#8b3c34}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,textarea{font:inherit}.top{position:sticky;top:0;background:rgba(245,242,237,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:10}
+.topin{max-width:940px;margin:auto;padding:16px 22px}.toprow{display:flex;justify-content:space-between;gap:18px}.brand{font-weight:800;font-size:14px}.pcopy{font-size:13px;color:var(--muted)}
+.progress{height:7px;margin-top:12px;border-radius:99px;background:#e8e1d8;overflow:hidden}.progress>div{height:100%;background:var(--brand);width:0;transition:.2s}
+main{display:flex;justify-content:center;padding:46px 16px 72px}.card{width:min(820px,100%);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(26px,5vw,52px);box-shadow:0 16px 50px rgba(35,35,31,.08)}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:800;margin-bottom:14px}
+h1{font-size:clamp(34px,5vw,54px);line-height:1.03;letter-spacing:-.04em;margin:0 0 20px}h2{font-size:clamp(25px,4vw,36px);line-height:1.12;letter-spacing:-.025em;margin:0 0 12px}
+p{color:var(--muted);line-height:1.65}.lead{font-size:18px}.helper{font-size:14px;color:var(--muted);line-height:1.5;margin:8px 0}.req{color:var(--bad)}
+.choices{display:grid;gap:10px;margin-top:26px}.choice{display:flex;gap:12px;align-items:center;text-align:left;padding:15px 17px;border:1px solid var(--line);background:#fff;border-radius:13px;min-height:55px;cursor:pointer}
+.choice:hover{border-color:#aaa198}.choice.sel{background:var(--soft);border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.dot,.box{width:20px;height:20px;border:1.5px solid #99938b;display:grid;place-items:center;flex:0 0 auto}.dot{border-radius:50%}.box{border-radius:5px}
+.choice.sel .dot:after{content:"";width:10px;height:10px;border-radius:50%;background:var(--brand)}.choice.sel .box:after{content:"✓";font-weight:900;color:var(--brand)}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:34px}.btn{padding:13px 18px;border-radius:12px;border:1px solid var(--brand);font-weight:800;cursor:pointer}.primary{background:var(--brand);color:#fff}.secondary{background:transparent;color:var(--brand)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:24px}.field{display:flex;flex-direction:column;gap:7px}.full{grid-column:1/-1}label{font-size:14px;font-weight:750}
+input,textarea{width:100%;border:1px solid var(--line);border-radius:11px;background:#fff;padding:13px 14px;outline:0}input:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(50,72,63,.1)}
+textarea{min-height:150px;resize:vertical}.small{font-size:12px;color:var(--muted)}.error{color:var(--bad);font-size:14px;margin-top:14px}.hidden{display:none!important}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:26px}.scale button{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff}.scale button.sel{background:var(--soft);border-color:var(--brand)}
+.scale-labels{display:flex;justify-content:space-between;gap:20px;margin-top:8px;color:var(--muted);font-size:12px}.tools{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0 10px}
+.tool{padding:10px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:750;cursor:pointer}.tool.active{background:#f5e6e3;border-color:#bd786f;color:#7a3028}
+.voicepanel{margin-top:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:#fff}.voicepanel audio{width:100%;margin-top:9px}
+.counters{display:grid;gap:10px;margin-top:24px}.crow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.ccontrols{display:flex;align-items:center;gap:10px}.cbtn{width:36px;height:36px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:20px;cursor:pointer}.cval{min-width:28px;text-align:center;font-weight:850}
+.notice{margin-top:20px;background:var(--soft);color:var(--brand);padding:13px 14px;border-radius:11px;font-size:14px}.signals{list-style:none;padding:0;display:grid;gap:9px}.signals li{border:1px solid var(--line);border-radius:11px;background:#fff;padding:13px 14px}
+@media(max-width:650px){main{padding:26px 10px 60px}.card{padding:27px 19px}.fields{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+
+<style id="visual-upgrade">
+:root{
+  --bg:#f8f2e9;
+  --card:#fffdf8;
+  --text:#171713;
+  --muted:#6c665f;
+  --line:#dfd2c2;
+  --brand:#173f35;
+  --brand-2:#0e2d27;
+  --clay:#b65f45;
+  --clay-deep:#8f4331;
+  --gold:#c79a55;
+  --gold-soft:#f1dfbd;
+  --sage:#dfe9e2;
+  --rose:#f0d7cc;
+  --soft:#edf3ef;
+  --bad:#9d3f35;
 }
-main().catch((error) => {
-    console.error("Server error:", error);
-    process.exit(1);
-});
-//# sourceMappingURL=index.js.map
+body{
+  background:
+    radial-gradient(circle at 8% 12%, rgba(182,95,69,.13), transparent 24rem),
+    radial-gradient(circle at 94% 20%, rgba(199,154,85,.15), transparent 26rem),
+    radial-gradient(circle at 82% 88%, rgba(23,63,53,.10), transparent 30rem),
+    var(--bg);
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.38;
+  background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.top{
+  background:rgba(248,242,233,.88);
+  border-bottom:1px solid rgba(199,154,85,.25);
+}
+.brand{color:var(--brand-2);letter-spacing:.015em}
+.progress{height:8px;background:#eadfd1}
+.progress>div{background:linear-gradient(90deg,var(--brand),var(--clay),var(--gold))}
+.card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(199,154,85,.32);
+  box-shadow:0 24px 70px rgba(47,37,27,.12);
+}
+.card:before{
+  content:"";
+  position:absolute;
+  width:160px;height:160px;
+  right:-70px;top:-75px;
+  border-radius:50%;
+  background:linear-gradient(135deg,rgba(182,95,69,.22),rgba(199,154,85,.22));
+}
+.card>*{position:relative;z-index:1}
+.eyebrow{color:var(--clay-deep)}
+h1,h2{color:var(--text)}
+.choice{
+  border-color:#e5d8c9;
+  box-shadow:0 3px 12px rgba(47,37,27,.035);
+}
+.choice:hover{
+  border-color:var(--gold);
+  box-shadow:0 9px 22px rgba(47,37,27,.07);
+  transform:translateY(-1px);
+}
+.choice.sel{
+  background:linear-gradient(135deg,var(--soft),#fff8ef);
+  border-color:var(--brand);
+  box-shadow:inset 4px 0 0 var(--clay),0 8px 22px rgba(23,63,53,.08);
+}
+.choice.sel .dot:after{background:var(--clay)}
+.choice.sel .box:after{color:var(--clay-deep)}
+.primary{
+  border-color:var(--brand);
+  background:linear-gradient(135deg,var(--brand),var(--brand-2));
+  box-shadow:0 8px 20px rgba(23,63,53,.18);
+}
+.primary:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(23,63,53,.24)}
+.secondary{border-color:#bda98d;color:var(--brand)}
+input:focus,textarea:focus{border-color:var(--clay);box-shadow:0 0 0 3px rgba(182,95,69,.10)}
+.scale button.sel{background:linear-gradient(135deg,var(--sage),#fff8ef);border-color:var(--clay);box-shadow:inset 0 -3px 0 var(--clay)}
+.notice{background:linear-gradient(135deg,var(--sage),#fbf6ec);border:1px solid #c9d8cd}
+.result-hero{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:28px;
+  align-items:center;
+  padding:22px;
+  border:1px solid rgba(199,154,85,.35);
+  border-radius:18px;
+  background:linear-gradient(135deg,#fff8ed,var(--sage));
+  margin:22px 0 30px;
+}
+.score-ring{
+  width:156px;height:156px;border-radius:50%;
+  display:grid;place-items:center;
+  background:conic-gradient(var(--clay) calc(var(--score)*1%),#eadfd2 0);
+  position:relative;
+  box-shadow:0 12px 30px rgba(90,58,37,.12);
+}
+.score-ring:after{
+  content:"";
+  width:118px;height:118px;border-radius:50%;
+  background:var(--card);
+  position:absolute;
+}
+.score-ring .score-inner{position:relative;z-index:2;text-align:center;width:92px}
+.score-ring strong{font-size:38px;line-height:1;display:block;color:var(--brand-2)}
+.score-ring .score-label{
+  display:block;
+  max-width:82px;
+  margin:7px auto 0;
+  font-size:9px;
+  line-height:1.12;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--muted);
+  font-weight:800;
+}
+.level-pill{
+  display:inline-flex;
+  padding:7px 11px;
+  border-radius:999px;
+  background:var(--brand);
+  color:white;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  margin-bottom:10px;
+}
+.category-list{display:grid;gap:12px;margin:22px 0 30px}
+.category-row{display:grid;grid-template-columns:170px 1fr 46px;gap:12px;align-items:center}
+.category-name{font-size:13px;font-weight:750}
+.category-track{height:10px;background:#eadfd2;border-radius:999px;overflow:hidden}
+.category-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--brand),var(--clay),var(--gold))}
+.category-score{text-align:right;font-weight:850;color:var(--brand-2)}
+.priority-order{margin:5px 0 0;color:var(--muted);font-size:13px}
+.priority-cards{display:grid;gap:12px;margin-top:18px}
+.priority-card{padding:16px 17px;border:1px solid #decab4;border-radius:14px;background:linear-gradient(135deg,#fffdf8,#fff5e8)}
+.priority-card b{color:var(--brand-2)}
+.priority-title{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:5px}
+.priority-score{flex:0 0 auto;padding:5px 8px;border-radius:999px;background:var(--sage);color:var(--brand-2);font-size:11px;font-weight:850;letter-spacing:.02em}
+.submit-status{margin-top:16px;padding:12px 14px;border-radius:11px;background:#f8efe2;border:1px solid #ead3b2;color:#6e5033;font-size:13px}
+.submit-status.ok{background:var(--sage);border-color:#bdd0c1;color:var(--brand-2)}
+.submit-status.bad{background:#f8e6e1;border-color:#e0b4aa;color:#81372f}
+.disclosure{margin-top:14px;padding:12px 14px;border-left:3px solid var(--gold);background:#fff8eb;color:var(--muted);font-size:12px;line-height:1.5}
+@media(max-width:650px){
+  .result-hero{grid-template-columns:1fr;text-align:center}
+  .score-ring{margin:auto}
+  .category-row{grid-template-columns:1fr 42px}
+  .category-track{grid-column:1/-1;grid-row:2}
+}
+</style>
+
+
+<style id="v4-hardening-styles">
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.toprow{align-items:center}
+.score-ring .score-label{font-size:11px;line-height:1.05;letter-spacing:.05em}
+.context-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 28px}
+.context-card,.impact-card,.alignment-card{
+  padding:15px 16px;border:1px solid #decab4;border-radius:14px;
+  background:linear-gradient(135deg,#fffdf8,#fff7ec)
+}
+.context-card span,.impact-card span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.context-card strong,.impact-card strong{display:block;margin-top:5px;color:var(--brand-2);font-size:16px}
+.impact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 28px}
+.priority-reason{display:block;margin-top:8px;color:#735d4f;font-size:12px;line-height:1.45}
+.alignment-card{margin:16px 0 28px}
+.alignment-card p{margin:5px 0;color:var(--text)}
+.resume-box{margin-top:22px;padding:15px;border:1px solid #d9c6ad;border-radius:14px;background:#fff8ec}
+.resume-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.error[role="alert"]{min-height:20px}
+@media(max-width:650px){
+  .toprow{align-items:flex-start;gap:8px}
+  .brand{max-width:70%;font-size:12px;line-height:1.25}
+  .pcopy{font-size:11px}
+  .context-grid,.impact-grid{grid-template-columns:1fr}
+}
+</style>
+
+
+<style id="v5-polish">
+.section-context{
+  margin:0 0 22px;
+  padding:12px 14px;
+  border-left:3px solid var(--gold);
+  background:#fff8eb;
+  color:var(--muted);
+  border-radius:0 10px 10px 0;
+  font-size:13px;
+  line-height:1.5;
+}
+.completed-box{
+  margin-top:22px;
+  padding:16px;
+  border:1px solid #c9d8cd;
+  background:var(--sage);
+  border-radius:14px;
+}
+.completed-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.voice-restore-note{font-size:12px;color:var(--muted);margin-top:8px}
+</style>
+
+</head>
+<body>
+<header class="top"><div class="topin"><div class="toprow"><div class="brand">Home Staging Inventory Operations Assessment</div><div id="pcopy" class="pcopy">Ready to begin</div></div><div class="progress"><div id="bar"></div></div></div></header>
+<main><section id="card" class="card"></section></main>
+<script>
+const ROLES=["Owner / Founder","General Manager","Operations Manager","Lead Designer / Creative Director","Staging Designer","Design Assistant","Inventory Manager","Warehouse Manager","Warehouse Associate","Installation / Moving Crew","Driver","Purchasing / Procurement","Project Coordinator","Scheduling / Dispatch","Sales / Business Development","Client / Realtor Relations","Administrative Support","Bookkeeping / Finance","Marketing","Contractor / Temporary Crew","Other"];
+let A={},notes={},steps=[],idx=-1,recorder=null,chunks=[],timer=null,recognition=null;
+
+const S=[
+["About Your Company","A few basics help put the rest of your answers in context.",[
+{id:"lead",t:"lead",q:"Tell us about your company",req:1}
+]],
+["Your Staging Operation","This section looks at the size, structure, and responsibilities inside your staging business.",[
+{id:"projects",t:"single",q:"Approximately how many staging projects does your company complete in a typical month?",o:["1–5","6–10","11–20","21–40","41–75","76+","It varies significantly"],req:1},
+{id:"locations",t:"single",q:"How many physical locations currently store staging inventory?",h:"Include warehouses, storage units, showrooms, offices, or other inventory storage locations.",o:["1","2","3","4","5+"],req:1},
+{id:"inventory_size",t:"single",q:"Approximately how large is your active inventory?",o:["Fewer than 250 items","250–499","500–999","1,000–2,499","2,500–4,999","5,000+","I do not know"],req:1},
+{id:"team_size",t:"single",q:"How many people currently work in or regularly support the business?",h:"Include owners, employees, regular contractors, warehouse staff, designers, installers, drivers, and administrative support.",o:["Just me","2–5","6–10","11–20","21–40","41+","It varies because we use contractors or temporary crews"],req:1},
+{id:"roles",t:"multi",q:"Which roles currently exist in your business?",o:ROLES,req:1},
+{id:"role_counts",t:"counts",q:"Approximately how many people work in each selected role?",h:"People who perform more than one role can be counted in more than one category.",show:()=>A.roles?.length,req:1},
+{id:"handlers",t:"dynamicMulti",q:"Which roles physically handle inventory during its lifecycle?",h:"Think about receiving, storing, pulling, loading, installation, de-staging, returns, cleaning, repairs, and inventory counts.",src:"roles",extra:["No defined responsibility","It varies depending on the project"],req:1},
+{id:"deciders",t:"dynamicMulti",q:"Which roles make decisions about inventory?",src:"roles",req:1},
+{id:"responsibility",t:"single",q:"How clearly are inventory responsibilities divided among team members today?",o:["Very clear. Each role has defined responsibilities.","Mostly clear, with some overlap.","Responsibilities depend on the project.","Several people handle the same work without defined ownership.","Most inventory knowledge and decisions depend on one or two people.","We do not have defined inventory responsibilities."],req:1},
+{id:"structure",t:"single",q:"How is your team primarily structured?",o:["Mostly employees","Mostly contractors","Mix of employees and contractors","Core internal team plus temporary installation crews","Owner-led with contractors as needed","Other"],req:1},
+{id:"coverage",t:"single",q:"When someone who normally handles inventory is unavailable, how easily can another team member take over?",o:["Easily. The process and information are documented.","Usually, with some questions.","It depends on the task.","It is difficult without the usual person.","Certain inventory processes stop until that person is available."],req:1}
+]],
+["Inventory Records","This section looks at what inventory information exists today and how consistently it is maintained.",[
+{id:"tracking",t:"multi",q:"How do you currently keep track of your inventory?",o:["Inventory management software","Spreadsheet","Accounting system","Photos or photo folders","Paper records","Labels or handwritten tags","Notes on phones","Team knowledge or memory","We do not have a consistent inventory record","Other"],req:1},
+{id:"documented",t:"single",q:"How much of your active inventory is currently documented?",o:["Nearly all of it","Most of it","About half","Some of it","Very little","I do not know"],req:1},
+{id:"fields",t:"multi",q:"What information can you typically see about an inventory item today?",o:["Photo","Item name or description","Category","Color","Style","Dimensions","Purchase date","Purchase cost","Current location","Current project","Availability","Condition","Repair history","Usage history","None of these consistently"],req:1}
+]],
+["Purchasing and Receiving","This section looks at what happens from the moment inventory is purchased until it is received and recorded.",[
+{id:"entry",t:"single",q:"When new inventory is purchased, when does it usually become part of your inventory records?",o:["When the order is placed","When the item ships","When the item arrives","When someone has time to enter it","It varies","We do not formally enter new purchases into an inventory system"],req:1},
+{id:"receiving",t:"multi",q:"What typically happens when new inventory arrives?",o:["Quantity is verified","Condition is inspected","Photos are taken","Purchase information is recorded","The item receives an ID or label","The storage location is recorded","Shipping damage is documented","Someone signs or confirms receipt","The item is simply put away","It depends on who receives it"],req:1},
+{id:"trace",t:"single",q:"How consistently can you connect a physical item back to its original purchase information?",o:["Very easily","Usually","Sometimes","Rarely","We generally cannot","I am not sure"],req:1}
+]],
+["Identification and Storage","This section looks at how items are identified, organized, located, and stored.",[
+{id:"ids",t:"single",q:"Do individual inventory items currently have unique identifiers?",o:["Yes, almost everything","Yes, but only certain items","No","I am not sure"],req:1},
+{id:"idtype",t:"multi",q:"What type of identifier do you use?",o:["Barcode","QR code","SKU","Serial or asset number","Printed label","Handwritten label","Manufacturer identifier","Other"],show:()=>["Yes, almost everything","Yes, but only certain items"].includes(A.ids),req:1},
+{id:"defined",t:"single",q:"Does your warehouse or storage area use defined storage locations?",o:["Yes, down to a specific shelf or location","Yes, by general area or zone","Some areas do","No","It varies by location"],req:1},
+{id:"find",t:"single",q:"How does someone determine where a specific item is stored?",o:["Exact location is available in a system","Location is recorded in a spreadsheet or document","Storage areas are labeled and staff know where categories belong","Staff generally remember where things are","Someone searches until they find it","It varies"],req:1},
+{id:"searchfreq",t:"single",q:"How often does your team spend extra time looking for inventory?",o:["Almost never","A few times per year","Monthly","Weekly","Several times per week","Almost every project","I do not know"],req:1}
+]],
+["Project Planning and Inventory Reservations","This section looks at how inventory is selected, reserved, and prepared for upcoming staging projects.",[
+{id:"select",t:"multi",q:"How is inventory selected for an upcoming staging project?",o:["Inventory software","Spreadsheet or list","Photos","Physical warehouse walkthrough","Designer memory","Warehouse team knowledge","Previous project references","Paper notes","Other"],req:1},
+{id:"reserve",t:"single",q:"Before inventory is committed to a project, can your team reliably see whether that item is already reserved elsewhere?",o:["Yes, in real time","Usually","Sometimes","No","We do not formally reserve inventory"],req:1},
+{id:"conflicts",t:"single",q:"How often do availability conflicts happen?",h:"Examples include an item being planned for two projects or discovering too late that something is unavailable.",o:["Almost never","A few times per year","Monthly","Weekly","Several times per week","I do not know"],req:1},
+{id:"pull",t:"single",q:"How are project pull lists created?",o:["Automatically from our inventory system","Manually in a spreadsheet or document","Written or printed manually","Created from photos","Communicated verbally","We do not consistently use pull lists","Other"],req:1},
+{id:"pulldata",t:"multi",q:"What information does the pull list normally include?",o:["Item name","Item ID","Photo","Quantity","Warehouse location","Room assignment","Project information","Special handling instructions","None of these consistently"],show:()=>A.pull&&A.pull!=="We do not consistently use pull lists",req:1}
+]],
+["Picking and Loading","This section looks at how your team pulls, verifies, and loads the correct inventory for each project.",[
+{id:"pick",t:"single",q:"How does the warehouse team confirm that the correct inventory was pulled for a project?",o:["Items are scanned","Items are checked against a digital list","Items are checked against a printed list","Designer or manager visually confirms","Warehouse staff rely on experience","There is no formal confirmation step","It varies"],req:1},
+{id:"vehicle",t:"single",q:"Can you see exactly which inventory has been loaded onto a particular truck, van, or trailer?",o:["Yes, in real time","Yes, but only through manual records","Sometimes","No","We do not need to track this today"],req:1},
+{id:"arrival",t:"single",q:"How often does a crew arrive at a property and discover that something is missing, incorrect, or was left behind?",o:["Almost never","A few times per year","Monthly","Weekly","Several times per week","I do not know"],req:1}
+]],
+["Installation","This section looks at how installed inventory, room placement, substitutions, and project changes are recorded.",[
+{id:"install",t:"multi",q:"Once inventory reaches a property, how is the final installation recorded?",o:["Inventory is scanned or digitally confirmed","Items are checked off a list","Photos are taken","Room assignments are recorded","Changes and substitutions are documented","The designer knows what was installed","Nothing is formally recorded","It varies"],req:1},
+{id:"changes",t:"single",q:"If an item is substituted, moved to another room, or not used during installation, how reliably is that change recorded?",o:["Always","Usually","Sometimes","Rarely","Never","We do not currently track that level of detail"],req:1}
+]],
+["De-Staging and Returns","This section looks at how inventory is retrieved, returned, and prepared to re-enter circulation.",[
+{id:"retrieve",t:"single",q:"When it is time to remove a staging installation, does the crew have a reliable list of everything that should be retrieved?",o:["Yes, generated from what was actually installed","Yes, but the list is manually maintained","Usually","Sometimes","No","We rely mostly on the crew or designer knowing what belongs to us"],req:1},
+{id:"missing",t:"single",q:"How often is an item discovered missing during or after de-staging?",o:["Almost never","A few times per year","Monthly","Weekly","Several times per week","I do not know"],req:1},
+{id:"return",t:"single",q:"What usually happens when inventory returns to storage?",o:["Every item is inspected before becoming available again","Most items are inspected","Only obviously damaged items are inspected","Items are generally put away immediately","It depends on who handles the return"],req:1}
+]],
+["Team Handoffs and Accountability","This section looks at what happens when responsibility for inventory moves between people or teams.",[
+{id:"handoffs",t:"multi",q:"At which points does responsibility for inventory typically move from one person or team to another?",o:["Purchasing → Receiving","Receiving → Warehouse / Storage","Designer → Warehouse team","Warehouse team → Loading crew","Loading crew → Driver","Driver → Installation crew","Designer → Installation crew","Installation crew → De-staging crew","De-staging crew → Warehouse team","Warehouse team → Cleaning","Warehouse team → Repair","Cleaning / Repair → Warehouse","Other","Most inventory is handled by the same person or team throughout the process"],req:1},
+{id:"handoffcomm",t:"multi",q:"How are those handoffs usually communicated?",o:["Inventory or project management system","Digital checklist","Spreadsheet","Printed paperwork","Email","Text message","Team chat","Phone call","Verbal conversation","Photos","The next person generally knows what to do","There is no consistent handoff process","It varies by project","Other"],req:1},
+{id:"handoffconfirm",t:"single",q:"When responsibility changes hands, how is completion usually confirmed?",o:["The system records the handoff automatically","The receiving person digitally confirms it","Someone checks off a list","A manager or supervisor confirms it","The teams communicate verbally","Completion is assumed unless there is a problem","There is no formal confirmation","It varies"],req:1},
+{id:"handofffreq",t:"single",q:"How often does information get lost, missed, or misunderstood during a handoff between people or teams?",o:["Almost never","A few times per year","Monthly","Weekly","Several times per week","Almost every project","I do not know"],req:1},
+{id:"handoffproblems",t:"multi",q:"What types of problems have resulted from incomplete or unclear handoffs?",o:["Wrong inventory pulled","Inventory not pulled","Items left at the warehouse","Items loaded onto the wrong vehicle","Missing project information","Installation team did not know where items belonged","Changes or substitutions were not communicated","Items left behind during de-staging","Returned inventory was not inspected","Damaged inventory was put back into circulation","Items were stored in the wrong location","Cleaning or repairs were missed","Inventory status was incorrect","Duplicate work","Additional warehouse trips","Installation delays","We rarely experience handoff problems","Other"],req:1},
+{id:"handofftrace",t:"single",q:"When something goes wrong during an inventory handoff, how easy is it to determine what happened?",o:["Very easy. We have a clear record of each step.","Usually easy","Possible, but requires checking several places or asking people","Difficult","We mostly rely on people's memory","We usually cannot determine exactly what happened"],req:1},
+{id:"handoffowner",t:"scale",q:"How clearly is ownership defined at each stage of the inventory lifecycle?",low:"Responsibilities are rarely clear",high:"Every stage has a clearly defined owner",req:1},
+{id:"riskhandoff",t:"dynamicSingle",q:"Which handoff currently creates the most operational risk or extra work?",src:"handoffs",exclude:["Most inventory is handled by the same person or team throughout the process"],extra:["No particular handoff stands out","I am not sure"],req:1},
+{id:"riskexplain",t:"long",q:"What usually goes wrong at this handoff?",h:"Optional. Type it, dictate it, or leave a short voice note.",voice:1,optional:1,show:()=>A.riskhandoff&&!["No particular handoff stands out","I am not sure"].includes(A.riskhandoff)}
+]],
+["Cleaning, Damage and Repairs","This section looks at how cleaning, damage, repairs, and maintenance needs are tracked.",[
+{id:"maintenance",t:"multi",q:"How do you currently track items that need cleaning, repair, replacement, or additional attention?",o:["Inventory software","Spreadsheet","Task management system","Paper notes","Text messages","Group chat","Email","Physical area or pile in the warehouse","Team memory","We do not have a consistent process","Other"],req:1},
+{id:"history",t:"single",q:"Can you easily see an individual item's history of damage, repairs, or cleaning?",o:["Yes","For some items","Only if we search through records","No","We do not currently track this"],req:1}
+]],
+["Financial and Lifecycle Visibility","This section looks at what you can currently see about the cost, use, condition, and lifecycle of each asset.",[
+{id:"financial",t:"multi",q:"Which of the following can you currently determine for an individual inventory item without significant research?",o:["Original purchase price","Purchase date","Replacement cost","Number of projects it has been used on","Total time it has spent staged","Cleaning costs","Repair costs","Current condition","Current location","Sale or disposal information","None of these consistently"],req:1},
+{id:"retire",t:"multi",q:"How do you decide when inventory should be sold, donated, replaced, or retired?",o:["Condition","Age","Style trends","Repair cost","Lack of use","Storage constraints","Designer recommendation","Owner judgment","Financial data","We do not have a defined process","Other"],req:1}
+]],
+["Operational Visibility","This section looks at how easily you can see the current state of inventory and upcoming operational needs.",[
+{id:"confidence",t:"scale",q:'If someone asked you right now, "Where is every major piece of inventory?" how confident would you be in the answer?',low:"Not confident",high:"Completely confident",req:1},
+{id:"dashboard",t:"multi",q:"Which information would be most valuable to see in one place?",h:"Select up to 5.",max:5,o:["What inventory is available right now","Where each item is located","What is reserved for upcoming projects","What is currently installed","What is on each vehicle","Upcoming installs","Upcoming removals","Missing inventory","Items needing cleaning","Items needing repair","Inventory value","Most-used inventory","Least-used inventory","Items that have not been used recently","Damage history","Repair spending","Inventory utilization","Purchasing needs"],req:1}
+]],
+["Biggest Operational Gaps","This section identifies which parts of the current process create the most friction or risk.",[
+{id:"friction",t:"multi",q:"Which issues create the most friction in your current inventory process?",h:"Select up to 5.",max:5,o:["Finding inventory","Knowing what is available","Preventing double-booking","Creating pull lists","Pulling the correct inventory","Loading trucks accurately","Knowing what was installed","Tracking changes during installation","Recovering everything during de-staging","Missing inventory","Damage tracking","Cleaning","Repairs","Returning items to the correct storage location","Inventory counts","Purchasing decisions","Knowing when to retire inventory","Too much manual data entry","Information spread across multiple places","Dependence on certain employees' memory","Reporting","Other"],req:1},
+{id:"outcome",t:"single",q:"Which outcome would make the biggest difference to your operation?",o:["Know exactly where inventory is","Reduce time spent searching","Prevent inventory conflicts","Make warehouse pulling faster","Improve loading accuracy","Improve install and de-staging accuracy","Reduce missing inventory","Improve damage and repair tracking","Know which inventory is actually being used","Make better purchasing decisions","Improve financial visibility","Create one consistent process across the company"],req:1}
+]],
+["Optional Process Explanation","This section gives you space to explain any recurring issue that does not fit neatly into the earlier questions.",[
+{id:"problem",t:"single",q:"Is there one part of your inventory process that causes more problems than the others?",o:["Yes","No"],req:1},
+{id:"problemtext",t:"long",q:"Tell us what happens.",h:"Optional. Describe it the same way you would explain it to someone on your team.",voice:1,optional:1,show:()=>A.problem==="Yes"}
+]],
+["Current Systems","This section looks at the tools and software currently supporting your staging operation.",[
+{id:"systems",t:"multi",q:"What tools are currently part of your inventory or staging operations?",o:["Inventory management software","CRM","Accounting software","Project management software","Spreadsheet","Cloud file storage","Photo management system","Warehouse management software","Design software","Messaging or team chat","Paper-based process","None","Other"],req:1},
+{id:"systemnames",t:"long",q:"What systems are you currently using?",h:"Optional. List the software or tools you use today.",dict:1,optional:1,show:()=>A.systems?.some(x=>!["Paper-based process","None"].includes(x))}
+]],
+["Operational Cost and Capacity","This section estimates the time, loss, and capacity impact of the current process.",[
+{id:"manual_hours",t:"single",q:"About how many staff hours per week are spent locating, reconciling, updating, or manually tracking inventory?",o:["Less than 2 hours","2–5 hours","6–10 hours","11–20 hours","More than 20 hours","I do not know"],req:1},
+{id:"error_time",t:"single",q:"When something is missing, incorrect, unavailable, or left behind, how much extra staff time does it usually create?",o:["Less than 30 minutes","30–60 minutes","1–2 hours","2–4 hours","More than 4 hours","I do not know"],req:1},
+{id:"extra_trips",t:"single",q:"How often does your team make an additional trip because something was missing, incorrect, unavailable, or left behind?",o:["Almost never","A few times per year","Monthly","Weekly","Several times per week","I do not know"],req:1},
+{id:"replacement_spend",t:"single",q:"Approximately how much do you spend in a typical year replacing missing, damaged, or prematurely retired inventory?",o:["Under $1,000","$1,000–$2,499","$2,500–$4,999","$5,000–$9,999","$10,000–$24,999","$25,000+","I do not know"],req:1},
+{id:"admin_hours",t:"single",q:"About how many staff hours per week are spent creating pull lists, checking availability, updating spreadsheets, or reconciling project inventory?",o:["Less than 2 hours","2–5 hours","6–10 hours","11–20 hours","More than 20 hours","I do not know"],req:1},
+{id:"capacity_more",t:"single",q:"If your inventory operation were significantly easier to manage, could your existing team handle more staging projects?",o:["Yes, definitely","Probably","Possibly","No","I am not sure"],req:1},
+{id:"capacity_projects",t:"single",q:"Approximately how many additional staging projects per month could your current team support?",o:["1–2","3–5","6–10","10+","I am not sure"],show:()=>["Yes, definitely","Probably","Possibly"].includes(A.capacity_more),req:1}
+]],
+["Implementation Readiness","This section looks at timing and how you would prefer to approach operational improvements.",[
+{id:"start_timing",t:"single",q:"If you decided to improve your inventory operation, when would you ideally want to begin?",o:["Immediately","Within 30 days","Within 60–90 days","Within 3–6 months","Later this year","Just exploring right now"],req:1},
+{id:"investment_approach",t:"single",q:"If the right system could materially reduce manual work, inventory loss, project errors, and time spent reconciling inventory, how would you prefer to approach the implementation?",o:["Solve the highest-priority issues first","Use a phased implementation","Build the complete system at once","Understand the ROI before deciding","I am primarily researching options right now"],req:1}
+]],
+["Final Priority","This final section identifies the one inventory operations problem you would most want solved first.",[
+{id:"priority",t:"long",q:"If you could fix one inventory operations problem first, what would it be?",h:"Optional. Type it, dictate it, or leave a short voice note.",voice:1,optional:1}
+]]
+];
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function rebuild(){steps=[];S.forEach((s,si)=>{steps.push({k:"section",si});s[2].forEach(q=>{if(!q.show||q.show())steps.push({k:"q",si,q})})})}
+function answered(q){if(q.optional)return true;if(q.t==="lead")return !!(A.name&&A.company&&A.email);if(q.t==="counts")return !!A.roles?.length;if(["multi","dynamicMulti"].includes(q.t))return A[q.id]?.length>0;return A[q.id]!==undefined&&String(A[q.id]).trim()!==""}
+function progress(){rebuild();let qs=steps.filter(x=>x.k==="q"),done=qs.filter(x=>answered(x.q)).length,p=Math.round(done/Math.max(1,qs.length)*100);document.querySelector("#bar").style.width=(idx<0?0:p)+"%";document.querySelector("#pcopy").textContent=idx<0?"Ready to begin":p+"% complete"}
+function dyn(q){let x=[...(A[q.src]||[])];if(q.exclude)x=x.filter(v=>!q.exclude.includes(v));if(q.extra)x=x.concat(q.extra);return [...new Set(x)]}
+function welcome(){idx=-1;document.querySelector("#card").innerHTML=`<div class=eyebrow>Inventory Operations Diagnostic</div><h1>How Well Can You See and Control Your Staging Inventory?</h1><p class=lead>Your staging inventory is purchased, received, stored, selected, loaded, installed, removed, inspected, cleaned, repaired, relocated, and eventually retired.</p><p>This assessment looks at how those movements happen today and where your current process may be creating unnecessary work, inventory loss, delays, or limited visibility.</p><p><b>Estimated time:</b> 8–12 minutes. Most questions are click-to-answer. Longer explanations are optional and can be dictated or recorded.</p><div class=nav><span></span><button class="btn primary" onclick=start()>Start Assessment</button></div>`;progress()}
+function start(){rebuild();idx=0;render()}
+function scrollAssessmentTop(){
+  requestAnimationFrame(()=>{
+    try{
+      window.scrollTo({top:0,left:0,behavior:"smooth"});
+      document.documentElement.scrollTop=0;
+      document.body.scrollTop=0;
+    }catch(e){
+      window.scrollTo(0,0);
+    }
+  });
+}
+function render(){stopVoice();rebuild();scrollAssessmentTop();if(idx>=steps.length)return complete();if(idx<0)return welcome();let x=steps[idx];if(x.k==="section")section(x.si);else question(x.si,x.q);progress()}
+function section(si){let s=S[si];document.querySelector("#card").innerHTML=`<div class=eyebrow>Section ${si+1} of ${S.length}</div><h1>${esc(s[0])}</h1>${s[1]?`<p class=lead>${esc(s[1])}</p>`:""}<div class=nav><button class="btn secondary" onclick=back()>Back</button><button class="btn primary" onclick=next()>Continue</button></div>`}
+function question(si,q){let b=q.t==="lead"?lead():q.t==="single"?single(q,q.o):q.t==="multi"?multi(q,q.o):q.t==="dynamicMulti"?multi(q,dyn(q)):q.t==="dynamicSingle"?single(q,dyn(q)):q.t==="scale"?scale(q):q.t==="counts"?counts():long(q);
+document.querySelector("#card").innerHTML=`<div class=eyebrow>${esc(S[si][0])}</div><h2>${esc(q.q)} ${q.req&&!q.optional?'<span class=req>*</span>':''}</h2>${q.h?`<div class=helper>${esc(q.h)}</div>`:""}${b}<div id=error class="error hidden"></div><div class=nav><button class="btn secondary" onclick=back()>Back</button><button class="btn primary" onclick=next()>Continue</button></div>`;bind(q)}
+function lead(){return `<div class=fields><div class=field><label>Your name <span class=req>*</span></label><input id=name value="${esc(A.name||"")}"></div><div class=field><label>Company name <span class=req>*</span></label><input id=company value="${esc(A.company||"")}"></div><div class=field><label>Email <span class=req>*</span></label><input id=email type=email value="${esc(A.email||"")}"></div><div class=field><label>Phone <span class=small>(optional)</span></label><input id=phone value="${esc(A.phone||"")}"></div><div class="field full"><label>Website <span class=small>(optional)</span></label><input id=website value="${esc(A.website||"")}"></div></div>`}
+function single(q,o){return `<div class=choices>${(o||[]).map(v=>`<button class="choice ${A[q.id]===v?"sel":""}" data-opt="${esc(v)}"><span class=dot></span><span>${esc(v)}</span></button>`).join("")}</div>`}
+function multi(q,o){let a=A[q.id]||[];return `<div class=choices>${(o||[]).map(v=>`<button class="choice ${a.includes(v)?"sel":""}" data-opt="${esc(v)}"><span class=box></span><span>${esc(v)}</span></button>`).join("")}</div>`}
+function scale(q){return `<div class=scale>${[1,2,3,4,5].map(n=>`<button data-scale=${n} class="${Number(A[q.id])===n?"sel":""}">${n}</button>`).join("")}</div><div class=scale-labels><span>${esc(q.low)}</span><span>${esc(q.high)}</span></div>`}
+function counts(){let c=A.role_counts||{};return `<div class=counters>${(A.roles||[]).map(r=>`<div class=crow><b>${esc(r)}</b><div class=ccontrols><button class=cbtn onclick="count('${encodeURIComponent(r)}',-1)">−</button><span class=cval>${c[r]||0}</span><button class=cbtn onclick="count('${encodeURIComponent(r)}',1)">+</button></div></div>`).join("")}</div>`}
+function long(q){let n=notes[q.id];return `${q.voice||q.dict?`<div class=tools><button id=dictBtn class=tool onclick="dictate('${q.id}')">🎙 Dictate</button>${q.voice?`<button id=recBtn class=tool onclick="record('${q.id}')">🎤 Record Voice Note</button>`:""}</div>`:""}<textarea id=txt placeholder="Type your response here...">${esc(A[q.id]||"")}</textarea>${q.voice?`<div id=voicePanel class="voicepanel ${n?"":"hidden"}"><b>Voice note</b> <span id=vstatus class=small>${n?"Recorded":"Not recorded"}</span><div id=audio>${n?`<audio controls src="${n.url}"></audio>`:""}</div>${n?`<button class=tool onclick="deleteNote('${q.id}')">Delete recording</button>`:""}</div>`:""}`
+}
+function bind(q){if(q.t==="lead")["name","company","email","phone","website"].forEach(id=>document.querySelector("#"+id).addEventListener("input",e=>A[id]=e.target.value.trim()));
+if(["single","dynamicSingle"].includes(q.t))document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{A[q.id]=b.dataset.opt;document.querySelectorAll(".choice").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");progress()});
+if(["multi","dynamicMulti"].includes(q.t))document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{let o=b.dataset.opt,a=[...(A[q.id]||[])];if(a.includes(o)){a=a.filter(x=>x!==o);b.classList.remove("sel")}else{if(q.max&&a.length>=q.max)return err("Please select no more than "+q.max+".");a.push(o);b.classList.add("sel")}A[q.id]=a;if(q.id==="roles"){A.role_counts=A.role_counts||{};Object.keys(A.role_counts).forEach(r=>{if(!a.includes(r))delete A.role_counts[r]})}progress()});
+if(q.t==="scale")document.querySelectorAll("[data-scale]").forEach(b=>b.onclick=()=>{A[q.id]=+b.dataset.scale;document.querySelectorAll("[data-scale]").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");progress()});
+if(q.t==="long")document.querySelector("#txt").oninput=e=>A[q.id]=e.target.value}
+function count(e,d){let r=decodeURIComponent(e);A.role_counts=A.role_counts||{};A.role_counts[r]=Math.max(0,(A.role_counts[r]||0)+d);render()}
+function err(m){let e=document.querySelector("#error");e.textContent=m;e.classList.remove("hidden")}
+function valid(){let x=steps[idx];if(!x||x.k!=="q")return true;let q=x.q;if(q.optional)return true;if(q.t==="lead"){if(!(A.name&&A.company&&A.email)){err("Please complete your name, company name, and email.");return false}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(A.email)){err("Please enter a valid email address.");return false}return true}if(!answered(q)){err("Please select an answer before continuing.");return false}return true}
+function next(){if(!valid())return;let cur=steps[idx];rebuild();let i=steps.findIndex(x=>x.k===cur.k&&(x.k==="section"?x.si===cur.si:x.q.id===cur.q.id));idx=(i<0?idx:i)+1;render()}
+function back(){rebuild();idx=Math.max(-1,idx-1);render()}
+function dictate(id){let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return err("Speech-to-text is not supported in this browser.");let b=document.querySelector("#dictBtn"),t=document.querySelector("#txt");if(recognition){recognition.stop();return}recognition=new SR();recognition.continuous=true;recognition.interimResults=true;let base=t.value.trim();recognition.onstart=()=>{b.classList.add("active");b.textContent="■ Stop Dictation"};recognition.onresult=e=>{let inter="",fin="";for(let i=e.resultIndex;i<e.results.length;i++){let s=e.results[i][0].transcript;e.results[i].isFinal?fin+=s+" ":inter+=s}if(fin){base=(base+" "+fin).trim();A[id]=base}t.value=(base+" "+inter).trim()};recognition.onend=()=>{A[id]=t.value.trim();recognition=null;b.classList.remove("active");b.textContent="🎙 Dictate"};recognition.start()}
+async function record(id){let b=document.querySelector("#recBtn");if(recorder&&recorder.state==="recording"){recorder.stop();return}if(!navigator.mediaDevices||!window.MediaRecorder)return err("Audio recording is not supported in this browser.");try{let stream=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];recorder=new MediaRecorder(stream);recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};recorder.onstart=()=>{b.classList.add("active");b.textContent="■ Stop Recording";document.querySelector("#voicePanel").classList.remove("hidden");document.querySelector("#vstatus").textContent="Recording…";timer=setTimeout(()=>{if(recorder?.state==="recording")recorder.stop()},120000)};recorder.onstop=()=>{clearTimeout(timer);stream.getTracks().forEach(t=>t.stop());let blob=new Blob(chunks,{type:recorder.mimeType||"audio/webm"}),url=URL.createObjectURL(blob);if(notes[id]?.url)URL.revokeObjectURL(notes[id].url);notes[id]={blob,url,type:blob.type,at:new Date().toISOString()};document.querySelector("#vstatus").textContent="Recorded";document.querySelector("#audio").innerHTML=`<audio controls src="${url}"></audio>`;b.classList.remove("active");b.textContent="🎤 Record Again";recorder=null}}catch(e){err("Microphone access was not granted.")}}
+function deleteNote(id){if(notes[id]?.url)URL.revokeObjectURL(notes[id].url);delete notes[id];render()}
+function stopVoice(){if(recognition){try{recognition.stop()}catch(e){}recognition=null}if(recorder&&recorder.state==="recording"){try{recorder.stop()}catch(e){}}}
+function signals(){let x=[],add=(n,r)=>x.push([n,r]);if(["No","We do not formally reserve inventory","Sometimes"].includes(A.reserve)||["Weekly","Several times per week"].includes(A.conflicts))add("Project allocation","Reservation visibility or availability conflicts need attention.");if(["Staff generally remember where things are","Someone searches until they find it","It varies"].includes(A.find)||["Weekly","Several times per week","Almost every project"].includes(A.searchfreq))add("Warehouse visibility","Inventory location relies on memory, searching, or inconsistent records.");if(["No","Sometimes","Yes, but only through manual records"].includes(A.vehicle)||["Weekly","Several times per week"].includes(A.arrival))add("Picking and loading","Vehicle-level visibility or load accuracy is limited.");if(["No","We rely mostly on the crew or designer knowing what belongs to us","Sometimes"].includes(A.retrieve)||["Monthly","Weekly","Several times per week"].includes(A.missing))add("De-staging control","Retrieval and return controls may allow inventory to go missing.");if(["Difficult","We mostly rely on people's memory","We usually cannot determine exactly what happened"].includes(A.handofftrace)||["Weekly","Several times per week","Almost every project"].includes(A.handofffreq))add("Team handoffs","Responsibility changes are difficult to trace or frequently lose information.");if(["No","We do not currently track this","Only if we search through records"].includes(A.history))add("Condition management","Damage, repair, and cleaning history is not immediately visible.");return x.slice(0,6)}
+function complete(){stopVoice();scrollAssessmentTop();let s=signals();document.querySelector("#bar").style.width="100%";document.querySelector("#pcopy").textContent="Assessment complete";document.querySelector("#card").innerHTML=`<div class=eyebrow>Complete</div><h1>Your Inventory Operations Assessment Is Complete</h1><p class=lead>Your responses create a picture of how inventory currently moves through your business and where stronger operational controls may have the greatest impact.</p>${s.length?`<h3>Early operational signals</h3><ul class=signals>${s.map(v=>`<li><b>${esc(v[0])}</b><br><span class=small>${esc(v[1])}</span></li>`).join("")}</ul>`:""}<div class=notice>This prototype keeps responses in the browser until they are exported. Production should connect submissions and voice files to your backend.</div><div class=nav><button class="btn secondary" onclick=download()>Export Responses</button><button class="btn primary" onclick=restart()>Start New Assessment</button></div>`}
+function download(){let data={...A,voice_notes:Object.entries(notes).map(([id,n])=>({question:id,type:n.type,recorded_at:n.at})),completed_at:new Date().toISOString()};let u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"})),a=document.createElement("a");a.href=u;a.download=((A.company||"staging-company").replace(/[^a-z0-9]+/gi,"-").toLowerCase())+"-assessment.json";a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+function restart(){if(!confirm("Start a new assessment? Current browser responses will be cleared."))return;Object.values(notes).forEach(n=>n.url&&URL.revokeObjectURL(n.url));A={};notes={};welcome()}
+welcome();
+</script>
+
+<script id="production-upgrade">
+const SUPABASE_URL = "https://iyyatugcngmqplsyzjsq.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5eWF0dWdjbmdtcXBsc3l6anNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNDU1NDYsImV4cCI6MjEwMDcyMTU0Nn0.Pwh497UVUmBWFW965hmZIqG4lRcRcgVFzNGT4DA9X4w";
+const VOICE_BUCKET = "staging-assessment-voice";
+const IS_PREVIEW_MODE =
+  ["file:","blob:"].includes(window.location.protocol) ||
+  /sandbox|chatgpt|openai/i.test(window.location.hostname) ||
+  window.location.origin === "null";
+
+function lead(){
+  return `<div class=fields>
+    <div class=field><label>Your name <span class=req>*</span></label><input id=name value="${esc(A.name||"")}" autocomplete="name"></div>
+    <div class=field><label>Company name <span class=req>*</span></label><input id=company value="${esc(A.company||"")}" autocomplete="organization"></div>
+    <div class=field><label>Email <span class=req>*</span></label><input id=email type=email value="${esc(A.email||"")}" autocomplete="email"></div>
+    <div class=field><label>Phone <span class=small>(optional)</span></label><input id=phone value="${esc(A.phone||"")}" autocomplete="tel"></div>
+    <div class="field full"><label>Website <span class=small>(optional)</span></label><input id=website value="${esc(A.website||"")}" placeholder="https://"></div>
+    <div class="field full"><div class="disclosure">By continuing, you understand that your assessment responses will be stored for operational review. Voice notes are optional and, when used, are stored with the assessment.</div></div>
+  </div>`;
+}
+
+const scoreMap = {
+  documented: {"Nearly all of it":100,"Most of it":82,"About half":55,"Some of it":35,"Very little":15,"I do not know":25},
+  ids: {"Yes, almost everything":100,"Yes, but only certain items":65,"No":10,"I am not sure":25},
+  defined: {"Yes, down to a specific shelf or location":100,"Yes, by general area or zone":78,"Some areas do":55,"No":15,"It varies by location":40},
+  find: {"Exact location is available in a system":100,"Location is recorded in a spreadsheet or document":78,"Storage areas are labeled and staff know where categories belong":62,"Staff generally remember where things are":35,"Someone searches until they find it":10,"It varies":35},
+  frequency: {"Almost never":100,"A few times per year":88,"Monthly":68,"Weekly":42,"Several times per week":20,"Almost every project":5,"I do not know":45},
+  reserve: {"Yes, in real time":100,"Usually":78,"Sometimes":50,"No":15,"We do not formally reserve inventory":10},
+  pull: {"Automatically from our inventory system":100,"Manually in a spreadsheet or document":72,"Written or printed manually":58,"Created from photos":48,"Communicated verbally":28,"We do not consistently use pull lists":10,"Other":45},
+  pick: {"Items are scanned":100,"Items are checked against a digital list":86,"Items are checked against a printed list":72,"Designer or manager visually confirms":60,"Warehouse staff rely on experience":38,"There is no formal confirmation step":10,"It varies":40},
+  vehicle: {"Yes, in real time":100,"Yes, but only through manual records":72,"Sometimes":48,"No":15,"We do not need to track this today":65},
+  changes: {"Always":100,"Usually":80,"Sometimes":55,"Rarely":30,"Never":5,"We do not currently track that level of detail":10},
+  retrieve: {"Yes, generated from what was actually installed":100,"Yes, but the list is manually maintained":78,"Usually":70,"Sometimes":45,"No":12,"We rely mostly on the crew or designer knowing what belongs to us":20},
+  return: {"Every item is inspected before becoming available again":100,"Most items are inspected":82,"Only obviously damaged items are inspected":50,"Items are generally put away immediately":15,"It depends on who handles the return":35},
+  responsibility: {"Very clear. Each role has defined responsibilities.":100,"Mostly clear, with some overlap.":80,"Responsibilities depend on the project.":52,"Several people handle the same work without defined ownership.":32,"Most inventory knowledge and decisions depend on one or two people.":22,"We do not have defined inventory responsibilities.":8},
+  coverage: {"Easily. The process and information are documented.":100,"Usually, with some questions.":78,"It depends on the task.":52,"It is difficult without the usual person.":25,"Certain inventory processes stop until that person is available.":8},
+  handoffconfirm: {"The system records the handoff automatically":100,"The receiving person digitally confirms it":92,"Someone checks off a list":78,"A manager or supervisor confirms it":70,"The teams communicate verbally":40,"Completion is assumed unless there is a problem":20,"There is no formal confirmation":8,"It varies":35},
+  handofftrace: {"Very easy. We have a clear record of each step.":100,"Usually easy":80,"Possible, but requires checking several places or asking people":50,"Difficult":25,"We mostly rely on people's memory":15,"We usually cannot determine exactly what happened":5},
+  history: {"Yes":100,"For some items":68,"Only if we search through records":45,"No":12,"We do not currently track this":5},
+  trace: {"Very easily":100,"Usually":82,"Sometimes":55,"Rarely":28,"We generally cannot":8,"I am not sure":30}
+};
+
+const val = (group,key,fallback=50) => scoreMap[group]?.[A[key]] ?? fallback;
+const ratio = (key, positive, fallback=35) => {
+  const arr=A[key]||[];
+  if(!arr.length) return fallback;
+  const hits=positive.filter(x=>arr.includes(x)).length;
+  return Math.round((hits/positive.length)*100);
+};
+const avg = xs => Math.round(xs.reduce((a,b)=>a+b,0)/Math.max(xs.length,1));
+
+function calculateScores(){
+  const categories = {
+    "Inventory Control": avg([
+      val("documented","documented"),
+      val("ids","ids"),
+      ratio("fields",["Photo","Item name or description","Current location","Current project","Availability","Condition"])
+    ]),
+    "Warehouse Organization": avg([
+      val("defined","defined"),
+      val("find","find"),
+      val("frequency","searchfreq")
+    ]),
+    "Project Allocation": avg([
+      val("reserve","reserve"),
+      val("frequency","conflicts"),
+      val("pull","pull"),
+      ratio("pulldata",["Item ID","Photo","Quantity","Warehouse location","Room assignment","Project information"],45)
+    ]),
+    "Picking & Loading": avg([
+      val("pick","pick"),
+      val("vehicle","vehicle"),
+      val("frequency","arrival")
+    ]),
+    "Install & Return Control": avg([
+      ratio("install",["Inventory is scanned or digitally confirmed","Items are checked off a list","Photos are taken","Room assignments are recorded","Changes and substitutions are documented"],40),
+      val("changes","changes"),
+      val("retrieve","retrieve"),
+      val("frequency","missing"),
+      val("return","return")
+    ]),
+    "Team & Handoffs": avg([
+      val("responsibility","responsibility"),
+      val("coverage","coverage"),
+      val("handoffconfirm","handoffconfirm"),
+      val("frequency","handofffreq"),
+      val("handofftrace","handofftrace"),
+      Math.max(0,Math.min(100,(Number(A.handoffowner||3)-1)*25))
+    ]),
+    "Condition Management": avg([
+      ratio("receiving",["Condition is inspected","Photos are taken","Shipping damage is documented"],45),
+      val("return","return"),
+      val("history","history"),
+      ratio("maintenance",["Inventory software","Spreadsheet","Task management system"],35)
+    ]),
+    "Financial & Lifecycle": avg([
+      val("trace","trace"),
+      ratio("financial",["Original purchase price","Purchase date","Replacement cost","Number of projects it has been used on","Total time it has spent staged","Cleaning costs","Repair costs","Current condition","Current location","Sale or disposal information"],30),
+      ratio("retire",["Condition","Age","Style trends","Repair cost","Lack of use","Storage constraints","Financial data"],40)
+    ]),
+    "Operational Visibility": avg([
+      Math.max(0,Math.min(100,(Number(A.confidence||3)-1)*25)),
+      val("documented","documented"),
+      val("find","find"),
+      val("reserve","reserve"),
+      val("vehicle","vehicle")
+    ])
+  };
+  const overall=avg(Object.values(categories));
+  let level, summary;
+  if(overall>=85){level="Optimized";summary="Your inventory operation is highly controlled. The next opportunity is using the data for forecasting, utilization, purchasing, and lifecycle decisions."}
+  else if(overall>=70){level="Controlled";summary="Your core inventory processes are working, with a few areas where stronger automation, traceability, or lifecycle visibility could reduce manual work."}
+  else if(overall>=55){level="Structured";summary="You have useful processes in place, but key parts still depend on manual updates, separate records, or team knowledge."}
+  else if(overall>=40){level="Developing";summary="Your operation has working practices, but limited real-time visibility and inconsistent handoffs can create avoidable labor, errors, and inventory risk."}
+  else {level="Reactive";summary="Inventory control depends heavily on people, memory, or disconnected records. Establishing a reliable asset and movement record should come before advanced automation."}
+  return {overall,level,summary,categories};
+}
+
+const recMap={
+  "Inventory Control":"Create one permanent digital record and unique identifier for every trackable asset.",
+  "Warehouse Organization":"Define scannable warehouse locations so item location changes can be recorded without typing.",
+  "Project Allocation":"Add real-time availability, reservations, and project-level inventory assignment before warehouse pulling begins.",
+  "Picking & Loading":"Use scan-based pull and vehicle loading confirmation to prevent wrong or missing items.",
+  "Install & Return Control":"Create an installed-item record that becomes the de-staging retrieval list and return inspection record.",
+  "Team & Handoffs":"Assign ownership at each inventory stage and require a recorded confirmation when responsibility changes.",
+  "Condition Management":"Create inspection, cleaning, damage, and repair queues tied to each asset's history.",
+  "Financial & Lifecycle":"Connect purchase, usage, maintenance, sale, donation, and retirement data to the permanent asset record.",
+  "Operational Visibility":"Build a single operational dashboard for availability, location, projects, exceptions, maintenance, and upcoming movement."
+};
+function recommendations(scores){
+  return Object.entries(scores.categories)
+    .sort((a,b)=>a[1]-b[1])
+    .slice(0,3)
+    .map(([category,score])=>({category,score,recommendation:recMap[category]}));
+}
+
+function fileExt(type){
+  if(type?.includes("ogg"))return "ogg";
+  if(type?.includes("mp4"))return "m4a";
+  if(type?.includes("mpeg"))return "mp3";
+  if(type?.includes("wav"))return "wav";
+  return "webm";
+}
+async function uploadVoiceNotes(submissionId){
+  const paths=[];
+  for(const [questionId,note] of Object.entries(notes)){
+    const filename=`${questionId}-${Date.now()}.${fileExt(note.type)}`;
+    const path=`${submissionId}/${filename}`;
+    const res=await fetch(`${SUPABASE_URL}/storage/v1/object/${VOICE_BUCKET}/${path}`,{
+      method:"POST",
+      headers:{
+        "apikey":SUPABASE_ANON_KEY,
+        "Authorization":`Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type":note.type||"audio/webm",
+        "x-upsert":"false"
+      },
+      body:note.blob
+    });
+    if(!res.ok) throw new Error(`Voice upload failed (${res.status})`);
+    paths.push({question_id:questionId,path,mime_type:note.type,recorded_at:note.at});
+  }
+  return paths;
+}
+async function saveAssessment(scores,recs){
+  const submissionId=crypto.randomUUID();
+  const voicePaths=await uploadVoiceNotes(submissionId);
+  const payload={
+    id:submissionId,
+    respondent_name:A.name,
+    company_name:A.company,
+    email:A.email,
+    phone:A.phone||null,
+    website:A.website||null,
+    overall_score:scores.overall,
+    maturity_level:scores.level,
+    category_scores:scores.categories,
+    recommendations:recs,
+    responses:A,
+    voice_note_paths:voicePaths,
+    completed_at:new Date().toISOString(),
+    user_agent:navigator.userAgent
+  };
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/staging_inventory_assessments`,{
+    method:"POST",
+    headers:{
+      "apikey":SUPABASE_ANON_KEY,
+      "Authorization":`Bearer ${SUPABASE_ANON_KEY}`,
+      "Content-Type":"application/json",
+      "Prefer":"return=minimal"
+    },
+    body:JSON.stringify(payload)
+  });
+  if(!res.ok){
+    const body=await res.text();
+    throw new Error(`Assessment save failed (${res.status}): ${body.slice(0,180)}`);
+  }
+  return submissionId;
+}
+
+async function persistResults(scores,recs){
+  const node=document.querySelector("#submitStatus");
+  if(!node)return;
+
+  if(IS_PREVIEW_MODE){
+    node.className="submit-status";
+    node.textContent="Preview mode: results are shown here, but this test response was not sent to Supabase.";
+    return;
+  }
+
+  node.className="submit-status";
+  node.textContent="Saving assessment responses…";
+  try{
+    const id=await saveAssessment(scores,recs);
+    node.className="submit-status ok";
+    node.textContent="Assessment saved successfully. Reference: "+id.slice(0,8).toUpperCase();
+    window.__lastSubmissionId=id;
+  }catch(e){
+    node.className="submit-status bad";
+    node.textContent="Your results are available, but the submission could not be saved. Please try again.";
+    console.error(e);
+  }
+}
+
+function complete(){
+  stopVoice();
+  const scores=calculateScores();
+  const recs=recommendations(scores);
+  document.querySelector("#bar").style.width="100%";
+  document.querySelector("#pcopy").textContent="Assessment complete";
+  const cats=Object.entries(scores.categories).sort((a,b)=>a[1]-b[1]);
+  document.querySelector("#card").innerHTML=`
+    <div class=eyebrow>Inventory Operations Results</div>
+    <h1>Your Operation Has a Clear Next Move</h1>
+    <div class=result-hero>
+      <div class=score-ring style="--score:${scores.overall}">
+        <div class=score-inner><strong>${scores.overall}</strong><span class=score-label>Operations<br>Score</span></div>
+      </div>
+      <div>
+        <span class=level-pill>${esc(scores.level)}</span>
+        <h2 style="font-size:28px;margin-bottom:8px">${esc(A.company||"Your company")}</h2>
+        <p style="margin:0">${esc(scores.summary)}</p>
+      </div>
+    </div>
+    <h3>Category scores</h3>
+    <div class=category-list>
+      ${cats.map(([name,score])=>`<div class=category-row>
+        <div class=category-name>${esc(name)}</div>
+        <div class=category-track><div class=category-fill style="width:${score}%"></div></div>
+        <div class=category-score>${score}</div>
+      </div>`).join("")}
+    </div>
+    <h3>Recommended first priorities</h3>
+    <p class=priority-order>Ranked from the lowest category score upward. Priority 1 is the area showing the greatest need for improvement.</p>
+    <div class=priority-cards>
+      ${recs.map((r,i)=>`<div class=priority-card>
+        <div class=priority-title><b>${i+1}. ${esc(r.category)}</b><span class=priority-score>${r.score}/100</span></div>
+        <span class=small>${esc(r.recommendation)}</span>
+      </div>`).join("")}
+    </div>
+    <div id=submitStatus class=submit-status>Finalizing assessment…</div>
+    <div class=nav>
+      <button class="btn secondary" onclick=download()>Export Responses</button>
+      <button class="btn primary" onclick=restart()>Start New Assessment</button>
+    </div>`;
+  persistResults(scores,recs);
+}
+
+function download(){
+  const scores=calculateScores(), recs=recommendations(scores);
+  const data={
+    ...A,
+    results:{overall_score:scores.overall,maturity_level:scores.level,category_scores:scores.categories,recommendations:recs},
+    voice_notes:Object.entries(notes).map(([id,n])=>({question:id,type:n.type,recorded_at:n.at})),
+    submission_id:window.__lastSubmissionId||null,
+    completed_at:new Date().toISOString()
+  };
+  const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));
+  const a=document.createElement("a");
+  a.href=u;
+  a.download=((A.company||"staging-company").replace(/[^a-z0-9]+/gi,"-").toLowerCase())+"-inventory-assessment-results.json";
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+</script>
+<script>setTimeout(()=>welcome(),0);</script>
+
+
+<script id="roi-upgrade">
+function rangeMid(value,map,fallback=0){return map[value]??fallback}
+function estimateROIInputs(){
+  const weeklyManual=rangeMid(A.manual_hours,{"Less than 2 hours":1,"2–5 hours":3.5,"6–10 hours":8,"11–20 hours":15.5,"More than 20 hours":24,"I do not know":0});
+  const weeklyAdmin=rangeMid(A.admin_hours,{"Less than 2 hours":1,"2–5 hours":3.5,"6–10 hours":8,"11–20 hours":15.5,"More than 20 hours":24,"I do not know":0});
+  const annualReplacement=rangeMid(A.replacement_spend,{"Under $1,000":500,"$1,000–$2,499":1750,"$2,500–$4,999":3750,"$5,000–$9,999":7500,"$10,000–$24,999":17500,"$25,000+":30000,"I do not know":0});
+  const monthlyExtraTrips=rangeMid(A.extra_trips,{"Almost never":0.1,"A few times per year":0.3,"Monthly":1,"Weekly":4.3,"Several times per week":10,"I do not know":0});
+  return {
+    weekly_manual_hours_estimate:weeklyManual,
+    weekly_admin_hours_estimate:weeklyAdmin,
+    annual_manual_admin_hours_estimate:Math.round((weeklyManual+weeklyAdmin)*52),
+    annual_replacement_loss_estimate:annualReplacement,
+    monthly_extra_trip_frequency_estimate:monthlyExtraTrips,
+    additional_project_capacity:A.capacity_projects||null,
+    start_timing:A.start_timing||null,
+    preferred_implementation_approach:A.investment_approach||null
+  };
+}
+
+const __baseSaveAssessment=saveAssessment;
+saveAssessment=async function(scores,recs){
+  const submissionId=crypto.randomUUID();
+  const voicePaths=await uploadVoiceNotes(submissionId);
+  const payload={
+    id:submissionId,respondent_name:A.name,company_name:A.company,email:A.email,
+    phone:A.phone||null,website:A.website||null,overall_score:scores.overall,
+    maturity_level:scores.level,category_scores:scores.categories,recommendations:recs,
+    responses:{...A,_roi_inputs:estimateROIInputs()},
+    voice_note_paths:voicePaths,completed_at:new Date().toISOString(),user_agent:navigator.userAgent
+  };
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/staging_inventory_assessments`,{
+    method:"POST",
+    headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`,"Content-Type":"application/json","Prefer":"return=minimal"},
+    body:JSON.stringify(payload)
+  });
+  if(!res.ok){const body=await res.text();throw new Error(`Assessment save failed (${res.status}): ${body.slice(0,180)}`)}
+  return submissionId;
+}
+
+download=function(){
+  const scores=calculateScores(),recs=recommendations(scores);
+  const data={...A,roi_inputs:estimateROIInputs(),results:{overall_score:scores.overall,maturity_level:scores.level,category_scores:scores.categories,recommendations:recs},voice_notes:Object.entries(notes).map(([id,n])=>({question:id,type:n.type,recorded_at:n.at})),submission_id:window.__lastSubmissionId||null,completed_at:new Date().toISOString()};
+  const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));
+  const a=document.createElement("a");
+  a.href=u;a.download=((A.company||"staging-company").replace(/[^a-z0-9]+/gi,"-").toLowerCase())+"-inventory-assessment-results.json";
+  a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+</script>
+
+
+<script id="v4-hardening">
+const V4_LIVE_SUBMISSION = true;
+const V4_STORAGE_KEY = "home_staging_operations_assessment_v4";
+
+document.title = "Home Staging Operations Assessment";
+const brandNode=document.querySelector(".brand");
+if(brandNode) brandNode.textContent="Home Staging Operations Assessment";
+const progressNode=document.querySelector(".progress");
+if(progressNode){
+  progressNode.setAttribute("role","progressbar");
+  progressNode.setAttribute("aria-valuemin","0");
+  progressNode.setAttribute("aria-valuemax","100");
+  progressNode.setAttribute("aria-valuenow","0");
+}
+
+// ----- Assessment scope changes -----
+(function updateAssessmentStructure(){
+  // Rename inventory-only language where the scope is now broader.
+  const gapSection=S.find(s=>s[0]==="Biggest Operational Gaps");
+  if(gapSection){
+    const frictionQ=gapSection[2].find(q=>q.id==="friction");
+    if(frictionQ){
+      frictionQ.q="Which issues create the most friction in your current staging operation?";
+      ["Missed or delayed extension billing","Tracking who has paid","Reconciling Zelle or bank payments","Tracking deposits or additional charges"].forEach(o=>{
+        if(!frictionQ.o.includes(o)) frictionQ.o.push(o);
+      });
+    }
+    const outcomeQ=gapSection[2].find(q=>q.id==="outcome");
+    if(outcomeQ){
+      outcomeQ.q="Which outcome would make the biggest difference to your operation?";
+      ["Reduce missed billing","Improve payment visibility"].forEach(o=>{
+        if(!outcomeQ.o.includes(o)) outcomeQ.o.push(o);
+      });
+    }
+  }
+
+  // Merge the optional explanation into Biggest Operational Gaps to avoid a standalone intro click.
+  const optionalIndex=S.findIndex(s=>s[0]==="Optional Process Explanation");
+  if(optionalIndex>=0 && gapSection){
+    gapSection[2].push(...S[optionalIndex][2]);
+    S.splice(optionalIndex,1);
+  }
+
+  // Remove overlapping admin-hours question. Manual-hours question now covers total manual operational tracking.
+  const costSection=S.find(s=>s[0]==="Operational Cost and Capacity");
+  if(costSection){
+    costSection[2]=costSection[2].filter(q=>q.id!=="admin_hours");
+    const mh=costSection[2].find(q=>q.id==="manual_hours");
+    if(mh) mh.q="About how many staff hours per week are spent on manual operational tracking or reconciliation, including inventory, pull lists, billing dates, payments, spreadsheets, and follow-up?";
+  }
+
+  // Add Billing & Revenue Control before cost/capacity.
+  if(!S.some(s=>s[0]==="Billing & Revenue Control")){
+    const billingSection=[
+      "Billing & Revenue Control",
+      "This section looks at how staging terms, extension billing, payment status, and additional charges are tracked.",
+      [
+        {id:"billing_terms",t:"single",q:"How do you currently track each property's initial staging term and extension dates?",o:["Automatically in a system","Recorded in a system or calendar and reviewed manually","Spreadsheet","Paper notes","Team knowledge or memory","We do not track this consistently"],req:1},
+        {id:"billing_trigger",t:"single",q:"What usually triggers the next 30-day extension billing?",o:["The system creates or triggers it automatically","A scheduled task or reminder prompts someone","Someone reviews dates and bills manually","The client or realtor reminds us","Someone remembers to check","There is no consistent trigger"],req:1},
+        {id:"billing_status",t:"single",q:"How easily can you see which active properties have been billed, paid, or are past due?",o:["In real time, in one system","Usually, with a quick review","Possible, but requires checking more than one place","Difficult","We mostly rely on memory or manual follow-up","We do not have a consistent payment-status record"],req:1},
+        {id:"payment_recon",t:"single",q:"How are payments such as Zelle, bank transfers, cards, or checks reconciled to the correct property and billing period?",o:["Automatically or directly through our accounting/payment system","Manually, but through one consistent reconciliation process","Manually by checking bank or payment activity against records","Only when something looks unpaid","It varies by payment method or person","We do not have a consistent reconciliation process"],req:1},
+        {id:"billing_misses",t:"single",q:"How often is extension billing delayed or missed because the billing date was not surfaced or followed up on?",o:["Almost never","A few times per year","Monthly","Weekly","Several times per week","I do not know"],req:1},
+        {id:"extra_charges",t:"single",q:"How consistently are deposits, damage charges, change charges, extra labor, or other additional amounts captured and billed?",o:["Always, through a defined process","Usually","Sometimes","Rarely","There is no consistent process","These charges do not apply to our business"],req:1},
+        {id:"active_properties",t:"single",q:"Approximately how many properties are actively staged at one time?",o:["1–5","6–10","11–20","21–30","31–50","51+","It varies significantly"],req:1},
+        {id:"extension_amount",t:"single",q:"What is a typical 30-day staging extension amount?",o:["Under $500","$500–$999","$1,000–$1,499","$1,500–$2,499","$2,500+","It varies significantly","I do not know"],req:1}
+      ]
+    ];
+    const insertAt=S.findIndex(s=>s[0]==="Operational Cost and Capacity");
+    S.splice(insertAt>=0?insertAt:S.length-2,0,billingSection);
+  }
+
+  const systemsSection=S.find(s=>s[0]==="Current Systems");
+  const systemsQ=systemsSection?.[2]?.find(q=>q.id==="systems");
+  if(systemsQ && !systemsQ.o.includes("Payment / invoicing software")){
+    systemsQ.o.splice(4,0,"Payment / invoicing software");
+  }
+
+  const readiness=S.find(s=>s[0]==="Implementation Readiness");
+  if(readiness){
+    const q=readiness[2].find(x=>x.id==="start_timing");
+    if(q) q.q="If you decided to improve your staging operation, when would you ideally want to begin?";
+  }
+})();
+
+// ----- Local recovery -----
+function serializableState(){
+  return {
+    answers:A,
+    idx,
+    savedAt:new Date().toISOString()
+  };
+}
+function saveLocal(){
+  try{ localStorage.setItem(V4_STORAGE_KEY,JSON.stringify(serializableState())); }catch(e){}
+}
+function readLocal(){
+  try{
+    const raw=localStorage.getItem(V4_STORAGE_KEY);
+    return raw?JSON.parse(raw):null;
+  }catch(e){return null}
+}
+function clearLocal(){
+  try{localStorage.removeItem(V4_STORAGE_KEY)}catch(e){}
+}
+function hasMeaningfulSavedState(){
+  const s=readLocal();
+  return !!(s && s.answers && Object.keys(s.answers).length);
+}
+function restoreLocal(){
+  const s=readLocal();
+  if(!s||!s.answers)return false;
+  A=s.answers||{};
+  sanitizeBranches();
+  rebuild();
+  idx=Math.min(Math.max(Number(s.idx)||0,0),Math.max(0,steps.length-1));
+  return true;
+}
+
+// ----- Branch cleanup -----
+function sanitizeBranches(){
+  if(!["Yes, almost everything","Yes, but only certain items"].includes(A.ids)) delete A.idtype;
+  if(A.pull==="We do not consistently use pull lists") delete A.pulldata;
+  if(!A.riskhandoff || ["No particular handoff stands out","I am not sure"].includes(A.riskhandoff)) delete A.riskexplain;
+  if(A.problem!=="Yes") delete A.problemtext;
+  if(!Array.isArray(A.systems) || !A.systems.some(x=>!["Paper-based process","None"].includes(x))) delete A.systemnames;
+  if(!["Yes, definitely","Probably","Possibly"].includes(A.capacity_more)) delete A.capacity_projects;
+
+  if(Array.isArray(A.roles)){
+    A.role_counts=A.role_counts||{};
+    Object.keys(A.role_counts).forEach(r=>{if(!A.roles.includes(r))delete A.role_counts[r]});
+    if(Array.isArray(A.handlers)) A.handlers=A.handlers.filter(x=>A.roles.includes(x)||["No defined responsibility","It varies depending on the project"].includes(x));
+    if(Array.isArray(A.deciders)) A.deciders=A.deciders.filter(x=>A.roles.includes(x));
+  }
+
+  if(Array.isArray(A.handoffs) && A.riskhandoff){
+    const allowed=[...A.handoffs.filter(x=>x!=="Most inventory is handled by the same person or team throughout the process"),"No particular handoff stands out","I am not sure"];
+    if(!allowed.includes(A.riskhandoff)){ delete A.riskhandoff; delete A.riskexplain; }
+  }
+}
+
+// ----- Exclusive multi-select options -----
+const EXCLUSIVE = {
+  tracking:["We do not have a consistent inventory record"],
+  fields:["None of these consistently"],
+  pulldata:["None of these consistently"],
+  install:["Nothing is formally recorded"],
+  handoffs:["Most inventory is handled by the same person or team throughout the process"],
+  handoffcomm:["There is no consistent handoff process"],
+  handoffproblems:["We rarely experience handoff problems"],
+  maintenance:["We do not have a consistent process"],
+  financial:["None of these consistently"],
+  retire:["We do not have a defined process"],
+  systems:["None"]
+};
+function normalizeMulti(qid,arr,chosen){
+  const exclusive=EXCLUSIVE[qid]||[];
+  if(exclusive.includes(chosen)) return [chosen];
+  return arr.filter(x=>!exclusive.includes(x));
+}
+function clearError(){
+  const e=document.querySelector("#error");
+  if(e){e.textContent="";e.classList.add("hidden")}
+}
+
+// ----- Accessibility renderers -----
+single=function(q,o){
+  return `<div class=choices role=radiogroup aria-label="${esc(q.q)}">${(o||[]).map(v=>`
+    <button type=button role=radio aria-checked="${A[q.id]===v}" class="choice ${A[q.id]===v?"sel":""}" data-opt="${esc(v)}">
+      <span class=dot aria-hidden=true></span><span>${esc(v)}</span>
+    </button>`).join("")}</div>`;
+};
+multi=function(q,o){
+  const a=A[q.id]||[];
+  return `<div class=choices role=group aria-label="${esc(q.q)}">${(o||[]).map(v=>`
+    <button type=button role=checkbox aria-checked="${a.includes(v)}" class="choice ${a.includes(v)?"sel":""}" data-opt="${esc(v)}">
+      <span class=box aria-hidden=true></span><span>${esc(v)}</span>
+    </button>`).join("")}</div>`;
+};
+scale=function(q){
+  return `<div class=scale role=radiogroup aria-label="${esc(q.q)}">${[1,2,3,4,5].map(n=>`
+    <button type=button role=radio aria-checked="${Number(A[q.id])===n}" data-scale=${n} class="${Number(A[q.id])===n?"sel":""}">${n}</button>`).join("")}</div>
+    <div class=scale-labels><span>${esc(q.low)}</span><span>${esc(q.high)}</span></div>`;
+};
+lead=function(){
+  return `<div class=fields>
+    <div class=field><label for=name>Your name <span class=req>*</span></label><input id=name value="${esc(A.name||"")}" autocomplete=name></div>
+    <div class=field><label for=company>Company name <span class=req>*</span></label><input id=company value="${esc(A.company||"")}" autocomplete=organization></div>
+    <div class=field><label for=email>Email <span class=req>*</span></label><input id=email type=email value="${esc(A.email||"")}" autocomplete=email></div>
+    <div class=field><label for=phone>Phone <span class=small>(optional)</span></label><input id=phone value="${esc(A.phone||"")}" autocomplete=tel></div>
+    <div class="field full"><label for=website>Website <span class=small>(optional)</span></label><input id=website value="${esc(A.website||"")}" placeholder="https://"></div>
+    <div class="field full"><div class=disclosure>By continuing, you understand that your assessment responses will be stored for operational review. Voice notes are optional and, when used, are stored with the assessment.</div></div>
+  </div>`;
+};
+counts=function(){
+  const c=A.role_counts||{};
+  return `<div class=counters>${(A.roles||[]).map(r=>`
+    <div class=crow data-role="${esc(r)}">
+      <b>${esc(r)}</b>
+      <div class=ccontrols>
+        <button type=button class=cbtn aria-label="Decrease ${esc(r)} count" onclick="count('${encodeURIComponent(r)}',-1)">−</button>
+        <span class=cval aria-live=polite>${c[r]||0}</span>
+        <button type=button class=cbtn aria-label="Increase ${esc(r)} count" onclick="count('${encodeURIComponent(r)}',1)">+</button>
+      </div>
+    </div>`).join("")}
+    <div class=helper>Each selected role should have at least one person assigned.</div>
+  </div>`;
+};
+
+// ----- Validation and answer handling -----
+answered=function(q){
+  if(q.t==="lead") return !!(A.name&&A.company&&A.email);
+  if(q.t==="counts"){
+    const roles=A.roles||[];
+    return roles.length>0 && roles.every(r=>Number((A.role_counts||{})[r]||0)>0);
+  }
+  if(["multi","dynamicMulti"].includes(q.t)) return Array.isArray(A[q.id])&&A[q.id].length>0;
+  if(q.optional) return true;
+  return A[q.id]!==undefined&&A[q.id]!==null&&String(A[q.id]).trim()!=="";
+};
+
+bind=function(q){
+  if(q.t==="lead"){
+    ["name","company","email","phone","website"].forEach(id=>{
+      const node=document.querySelector("#"+id);
+      node.addEventListener("input",e=>{A[id]=e.target.value.trim();clearError();saveLocal()});
+    });
+  }
+
+  if(["single","dynamicSingle"].includes(q.t)){
+    document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{
+      A[q.id]=b.dataset.opt;
+      document.querySelectorAll(".choice").forEach(x=>{x.classList.remove("sel");x.setAttribute("aria-checked","false")});
+      b.classList.add("sel");b.setAttribute("aria-checked","true");
+      sanitizeBranches();clearError();rebuild();progress();saveLocal();
+    });
+  }
+
+  if(["multi","dynamicMulti"].includes(q.t)){
+    document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{
+      const o=b.dataset.opt;
+      let a=[...(A[q.id]||[])];
+      if(a.includes(o)){
+        a=a.filter(x=>x!==o);
+      }else{
+        if(q.max&&a.length>=q.max){err("Please select no more than "+q.max+".");return}
+        a.push(o);
+        a=normalizeMulti(q.id,a,o);
+      }
+      A[q.id]=a;
+      document.querySelectorAll(".choice").forEach(x=>{
+        const selected=a.includes(x.dataset.opt);
+        x.classList.toggle("sel",selected);
+        x.setAttribute("aria-checked",selected?"true":"false");
+      });
+      if(q.id==="roles"){
+        A.role_counts=A.role_counts||{};
+        Object.keys(A.role_counts).forEach(r=>{if(!a.includes(r))delete A.role_counts[r]});
+      }
+      sanitizeBranches();clearError();rebuild();progress();saveLocal();
+    });
+  }
+
+  if(q.t==="scale"){
+    document.querySelectorAll("[data-scale]").forEach(b=>b.onclick=()=>{
+      A[q.id]=+b.dataset.scale;
+      document.querySelectorAll("[data-scale]").forEach(x=>{x.classList.remove("sel");x.setAttribute("aria-checked","false")});
+      b.classList.add("sel");b.setAttribute("aria-checked","true");
+      clearError();progress();saveLocal();
+    });
+  }
+
+  if(q.t==="long"){
+    const t=document.querySelector("#txt");
+    t.oninput=e=>{A[q.id]=e.target.value;clearError();saveLocal()};
+  }
+};
+
+count=function(encoded,delta){
+  const role=decodeURIComponent(encoded);
+  A.role_counts=A.role_counts||{};
+  A.role_counts[role]=Math.max(0,(A.role_counts[role]||0)+delta);
+  const row=[...document.querySelectorAll(".crow")].find(x=>x.dataset.role===role);
+  if(row){
+    const value=row.querySelector(".cval");
+    if(value)value.textContent=A.role_counts[role];
+  }
+  clearError();saveLocal();
+};
+
+valid=function(){
+  const x=steps[idx];
+  if(!x||x.k!=="q")return true;
+  const q=x.q;
+  if(q.t==="lead"){
+    if(!(A.name&&A.company&&A.email)){err("Please complete your name, company name, and email.");return false}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(A.email)){err("Please enter a valid email address.");return false}
+    return true;
+  }
+  if(q.t==="counts"&&!answered(q)){err("Please enter at least 1 for each selected role.");return false}
+  if(q.optional)return true;
+  if(!answered(q)){err("Please select an answer before continuing.");return false}
+  return true;
+};
+
+err=function(m){
+  const e=document.querySelector("#error");
+  if(e){e.textContent=m;e.classList.remove("hidden");e.setAttribute("role","alert");}
+};
+
+// ----- Accurate progress -----
+progress=function(){
+  rebuild();
+  const qSteps=steps.filter(x=>x.k==="q");
+  let completedBefore=0;
+  for(let i=0;i<idx;i++) if(steps[i]?.k==="q") completedBefore++;
+  let p=idx<0?0:Math.round((completedBefore/Math.max(1,qSteps.length))*100);
+  p=Math.max(0,Math.min(99,p));
+  const bar=document.querySelector("#bar");
+  if(bar)bar.style.width=p+"%";
+  const copy=document.querySelector("#pcopy");
+  if(copy)copy.textContent=idx<0?"Ready to begin":p+"% complete";
+  if(progressNode)progressNode.setAttribute("aria-valuenow",String(p));
+};
+
+const _renderV4Base=render;
+render=function(){
+  sanitizeBranches();
+  _renderV4Base();
+  saveLocal();
+};
+
+next=function(){
+  if(!valid())return;
+  sanitizeBranches();
+  const cur=steps[idx];
+  rebuild();
+  const i=steps.findIndex(x=>x.k===cur.k&&(x.k==="section"?x.si===cur.si:x.q.id===cur.q.id));
+  idx=(i<0?idx:i)+1;
+  saveLocal();
+  render();
+};
+back=function(){
+  sanitizeBranches();rebuild();idx=Math.max(-1,idx-1);saveLocal();render();
+};
+
+// ----- Scoring -----
+function mscore(key,map,fallback=50){return map[A[key]]??fallback}
+function freqScore(key){
+  return mscore(key,{"Almost never":100,"A few times per year":85,"Monthly":45,"Weekly":20,"Several times per week":5,"Almost every project":5,"I do not know":null},50);
+}
+function avgKnown(values){
+  const xs=values.filter(v=>Number.isFinite(v));
+  return xs.length?Math.round(xs.reduce((a,b)=>a+b,0)/xs.length):0;
+}
+function fractionScore(key,positive,negative=[]){
+  const arr=A[key]||[];
+  if(!arr.length)return 0;
+  if(negative.some(x=>arr.includes(x)))return 5;
+  const hits=positive.filter(x=>arr.includes(x)).length;
+  return Math.round(hits/Math.max(1,positive.length)*100);
+}
+function trackingScore(){
+  const a=A.tracking||[];
+  if(a.includes("We do not have a consistent inventory record"))return 5;
+  let s=0;
+  if(a.includes("Inventory management software"))s=Math.max(s,100);
+  if(a.includes("Spreadsheet")||a.includes("Accounting system"))s=Math.max(s,65);
+  if(a.includes("Photos or photo folders")||a.includes("Paper records")||a.includes("Labels or handwritten tags"))s=Math.max(s,40);
+  if(a.includes("Notes on phones")||a.includes("Team knowledge or memory"))s=Math.max(s,20);
+  return s||35;
+}
+function systemsMaturity(){
+  const a=A.systems||[];
+  if(a.includes("None"))return 5;
+  let s=25;
+  if(a.includes("Inventory management software")||a.includes("Warehouse management software"))s+=30;
+  if(a.includes("Project management software")||a.includes("CRM"))s+=15;
+  if(a.includes("Accounting software")||a.includes("Payment / invoicing software"))s+=15;
+  if(a.includes("Spreadsheet"))s+=5;
+  if(a.includes("Paper-based process"))s-=10;
+  return Math.max(5,Math.min(100,s));
+}
+function projectSelectionScore(){
+  const a=A.select||[];
+  if(a.includes("Inventory software"))return 100;
+  if(a.includes("Spreadsheet or list"))return 70;
+  if(a.includes("Photos")||a.includes("Previous project references"))return 55;
+  if(a.includes("Physical warehouse walkthrough"))return 45;
+  if(a.includes("Designer memory")||a.includes("Warehouse team knowledge"))return 25;
+  return 40;
+}
+function processStepScore(key,positives,hardNegatives=[]){
+  const a=A[key]||[];
+  if(hardNegatives.some(x=>a.includes(x)))return 5;
+  return fractionScore(key,positives);
+}
+calculateScores=function(){
+  const categories={
+    "Inventory Control":avgKnown([
+      trackingScore(),
+      mscore("documented",{"Nearly all of it":100,"Most of it":80,"About half":55,"Some of it":30,"Very little":10,"I do not know":35}),
+      mscore("ids",{"Yes, almost everything":100,"Yes, but only certain items":65,"No":10,"I am not sure":30}),
+      processStepScore("fields",["Photo","Item name or description","Category","Dimensions","Purchase date","Purchase cost","Current location","Current project","Availability","Condition"],["None of these consistently"])
+    ]),
+    "Warehouse Organization":avgKnown([
+      mscore("defined",{"Yes, down to a specific shelf or location":100,"Yes, by general area or zone":75,"Some areas do":50,"No":10,"It varies by location":35}),
+      mscore("find",{"Exact location is available in a system":100,"Location is recorded in a spreadsheet or document":70,"Storage areas are labeled and staff know where categories belong":55,"Staff generally remember where things are":25,"Someone searches until they find it":5,"It varies":30}),
+      freqScore("searchfreq")
+    ]),
+    "Project Allocation":avgKnown([
+      projectSelectionScore(),
+      mscore("reserve",{"Yes, in real time":100,"Usually":75,"Sometimes":45,"No":10,"We do not formally reserve inventory":5}),
+      freqScore("conflicts"),
+      mscore("pull",{"Automatically from our inventory system":100,"Manually in a spreadsheet or document":65,"Written or printed manually":50,"Created from photos":40,"Communicated verbally":20,"We do not consistently use pull lists":0,"Other":35}),
+      A.pull==="We do not consistently use pull lists"?0:processStepScore("pulldata",["Item name","Item ID","Photo","Quantity","Warehouse location","Room assignment","Project information"])
+    ]),
+    "Picking & Loading":avgKnown([
+      mscore("pick",{"Items are scanned":100,"Items are checked against a digital list":70,"Items are checked against a printed list":55,"Designer or manager visually confirms":45,"Warehouse staff rely on experience":25,"There is no formal confirmation step":5,"It varies":30}),
+      mscore("vehicle",{"Yes, in real time":100,"Yes, but only through manual records":50,"Sometimes":30,"No":5,"We do not need to track this today":55}),
+      mscore("arrival",{"Almost never":100,"A few times per year":80,"Monthly":40,"Weekly":15,"Several times per week":5,"I do not know":45})
+    ]),
+    "Install & Return Control":avgKnown([
+      processStepScore("install",["Inventory is scanned or digitally confirmed","Items are checked off a list","Photos are taken","Room assignments are recorded","Changes and substitutions are documented"],["Nothing is formally recorded"]),
+      mscore("changes",{"Always":100,"Usually":75,"Sometimes":45,"Rarely":20,"Never":5,"We do not currently track that level of detail":5}),
+      mscore("retrieve",{"Yes, generated from what was actually installed":100,"Yes, but the list is manually maintained":70,"Usually":65,"Sometimes":35,"No":5,"We rely mostly on the crew or designer knowing what belongs to us":10}),
+      freqScore("missing"),
+      mscore("return",{"Every item is inspected before becoming available again":100,"Most items are inspected":75,"Only obviously damaged items are inspected":40,"Items are generally put away immediately":5,"It depends on who handles the return":25})
+    ]),
+    "Team & Handoffs":avgKnown([
+      mscore("responsibility",{"Very clear. Each role has defined responsibilities.":100,"Mostly clear, with some overlap.":78,"Responsibilities depend on the project.":50,"Several people handle the same work without defined ownership.":28,"Most inventory knowledge and decisions depend on one or two people.":18,"We do not have defined inventory responsibilities.":5}),
+      mscore("coverage",{"Easily. The process and information are documented.":100,"Usually, with some questions.":75,"It depends on the task.":50,"It is difficult without the usual person.":22,"Certain inventory processes stop until that person is available.":5}),
+      mscore("handoffconfirm",{"The system records the handoff automatically":100,"The receiving person digitally confirms it":90,"Someone checks off a list":75,"A manager or supervisor confirms it":65,"The teams communicate verbally":35,"Completion is assumed unless there is a problem":15,"There is no formal confirmation":5,"It varies":30}),
+      freqScore("handofffreq"),
+      mscore("handofftrace",{"Very easy. We have a clear record of each step.":100,"Usually easy":78,"Possible, but requires checking several places or asking people":45,"Difficult":20,"We mostly rely on people's memory":10,"We usually cannot determine exactly what happened":5}),
+      Number.isFinite(Number(A.handoffowner))?(Number(A.handoffowner)-1)*25:null
+    ]),
+    "Condition Management":avgKnown([
+      processStepScore("receiving",["Condition is inspected","Photos are taken","Shipping damage is documented"]),
+      processStepScore("maintenance",["Inventory software","Spreadsheet","Task management system"],["We do not have a consistent process"]),
+      mscore("history",{"Yes":100,"For some items":60,"Only if we search through records":35,"No":10,"We do not currently track this":5})
+    ]),
+    "Financial & Lifecycle":avgKnown([
+      mscore("entry",{"When the order is placed":100,"When the item ships":90,"When the item arrives":75,"When someone has time to enter it":35,"It varies":25,"We do not formally enter new purchases into an inventory system":5}),
+      mscore("trace",{"Very easily":100,"Usually":78,"Sometimes":50,"Rarely":22,"We generally cannot":5,"I am not sure":30}),
+      processStepScore("financial",["Original purchase price","Purchase date","Replacement cost","Number of projects it has been used on","Total time it has spent staged","Cleaning costs","Repair costs","Current condition","Current location","Sale or disposal information"],["None of these consistently"]),
+      processStepScore("retire",["Condition","Age","Style trends","Repair cost","Lack of use","Storage constraints","Financial data"],["We do not have a defined process"])
+    ]),
+    "Billing & Revenue Control":avgKnown([
+      mscore("billing_terms",{"Automatically in a system":100,"Recorded in a system or calendar and reviewed manually":75,"Spreadsheet":60,"Paper notes":30,"Team knowledge or memory":15,"We do not track this consistently":5}),
+      mscore("billing_trigger",{"The system creates or triggers it automatically":100,"A scheduled task or reminder prompts someone":78,"Someone reviews dates and bills manually":50,"The client or realtor reminds us":15,"Someone remembers to check":12,"There is no consistent trigger":5}),
+      mscore("billing_status",{"In real time, in one system":100,"Usually, with a quick review":78,"Possible, but requires checking more than one place":45,"Difficult":20,"We mostly rely on memory or manual follow-up":10,"We do not have a consistent payment-status record":5}),
+      mscore("payment_recon",{"Automatically or directly through our accounting/payment system":100,"Manually, but through one consistent reconciliation process":75,"Manually by checking bank or payment activity against records":50,"Only when something looks unpaid":20,"It varies by payment method or person":25,"We do not have a consistent reconciliation process":5}),
+      freqScore("billing_misses"),
+      mscore("extra_charges",{"Always, through a defined process":100,"Usually":75,"Sometimes":45,"Rarely":20,"There is no consistent process":5,"These charges do not apply to our business":null})
+    ]),
+    "Operational Visibility":avgKnown([
+      Number.isFinite(Number(A.confidence))?(Number(A.confidence)-1)*25:null,
+      systemsMaturity()
+    ])
+  };
+  const overall=avgKnown(Object.values(categories));
+  let level,summary;
+  if(overall>=85){level="Optimized";summary="Your operation has strong control and visibility. The next opportunity is using reliable data to improve utilization, forecasting, purchasing, and capacity."}
+  else if(overall>=70){level="Controlled";summary="Your core processes are working, with a few areas where stronger automation or traceability could reduce manual work and revenue risk."}
+  else if(overall>=55){level="Structured";summary="You have useful processes in place, but important parts still depend on manual updates, separate records, or individual follow-up."}
+  else if(overall>=40){level="Developing";summary="Your operation has working practices, but gaps in tracking, handoffs, billing, or real-time visibility can create avoidable labor, errors, and lost revenue."}
+  else {level="Reactive";summary="Core operational control depends heavily on manual work, memory, or disconnected records. Establishing reliable tracking and ownership should come before advanced automation."}
+  return {overall,level,summary,categories};
+};
+
+// ----- ROI / context -----
+function midpointHours(value){
+  return {"Less than 2 hours":1,"2–5 hours":3.5,"6–10 hours":8,"11–20 hours":15.5,"More than 20 hours":24}[value]??null;
+}
+estimateROIInputs=function(){
+  const weekly=midpointHours(A.manual_hours);
+  return {
+    weekly_manual_hours_estimate:weekly,
+    annual_manual_hours_estimate:weekly===null?null:Math.round(weekly*52),
+    typical_error_recovery_time:A.error_time==="I do not know"?null:(A.error_time||null),
+    extra_trip_frequency:A.extra_trips==="I do not know"?null:(A.extra_trips||null),
+    annual_replacement_loss_range:A.replacement_spend==="I do not know"?null:(A.replacement_spend||null),
+    additional_project_capacity:A.capacity_projects==="I am not sure"?null:(A.capacity_projects||null),
+    active_staged_properties:A.active_properties||null,
+    typical_extension_amount:A.extension_amount==="I do not know"?null:(A.extension_amount||null),
+    missed_billing_frequency:A.billing_misses==="I do not know"?null:(A.billing_misses||null),
+    start_timing:A.start_timing||null,
+    preferred_implementation_approach:A.investment_approach||null
+  };
+};
+
+const categoryContext={
+  "Inventory Control":()=>`Inventory tracking: ${A.tracking?.join(", ")||"not specified"}. Documentation: ${A.documented||"not specified"}.`,
+  "Warehouse Organization":()=>`Item location: ${A.find||"not specified"}. Extra search time: ${A.searchfreq||"not specified"}.`,
+  "Project Allocation":()=>`Reservation visibility: ${A.reserve||"not specified"}. Availability conflicts: ${A.conflicts||"not specified"}.`,
+  "Picking & Loading":()=>`Pull confirmation: ${A.pick||"not specified"}. Vehicle visibility: ${A.vehicle||"not specified"}.`,
+  "Install & Return Control":()=>`Retrieval control: ${A.retrieve||"not specified"}. Missing-item frequency: ${A.missing||"not specified"}.`,
+  "Team & Handoffs":()=>`Responsibility clarity: ${A.responsibility||"not specified"}. Handoff traceability: ${A.handofftrace||"not specified"}.`,
+  "Condition Management":()=>`Maintenance history: ${A.history||"not specified"}. Return process: ${A.return||"not specified"}.`,
+  "Financial & Lifecycle":()=>`Purchase traceability: ${A.trace||"not specified"}. Retirement process: ${(A.retire||[]).join(", ")||"not specified"}.`,
+  "Billing & Revenue Control":()=>`Billing visibility: ${A.billing_status||"not specified"}. Missed/delayed billing: ${A.billing_misses||"not specified"}.`,
+  "Operational Visibility":()=>`Current-location confidence: ${A.confidence||"not specified"}/5. Current systems: ${(A.systems||[]).join(", ")||"not specified"}.`
+};
+const v4RecMap={
+  "Inventory Control":"Create one permanent digital record and unique identifier for every trackable asset.",
+  "Warehouse Organization":"Define scannable warehouse locations so item movements can be recorded without manual location updates.",
+  "Project Allocation":"Add real-time availability, reservations, and project-level inventory assignment before warehouse pulling begins.",
+  "Picking & Loading":"Use scan-based or required digital confirmation for picking and vehicle loading.",
+  "Install & Return Control":"Create an installed-item record that becomes the de-staging retrieval list and return inspection record.",
+  "Team & Handoffs":"Assign ownership at each operational stage and require a recorded confirmation when responsibility changes.",
+  "Condition Management":"Create inspection, cleaning, damage, and repair queues tied to each asset's history.",
+  "Financial & Lifecycle":"Connect purchase, usage, maintenance, sale, donation, and retirement data to the permanent asset record.",
+  "Billing & Revenue Control":"Track staging terms, extension billing dates, sent/paid status, reconciliation, and additional charges by property.",
+  "Operational Visibility":"Bring inventory, projects, billing, exceptions, and upcoming work into one operational view."
+};
+recommendations=function(scores){
+  return Object.entries(scores.categories).sort((a,b)=>a[1]-b[1]).slice(0,3).map(([category,score])=>({
+    category,score,recommendation:v4RecMap[category],why:categoryContext[category]?.()||""
+  }));
+};
+
+// ----- Voice recorder safety -----
+record=async function(id){
+  const b=document.querySelector("#recBtn");
+  if(recorder&&recorder.state==="recording"){recorder.stop();return}
+  if(!navigator.mediaDevices||!window.MediaRecorder){err("Audio recording is not supported in this browser.");return}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    chunks=[];
+    recorder=new MediaRecorder(stream);
+    recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+    recorder.onstart=()=>{
+      if(b){b.classList.add("active");b.textContent="■ Stop Recording"}
+      const panel=document.querySelector("#voicePanel"),status=document.querySelector("#vstatus");
+      if(panel)panel.classList.remove("hidden");
+      if(status)status.textContent="Recording…";
+      timer=setTimeout(()=>{if(recorder?.state==="recording")recorder.stop()},120000)
+    };
+    recorder.onstop=()=>{
+      clearTimeout(timer);stream.getTracks().forEach(t=>t.stop());
+      const blob=new Blob(chunks,{type:recorder.mimeType||"audio/webm"}),url=URL.createObjectURL(blob);
+      if(notes[id]?.url)URL.revokeObjectURL(notes[id].url);
+      notes[id]={blob,url,type:blob.type,at:new Date().toISOString()};
+      const status=document.querySelector("#vstatus"),audio=document.querySelector("#audio"),btn=document.querySelector("#recBtn");
+      if(status)status.textContent="Recorded";
+      if(audio)audio.innerHTML=`<audio controls src="${url}"></audio>`;
+      if(btn){btn.classList.remove("active");btn.textContent="🎤 Record Again"}
+      recorder=null;saveLocal();
+    };
+    recorder.start();
+  }catch(e){err("Microphone access was not granted. Voice recording should be tested again on the hosted HTTPS version.")}
+};
+
+// ----- Results -----
+function resultValue(v,fallback="Not available"){return v===null||v===undefined||v===""?fallback:v}
+complete=function(){
+  stopVoice();sanitizeBranches();scrollAssessmentTop();
+  const scores=calculateScores(),recs=recommendations(scores),roi=estimateROIInputs();
+  document.querySelector("#bar").style.width="100%";
+  document.querySelector("#pcopy").textContent="Assessment complete";
+  if(progressNode)progressNode.setAttribute("aria-valuenow","100");
+  const cats=Object.entries(scores.categories).sort((a,b)=>a[1]-b[1]);
+  document.querySelector("#card").innerHTML=`
+    <div class=eyebrow>Home Staging Operations Results</div>
+    <h1>Your Operation Has a Clear Next Move</h1>
+    <div class=result-hero>
+      <div class=score-ring style="--score:${scores.overall}">
+        <div class=score-inner><strong>${scores.overall}</strong><span class=score-label>Operations<br>Score</span></div>
+      </div>
+      <div>
+        <span class=level-pill>${esc(scores.level)}</span>
+        <h2 style="font-size:28px;margin-bottom:8px">${esc(A.company||"Your company")}</h2>
+        <p style="margin:0">${esc(scores.summary)}</p>
+      </div>
+    </div>
+
+    <h3>Business context</h3>
+    <div class=context-grid>
+      <div class=context-card><span>Projects per month</span><strong>${esc(resultValue(A.projects))}</strong></div>
+      <div class=context-card><span>Active inventory</span><strong>${esc(resultValue(A.inventory_size))}</strong></div>
+      <div class=context-card><span>Team size</span><strong>${esc(resultValue(A.team_size))}</strong></div>
+      <div class=context-card><span>Active staged properties</span><strong>${esc(resultValue(A.active_properties))}</strong></div>
+    </div>
+
+    <h3>Operational impact</h3>
+    <div class=impact-grid>
+      <div class=impact-card><span>Manual operational time</span><strong>${roi.annual_manual_hours_estimate===null?"Not available":"~"+roi.annual_manual_hours_estimate+" hrs/year"}</strong></div>
+      <div class=impact-card><span>Replacement / damage spend</span><strong>${esc(resultValue(roi.annual_replacement_loss_range))}</strong></div>
+      <div class=impact-card><span>Additional trips</span><strong>${esc(resultValue(roi.extra_trip_frequency))}</strong></div>
+      <div class=impact-card><span>Potential added capacity</span><strong>${roi.additional_project_capacity?esc(roi.additional_project_capacity+" projects/month"):"Not available"}</strong></div>
+      <div class=impact-card><span>Missed / delayed extension billing</span><strong>${esc(resultValue(roi.missed_billing_frequency))}</strong></div>
+      <div class=impact-card><span>Typical 30-day extension</span><strong>${esc(resultValue(roi.typical_extension_amount))}</strong></div>
+    </div>
+
+    <h3>Category scores</h3>
+    <div class=category-list>
+      ${cats.map(([name,score])=>`<div class=category-row>
+        <div class=category-name>${esc(name)}</div>
+        <div class=category-track><div class=category-fill style="width:${score}%"></div></div>
+        <div class=category-score>${score}</div>
+      </div>`).join("")}
+    </div>
+
+    <h3>Recommended first priorities</h3>
+    <p class=priority-order>Ranked from the lowest category score upward. Priority 1 is the area showing the greatest need for improvement.</p>
+    <div class=priority-cards>
+      ${recs.map((r,i)=>`<div class=priority-card>
+        <div class=priority-title><b>${i+1}. ${esc(r.category)}</b><span class=priority-score>${r.score}/100</span></div>
+        <span class=small>${esc(r.recommendation)}</span>
+        <span class=priority-reason><b>Why this ranked here:</b> ${esc(r.why)}</span>
+      </div>`).join("")}
+    </div>
+
+    <h3>What you said matters most</h3>
+    <div class=alignment-card>
+      <p><b>Desired outcome:</b> ${esc(resultValue(A.outcome))}</p>
+      ${A.priority?`<p><b>Your stated first priority:</b> ${esc(A.priority)}</p>`:""}
+      <p><b>Preferred timing:</b> ${esc(resultValue(A.start_timing))}</p>
+      <p><b>Preferred implementation approach:</b> ${esc(resultValue(A.investment_approach))}</p>
+    </div>
+
+    <div id=submitStatus class=submit-status>Finalizing assessment…</div>
+    <div id=retryWrap></div>
+    <div class=nav>
+      <button class="btn secondary" onclick=download()>Export Responses</button>
+      <button class="btn primary" onclick=restart()>Start New Assessment</button>
+    </div>`;
+  idx=steps.length;saveLocal();
+  persistResults(scores,recs);
+};
+
+// ----- Submission and retry -----
+persistResults=async function(scores,recs){
+  const node=document.querySelector("#submitStatus"),retry=document.querySelector("#retryWrap");
+  if(!node)return;
+
+  if(!V4_LIVE_SUBMISSION){
+    node.className="submit-status";
+    node.textContent="Preview mode: results are available, but this test response was not sent to Supabase.";
+    if(retry)retry.innerHTML="";
+    return;
+  }
+
+  node.className="submit-status";
+  node.textContent="Saving assessment responses…";
+  if(retry)retry.innerHTML="";
+  try{
+    const id=await saveAssessment(scores,recs);
+    window.__lastSubmissionId=id;
+    node.className="submit-status ok";
+    node.textContent="Assessment saved successfully. Reference: "+id.slice(0,8).toUpperCase();
+  }catch(e){
+    window.__lastSubmissionId=null;
+    node.className="submit-status bad";
+    node.textContent="Your results are available, but the submission could not be saved.";
+    if(retry)retry.innerHTML=`<button class="btn secondary" style="margin-top:10px" onclick="retrySubmission()">Retry save</button>`;
+    console.error(e);
+  }
+};
+retrySubmission=function(){
+  const scores=calculateScores(),recs=recommendations(scores);
+  persistResults(scores,recs);
+};
+
+download=function(){
+  const scores=calculateScores(),recs=recommendations(scores);
+  const data={
+    ...A,
+    roi_inputs:estimateROIInputs(),
+    results:{overall_score:scores.overall,maturity_level:scores.level,category_scores:scores.categories,recommendations:recs},
+    voice_notes:Object.entries(notes).map(([id,n])=>({question:id,type:n.type,recorded_at:n.at})),
+    submission_id:window.__lastSubmissionId||null,
+    completed_at:new Date().toISOString()
+  };
+  const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));
+  const a=document.createElement("a");
+  a.href=u;
+  a.download=((A.company||"staging-company").replace(/[^a-z0-9]+/gi,"-").toLowerCase())+"-operations-assessment-results.json";
+  a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
+};
+
+restart=function(){
+  if(!confirm("Start a new assessment? Current browser responses will be cleared."))return;
+  Object.values(notes).forEach(n=>n.url&&URL.revokeObjectURL(n.url));
+  A={};notes={};idx=-1;window.__lastSubmissionId=null;clearLocal();rebuild();welcome();
+};
+
+// ----- Welcome / resume -----
+welcome=function(){
+  idx=-1;
+  const saved=hasMeaningfulSavedState();
+  document.querySelector("#card").innerHTML=`
+    <div class=eyebrow>Home Staging Operations Diagnostic</div>
+    <h1>How Well Can You See and Control Your Staging Operation?</h1>
+    <p class=lead>This assessment looks at how inventory, projects, team handoffs, billing, payments, and asset lifecycle work move through your business today.</p>
+    <p>The goal is to identify where manual work, limited visibility, inconsistent tracking, or missed follow-up may be creating unnecessary labor, errors, inventory risk, or lost revenue.</p>
+    <p><b>Estimated time:</b> 15–20 minutes. Most questions are click-to-answer. Longer explanations are optional and can be dictated or recorded.</p>
+    ${saved?`<div class=resume-box><b>You have an unfinished assessment saved on this device.</b><div class=resume-actions><button class="btn primary" onclick="resumeAssessment()">Resume assessment</button><button class="btn secondary" onclick="discardSaved()">Start over</button></div></div>`:`<div class=nav><span></span><button class="btn primary" onclick=start()>Start Assessment</button></div>`}`;
+  const bar=document.querySelector("#bar");if(bar)bar.style.width="0%";
+  document.querySelector("#pcopy").textContent="Ready to begin";
+  if(progressNode)progressNode.setAttribute("aria-valuenow","0");
+};
+resumeAssessment=function(){
+  if(restoreLocal()){render()}else start();
+};
+discardSaved=function(){
+  clearLocal();A={};idx=-1;welcome();
+};
+
+// Initial hardening
+sanitizeBranches();
+rebuild();
+setTimeout(()=>welcome(),10);
+</script>
+
+
+<script id="v5-final-hardening">
+const V5_STATE_KEY="home_staging_operations_assessment_v5";
+const V5_DB_NAME="home_staging_operations_assessment_voice";
+const V5_DB_STORE="voice_notes";
+let V5_COMPLETED=false;
+let V5_SUBMITTED=false;
+let V5_LAST_RESULTS=null;
+
+// Local/sandbox/localhost should never submit.
+// Any normal HTTPS deployment can submit.
+function isLiveHostedEnvironment(){
+  const protocol=window.location.protocol;
+  const host=(window.location.hostname||"").toLowerCase();
+  if(protocol!=="https:") return false;
+  if(!host || host==="localhost" || host==="127.0.0.1" || host==="0.0.0.0") return false;
+  if(window.location.origin==="null") return false;
+  return true;
+}
+const V5_CAN_SUBMIT=isLiveHostedEnvironment();
+
+// Remove standalone section-intro screens.
+// Keep the section context on the first question in each section.
+rebuild=function(){
+  steps=[];
+  S.forEach((section,si)=>{
+    section[2].forEach(q=>{
+      if(!q.show||q.show()) steps.push({k:"q",si,q});
+    });
+  });
+};
+
+function isFirstVisibleQuestionInSection(si,qid){
+  const qs=S[si][2].filter(q=>!q.show||q.show());
+  return qs.length>0 && qs[0].id===qid;
+}
+
+question=function(si,q){
+  let b=q.t==="lead"?lead()
+    :q.t==="single"?single(q,q.o)
+    :q.t==="multi"?multi(q,q.o)
+    :q.t==="dynamicMulti"?multi(q,dyn(q))
+    :q.t==="dynamicSingle"?single(q,dyn(q))
+    :q.t==="scale"?scale(q)
+    :q.t==="counts"?counts()
+    :long(q);
+
+  const sectionDesc=S[si][1];
+  const context=isFirstVisibleQuestionInSection(si,q.id)&&sectionDesc
+    ? `<div class=section-context>${esc(sectionDesc)}</div>`:"";
+
+  document.querySelector("#card").innerHTML=`
+    <div class=eyebrow>${esc(S[si][0])}</div>
+    ${context}
+    <h2>${esc(q.q)} ${q.req&&!q.optional?'<span class=req>*</span>':''}</h2>
+    ${q.h?`<div class=helper>${esc(q.h)}</div>`:""}
+    ${b}
+    <div id=error class="error hidden" role=alert aria-live=assertive></div>
+    <div class=nav>
+      <button class="btn secondary" onclick=back()>Back</button>
+      <button class="btn primary" onclick=next()>Continue</button>
+    </div>`;
+  bind(q);
+};
+
+// ----- Completed-state persistence -----
+function v5SerializableState(){
+  return {
+    answers:A,
+    idx,
+    completed:V5_COMPLETED,
+    submitted:V5_SUBMITTED,
+    submissionId:window.__submissionId||window.__lastSubmissionId||null,
+    lastResults:V5_LAST_RESULTS,
+    savedAt:new Date().toISOString()
+  };
+}
+saveLocal=function(){
+  try{
+    localStorage.setItem(V5_STATE_KEY,JSON.stringify(v5SerializableState()));
+  }catch(e){}
+};
+readLocal=function(){
+  try{
+    const raw=localStorage.getItem(V5_STATE_KEY);
+    return raw?JSON.parse(raw):null;
+  }catch(e){return null}
+};
+clearLocal=function(){
+  try{localStorage.removeItem(V5_STATE_KEY)}catch(e){}
+};
+hasMeaningfulSavedState=function(){
+  const s=readLocal();
+  return !!(s&&s.answers&&Object.keys(s.answers).length);
+};
+
+async function restoreLocalV5(){
+  const s=readLocal();
+  if(!s||!s.answers)return false;
+  A=s.answers||{};
+  V5_COMPLETED=!!s.completed;
+  V5_SUBMITTED=!!s.submitted;
+  V5_LAST_RESULTS=s.lastResults||null;
+  window.__submissionId=s.submissionId||null;
+  window.__lastSubmissionId=s.submissionId||null;
+  sanitizeBranches();
+  await restoreVoiceNotes();
+  rebuild();
+  idx=V5_COMPLETED?steps.length:Math.min(Math.max(Number(s.idx)||0,0),Math.max(0,steps.length-1));
+  return true;
+}
+
+// ----- IndexedDB voice note persistence -----
+function openVoiceDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(V5_DB_NAME,1);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains(V5_DB_STORE)) db.createObjectStore(V5_DB_STORE,{keyPath:"id"});
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function saveVoiceNoteToDB(id,note){
+  try{
+    const db=await openVoiceDB();
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(V5_DB_STORE,"readwrite");
+      tx.objectStore(V5_DB_STORE).put({id,blob:note.blob,type:note.type,at:note.at});
+      tx.oncomplete=()=>resolve();
+      tx.onerror=()=>reject(tx.error);
+    });
+    db.close();
+  }catch(e){console.warn("Voice-note recovery save failed",e)}
+}
+async function restoreVoiceNotes(){
+  try{
+    const db=await openVoiceDB();
+    const rows=await new Promise((resolve,reject)=>{
+      const tx=db.transaction(V5_DB_STORE,"readonly");
+      const req=tx.objectStore(V5_DB_STORE).getAll();
+      req.onsuccess=()=>resolve(req.result||[]);
+      req.onerror=()=>reject(req.error);
+    });
+    Object.values(notes).forEach(n=>n.url&&URL.revokeObjectURL(n.url));
+    notes={};
+    rows.forEach(row=>{
+      const url=URL.createObjectURL(row.blob);
+      notes[row.id]={blob:row.blob,url,type:row.type,at:row.at};
+    });
+    db.close();
+  }catch(e){console.warn("Voice-note recovery restore failed",e)}
+}
+async function deleteVoiceNoteFromDB(id){
+  try{
+    const db=await openVoiceDB();
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(V5_DB_STORE,"readwrite");
+      tx.objectStore(V5_DB_STORE).delete(id);
+      tx.oncomplete=()=>resolve();
+      tx.onerror=()=>reject(tx.error);
+    });
+    db.close();
+  }catch(e){}
+}
+async function clearVoiceDB(){
+  try{
+    const db=await openVoiceDB();
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(V5_DB_STORE,"readwrite");
+      tx.objectStore(V5_DB_STORE).clear();
+      tx.oncomplete=()=>resolve();
+      tx.onerror=()=>reject(tx.error);
+    });
+    db.close();
+  }catch(e){}
+}
+
+deleteNote=async function(id){
+  if(notes[id]?.url)URL.revokeObjectURL(notes[id].url);
+  delete notes[id];
+  await deleteVoiceNoteFromDB(id);
+  render();
+};
+
+// Patch recorder to save audio blob to IndexedDB.
+record=async function(id){
+  const b=document.querySelector("#recBtn");
+  if(recorder&&recorder.state==="recording"){recorder.stop();return}
+  if(!navigator.mediaDevices||!window.MediaRecorder){err("Audio recording is not supported in this browser.");return}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    chunks=[];
+    recorder=new MediaRecorder(stream);
+    recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+    recorder.onstart=()=>{
+      if(b){b.classList.add("active");b.textContent="■ Stop Recording"}
+      const panel=document.querySelector("#voicePanel"),status=document.querySelector("#vstatus");
+      if(panel)panel.classList.remove("hidden");
+      if(status)status.textContent="Recording…";
+      timer=setTimeout(()=>{if(recorder?.state==="recording")recorder.stop()},120000)
+    };
+    recorder.onstop=async()=>{
+      clearTimeout(timer);
+      stream.getTracks().forEach(t=>t.stop());
+      const blob=new Blob(chunks,{type:recorder.mimeType||"audio/webm"});
+      const url=URL.createObjectURL(blob);
+      if(notes[id]?.url)URL.revokeObjectURL(notes[id].url);
+      notes[id]={blob,url,type:blob.type,at:new Date().toISOString()};
+      await saveVoiceNoteToDB(id,notes[id]);
+      const status=document.querySelector("#vstatus"),audio=document.querySelector("#audio"),btn=document.querySelector("#recBtn");
+      if(status)status.textContent="Recorded";
+      if(audio)audio.innerHTML=`<audio controls src="${url}"></audio>`;
+      if(btn){btn.classList.remove("active");btn.textContent="🎤 Record Again"}
+      recorder=null;
+      saveLocal();
+    };
+    recorder.start();
+  }catch(e){
+    err("Microphone access was not granted. Voice recording should be tested on the hosted HTTPS version.");
+  }
+};
+
+// ----- Receiving contradictions -----
+EXCLUSIVE.receiving=["The item is simply put away"];
+const _normalizeMultiV5=normalizeMulti;
+normalizeMulti=function(qid,arr,chosen){
+  let normalized=_normalizeMultiV5(qid,arr,chosen);
+  if(qid==="receiving"){
+    if(chosen==="The item is simply put away") return [chosen];
+    normalized=normalized.filter(x=>x!=="The item is simply put away");
+  }
+  return normalized;
+};
+
+// Cap inconsistent receiving practice instead of allowing a perfect score.
+function receivingConditionScore(){
+  const a=A.receiving||[];
+  if(a.includes("The item is simply put away"))return 5;
+  const positive=["Condition is inspected","Photos are taken","Shipping damage is documented"];
+  let score=fractionScore("receiving",positive);
+  if(a.includes("It depends on who receives it")) score=Math.min(score,55);
+  return score;
+}
+
+// Preserve explicit null values in score maps.
+mscore=function(key,map,fallback=50){
+  const value=A[key];
+  if(Object.prototype.hasOwnProperty.call(map,value)) return map[value];
+  return fallback;
+};
+
+// Patch the two category formulas that need the null/receiving fix.
+// Keep all other v4 category logic.
+const _calculateScoresV4=calculateScores;
+calculateScores=function(){
+  const result=_calculateScoresV4();
+
+  result.categories["Condition Management"]=avgKnown([
+    receivingConditionScore(),
+    processStepScore("maintenance",["Inventory software","Spreadsheet","Task management system"],["We do not have a consistent process"]),
+    mscore("history",{"Yes":100,"For some items":60,"Only if we search through records":35,"No":10,"We do not currently track this":5})
+  ]);
+
+  result.categories["Billing & Revenue Control"]=avgKnown([
+    mscore("billing_terms",{"Automatically in a system":100,"Recorded in a system or calendar and reviewed manually":75,"Spreadsheet":60,"Paper notes":30,"Team knowledge or memory":15,"We do not track this consistently":5}),
+    mscore("billing_trigger",{"The system creates or triggers it automatically":100,"A scheduled task or reminder prompts someone":78,"Someone reviews dates and bills manually":50,"The client or realtor reminds us":15,"Someone remembers to check":12,"There is no consistent trigger":5}),
+    mscore("billing_status",{"In real time, in one system":100,"Usually, with a quick review":78,"Possible, but requires checking more than one place":45,"Difficult":20,"We mostly rely on memory or manual follow-up":10,"We do not have a consistent payment-status record":5}),
+    mscore("payment_recon",{"Automatically or directly through our accounting/payment system":100,"Manually, but through one consistent reconciliation process":75,"Manually by checking bank or payment activity against records":50,"Only when something looks unpaid":20,"It varies by payment method or person":25,"We do not have a consistent reconciliation process":5}),
+    mscore("billing_misses",{"Almost never":100,"A few times per year":85,"Monthly":45,"Weekly":20,"Several times per week":5,"I do not know":null}),
+    mscore("extra_charges",{"Always, through a defined process":100,"Usually":75,"Sometimes":45,"Rarely":20,"There is no consistent process":5,"These charges do not apply to our business":null})
+  ]);
+
+  result.overall=avgKnown(Object.values(result.categories));
+  if(result.overall>=85){result.level="Optimized";result.summary="Your operation has strong control and visibility. The next opportunity is using reliable data to improve utilization, forecasting, purchasing, and capacity."}
+  else if(result.overall>=70){result.level="Controlled";result.summary="Your core processes are working, with a few areas where stronger automation or traceability could reduce manual work and revenue risk."}
+  else if(result.overall>=55){result.level="Structured";result.summary="You have useful processes in place, but important parts still depend on manual updates, separate records, or individual follow-up."}
+  else if(result.overall>=40){result.level="Developing";result.summary="Your operation has working practices, but gaps in tracking, handoffs, billing, or real-time visibility can create avoidable labor, errors, and lost revenue."}
+  else {result.level="Reactive";result.summary="Core operational control depends heavily on manual work, memory, or disconnected records. Establishing reliable tracking and ownership should come before advanced automation."}
+  return result;
+};
+
+// ----- Stable submission ID + retry-safe save -----
+uploadVoiceNotes=async function(submissionId){
+  const paths=[];
+  for(const [questionId,note] of Object.entries(notes)){
+    const extension=fileExt(note.type);
+    const path=`${submissionId}/${questionId}.${extension}`;
+    const res=await fetch(`${SUPABASE_URL}/storage/v1/object/${VOICE_BUCKET}/${path}`,{
+      method:"POST",
+      headers:{
+        "apikey":SUPABASE_ANON_KEY,
+        "Authorization":`Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type":note.type||"audio/webm",
+        "x-upsert":"false"
+      },
+      body:note.blob
+    });
+    // 400/409 can mean this stable object already exists after an ambiguous prior attempt.
+    if(!res.ok && ![400,409].includes(res.status)) throw new Error(`Voice upload failed (${res.status})`);
+    paths.push({question_id:questionId,path,mime_type:note.type,recorded_at:note.at});
+  }
+  return paths;
+};
+
+saveAssessment=async function(scores,recs){
+  const submissionId=window.__submissionId||crypto.randomUUID();
+  window.__submissionId=submissionId;
+  saveLocal();
+
+  const voicePaths=await uploadVoiceNotes(submissionId);
+  const payload={
+    id:submissionId,
+    respondent_name:A.name,
+    company_name:A.company,
+    email:A.email,
+    phone:A.phone||null,
+    website:A.website||null,
+    overall_score:scores.overall,
+    maturity_level:scores.level,
+    category_scores:scores.categories,
+    recommendations:recs,
+    responses:{...A,_roi_inputs:estimateROIInputs()},
+    voice_note_paths:voicePaths,
+    completed_at:new Date().toISOString(),
+    user_agent:navigator.userAgent
+  };
+
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/staging_inventory_assessments?on_conflict=id`,{
+    method:"POST",
+    headers:{
+      "apikey":SUPABASE_ANON_KEY,
+      "Authorization":`Bearer ${SUPABASE_ANON_KEY}`,
+      "Content-Type":"application/json",
+      "Prefer":"resolution=merge-duplicates,return=minimal"
+    },
+    body:JSON.stringify(payload)
+  });
+  if(!res.ok){
+    const body=await res.text();
+    throw new Error(`Assessment save failed (${res.status}): ${body.slice(0,180)}`);
+  }
+  return submissionId;
+};
+
+persistResults=async function(scores,recs){
+  const node=document.querySelector("#submitStatus"),retry=document.querySelector("#retryWrap");
+  if(!node)return;
+
+  if(!V5_CAN_SUBMIT){
+    node.className="submit-status";
+    node.textContent="Preview mode: results are available, but this test response was not sent to Supabase.";
+    if(retry)retry.innerHTML="";
+    return;
+  }
+
+  if(V5_SUBMITTED && (window.__lastSubmissionId||window.__submissionId)){
+    node.className="submit-status ok";
+    node.textContent="Assessment saved successfully. Reference: "+String(window.__lastSubmissionId||window.__submissionId).slice(0,8).toUpperCase();
+    if(retry)retry.innerHTML="";
+    return;
+  }
+
+  node.className="submit-status";
+  node.textContent="Saving assessment responses…";
+  if(retry)retry.innerHTML="";
+
+  try{
+    const id=await saveAssessment(scores,recs);
+    window.__lastSubmissionId=id;
+    V5_SUBMITTED=true;
+    saveLocal();
+    node.className="submit-status ok";
+    node.textContent="Assessment saved successfully. Reference: "+id.slice(0,8).toUpperCase();
+  }catch(e){
+    V5_SUBMITTED=false;
+    saveLocal();
+    node.className="submit-status bad";
+    node.textContent="Your results are available, but the submission could not be confirmed.";
+    if(retry)retry.innerHTML=`<button class="btn secondary" style="margin-top:10px" onclick="retrySubmission()">Retry save</button>`;
+    console.error(e);
+  }
+};
+
+// ----- Completed assessment behavior -----
+const _completeV5Base=complete;
+complete=function(){
+  V5_COMPLETED=true;
+  const scores=calculateScores(),recs=recommendations(scores);
+  V5_LAST_RESULTS={scores,recs};
+  saveLocal();
+  _completeV5Base();
+  // The wrapped v4 complete writes local state again. Ensure completed state remains true.
+  V5_COMPLETED=true;
+  saveLocal();
+};
+
+welcome=function(){
+  idx=-1;
+  const saved=readLocal();
+  const unfinished=!!(saved&&saved.answers&&Object.keys(saved.answers).length&&!saved.completed);
+  const completed=!!(saved&&saved.answers&&saved.completed);
+
+  document.querySelector("#card").innerHTML=`
+    <div class=eyebrow>Home Staging Operations Diagnostic</div>
+    <h1>How Well Can You See and Control Your Staging Operation?</h1>
+    <p class=lead>This assessment looks at how inventory, projects, team handoffs, billing, payments, and asset lifecycle work move through your business today.</p>
+    <p>The goal is to identify where manual work, limited visibility, inconsistent tracking, or missed follow-up may be creating unnecessary labor, errors, inventory risk, or lost revenue.</p>
+    <p><b>Estimated time:</b> 15–20 minutes. Most questions are click-to-answer. Longer explanations are optional and can be dictated or recorded.</p>
+    ${completed?`
+      <div class=completed-box>
+        <b>You have a completed assessment saved on this device.</b>
+        <div class=completed-actions>
+          <button class="btn primary" onclick="viewSavedResults()">View results</button>
+          <button class="btn secondary" onclick="discardSaved()">Start a new assessment</button>
+        </div>
+      </div>`:
+      unfinished?`
+      <div class=resume-box>
+        <b>You have an unfinished assessment saved on this device.</b>
+        <div class=resume-actions>
+          <button class="btn primary" onclick="resumeAssessment()">Resume assessment</button>
+          <button class="btn secondary" onclick="discardSaved()">Start over</button>
+        </div>
+      </div>`:
+      `<div class=nav><span></span><button class="btn primary" onclick=start()>Start Assessment</button></div>`}
+  `;
+  const bar=document.querySelector("#bar");if(bar)bar.style.width="0%";
+  document.querySelector("#pcopy").textContent="Ready to begin";
+  if(progressNode)progressNode.setAttribute("aria-valuenow","0");
+};
+
+resumeAssessment=async function(){
+  if(await restoreLocalV5()){
+    if(V5_COMPLETED) complete(); else render();
+  }else start();
+};
+viewSavedResults=async function(){
+  if(await restoreLocalV5()){
+    V5_COMPLETED=true;
+    complete();
+  }
+};
+discardSaved=async function(){
+  clearLocal();
+  await clearVoiceDB();
+  Object.values(notes).forEach(n=>n.url&&URL.revokeObjectURL(n.url));
+  A={};notes={};idx=-1;V5_COMPLETED=false;V5_SUBMITTED=false;V5_LAST_RESULTS=null;
+  window.__submissionId=null;window.__lastSubmissionId=null;
+  welcome();
+};
+
+restart=async function(){
+  if(!confirm("Start a new assessment? Current browser responses will be cleared."))return;
+  await discardSaved();
+};
+
+// Path-position progress with no intro screens.
+progress=function(){
+  rebuild();
+  const total=steps.length;
+  let current=Math.max(0,idx);
+  let p=idx<0?0:Math.round((current/Math.max(1,total))*100);
+  p=Math.max(0,Math.min(99,p));
+  const bar=document.querySelector("#bar");
+  if(bar)bar.style.width=p+"%";
+  const copy=document.querySelector("#pcopy");
+  if(copy)copy.textContent=idx<0?"Ready to begin":p+"% complete";
+  if(progressNode)progressNode.setAttribute("aria-valuenow",String(p));
+};
+
+// Initialize from v5 state only.
+try{
+  localStorage.removeItem("home_staging_operations_assessment_v4");
+  localStorage.removeItem("home_staging_inventory_assessment_v4");
+}catch(e){}
+rebuild();
+setTimeout(()=>welcome(),20);
+</script>
+
+
+<script id="v6-deployment-hardening">
+/*
+  Deployment safety:
+  - TEST build: SUBMISSION_MODE = "test"
+  - Production template: SUBMISSION_MODE = "production"
+  - Production still requires the exact hostname to appear in PRODUCTION_HOSTS.
+*/
+const SUBMISSION_MODE = "production";
+const PRODUCTION_HOSTS = [];
+
+function canSubmitToProduction(){
+  if(SUBMISSION_MODE!=="production") return false;
+  if(window.location.protocol!=="https:") return false;
+  const host=(window.location.hostname||"").toLowerCase();
+  return PRODUCTION_HOSTS.map(h=>String(h).toLowerCase()).includes(host);
+}
+
+// Clear voice recordings when their conditional question becomes hidden.
+const __sanitizeBranchesV6Base = sanitizeBranches;
+sanitizeBranches = function(){
+  __sanitizeBranchesV6Base();
+
+  const hiddenVoiceIds=[];
+
+  if(!A.riskhandoff || ["No particular handoff stands out","I am not sure"].includes(A.riskhandoff)){
+    hiddenVoiceIds.push("riskexplain");
+  }
+
+  if(A.problem!=="Yes"){
+    hiddenVoiceIds.push("problemtext");
+  }
+
+  hiddenVoiceIds.forEach(id=>{
+    if(notes[id]?.url){
+      try{URL.revokeObjectURL(notes[id].url)}catch(e){}
+    }
+    if(notes[id]) delete notes[id];
+    // IndexedDB cleanup is intentionally fire-and-forget so answer changes stay instant.
+    Promise.resolve(deleteVoiceNoteFromDB(id)).catch(()=>{});
+  });
+};
+
+// Upload voice notes safely.
+// 409 is treated as duplicate.
+// 400 is only treated as duplicate when Supabase explicitly says the object already exists.
+uploadVoiceNotes = async function(submissionId){
+  const paths=[];
+
+  for(const [questionId,note] of Object.entries(notes)){
+    const extension=fileExt(note.type);
+    const path=`${submissionId}/${questionId}.${extension}`;
+
+    const res=await fetch(`${SUPABASE_URL}/storage/v1/object/${VOICE_BUCKET}/${path}`,{
+      method:"POST",
+      headers:{
+        "apikey":SUPABASE_ANON_KEY,
+        "Authorization":`Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type":note.type||"audio/webm",
+        "x-upsert":"false"
+      },
+      body:note.blob
+    });
+
+    if(!res.ok){
+      const responseText=await res.text();
+      const duplicate400 =
+        res.status===400 &&
+        /already exists|duplicate|resource exists|object exists/i.test(responseText);
+
+      const duplicate409 = res.status===409;
+
+      if(!duplicate400 && !duplicate409){
+        throw new Error(`Voice upload failed (${res.status}): ${responseText.slice(0,220)}`);
+      }
+    }
+
+    paths.push({
+      question_id:questionId,
+      path,
+      mime_type:note.type,
+      recorded_at:note.at
+    });
+  }
+
+  return paths;
+};
+
+// Submission now uses explicit mode + exact production hostname allowlist.
+persistResults = async function(scores,recs){
+  const node=document.querySelector("#submitStatus");
+  const retry=document.querySelector("#retryWrap");
+  if(!node)return;
+
+  if(!canSubmitToProduction()){
+    node.className="submit-status";
+    node.textContent=
+      SUBMISSION_MODE==="production"
+        ? "Submission is disabled on this hostname. Results are available, but this response was not sent to Supabase."
+        : "Test mode: results are available, but this response was not sent to Supabase.";
+    if(retry)retry.innerHTML="";
+    return;
+  }
+
+  if(V5_SUBMITTED && (window.__lastSubmissionId||window.__submissionId)){
+    node.className="submit-status ok";
+    node.textContent="Assessment saved successfully. Reference: "+
+      String(window.__lastSubmissionId||window.__submissionId).slice(0,8).toUpperCase();
+    if(retry)retry.innerHTML="";
+    return;
+  }
+
+  node.className="submit-status";
+  node.textContent="Saving assessment responses…";
+  if(retry)retry.innerHTML="";
+
+  try{
+    const id=await saveAssessment(scores,recs);
+    window.__lastSubmissionId=id;
+    V5_SUBMITTED=true;
+    saveLocal();
+
+    node.className="submit-status ok";
+    node.textContent="Assessment saved successfully. Reference: "+
+      id.slice(0,8).toUpperCase();
+  }catch(e){
+    V5_SUBMITTED=false;
+    saveLocal();
+
+    node.className="submit-status bad";
+    node.textContent="Your results are available, but the submission could not be confirmed.";
+
+    if(retry){
+      retry.innerHTML=
+        `<button class="btn secondary" style="margin-top:10px" onclick="retrySubmission()">Retry save</button>`;
+    }
+    console.error(e);
+  }
+};
+
+// Ensure hidden-branch audio is pruned before every save/export.
+const __saveAssessmentV6Base=saveAssessment;
+saveAssessment=async function(scores,recs){
+  sanitizeBranches();
+  return await __saveAssessmentV6Base(scores,recs);
+};
+
+const __downloadV6Base=download;
+download=function(){
+  sanitizeBranches();
+  return __downloadV6Base();
+};
+</script>
+
+
+<script id="v7-diagnostic-calibration">
+const V7_STATE_KEY="home_staging_operations_assessment_v7_schema1";
+const V7_DB_NAME="home_staging_operations_assessment_voice_v7";
+
+// ---------- Scope and question cleanup ----------
+(function v7QuestionCleanup(){
+  const team=S.find(s=>s[0]==="Team Handoffs and Accountability");
+  if(team){
+    // Remove duplicate ownership scale. The responsibility question remains.
+    team[2]=team[2].filter(q=>q.id!=="handoffowner");
+  }
+
+  const gaps=S.find(s=>s[0]==="Biggest Operational Gaps");
+  if(gaps){
+    // Remove the redundant yes/no + explanation branch. Final Priority retains open explanation/voice.
+    gaps[2]=gaps[2].filter(q=>!["problem","problemtext"].includes(q.id));
+
+    const friction=gaps[2].find(q=>q.id==="friction");
+    if(friction) friction.q="Which issues create the most friction in your current staging operation?";
+
+    const outcome=gaps[2].find(q=>q.id==="outcome");
+    if(outcome) outcome.q="Which outcome would make the biggest difference to your staging operation?";
+  }
+
+  const final=S.find(s=>s[0]==="Final Priority");
+  if(final){
+    final[1]="This final section identifies the one operational problem you would most want solved first.";
+    const q=final[2].find(q=>q.id==="priority");
+    if(q) q.q="If you could fix one staging operations problem first, what would it be?";
+  }
+
+  const readiness=S.find(s=>s[0]==="Implementation Readiness");
+  if(readiness){
+    const q=readiness[2].find(q=>q.id==="start_timing");
+    if(q) q.q="If you decided to improve your staging operation, when would you ideally want to begin?";
+  }
+})();
+
+// ---------- Build-versioned browser recovery ----------
+saveLocal=function(){
+  try{
+    localStorage.setItem(V7_STATE_KEY,JSON.stringify({
+      answers:A,
+      idx,
+      completed:V5_COMPLETED,
+      submitted:V5_SUBMITTED,
+      submissionId:window.__submissionId||window.__lastSubmissionId||null,
+      lastResults:V5_LAST_RESULTS,
+      savedAt:new Date().toISOString()
+    }));
+  }catch(e){}
+};
+
+readLocal=function(){
+  try{
+    const raw=localStorage.getItem(V7_STATE_KEY);
+    return raw?JSON.parse(raw):null;
+  }catch(e){return null}
+};
+
+clearLocal=function(){
+  try{localStorage.removeItem(V7_STATE_KEY)}catch(e){}
+};
+
+openVoiceDB=function(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(V7_DB_NAME,1);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains(V5_DB_STORE)){
+        db.createObjectStore(V5_DB_STORE,{keyPath:"id"});
+      }
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+};
+
+// ---------- Stable progress based on the full questionnaire order ----------
+progress=function(){
+  rebuild();
+  const allQs=S.flatMap(section=>section[2]);
+  const current=steps[idx]?.q;
+  let p=0;
+
+  if(idx>=0 && current){
+    const ordinal=allQs.findIndex(q=>q.id===current.id);
+    p=Math.round(Math.max(0,ordinal)/Math.max(1,allQs.length)*100);
+    p=Math.min(99,Math.max(0,p));
+  }
+
+  const bar=document.querySelector("#bar");
+  if(bar) bar.style.width=p+"%";
+
+  const copy=document.querySelector("#pcopy");
+  if(copy) copy.textContent=idx<0?"Ready to begin":p+"% complete";
+
+  if(progressNode) progressNode.setAttribute("aria-valuenow",String(p));
+};
+
+// ---------- Mixed-answer controls ----------
+EXCLUSIVE.install=["Nothing is formally recorded"];
+
+const __normalizeMultiV7Base=normalizeMulti;
+normalizeMulti=function(qid,arr,chosen){
+  let result=__normalizeMultiV7Base(qid,arr,chosen);
+
+  if(qid==="install"){
+    if(chosen==="Nothing is formally recorded") return [chosen];
+    result=result.filter(x=>x!=="Nothing is formally recorded");
+  }
+
+  return result;
+};
+
+// ---------- Scoring helpers ----------
+function v7Avg(values){
+  const xs=values.filter(v=>Number.isFinite(v));
+  return xs.length?Math.round(xs.reduce((a,b)=>a+b,0)/xs.length):0;
+}
+
+trackingScore=function(){
+  const a=A.tracking||[];
+  if(a.includes("We do not have a consistent inventory record")) return 5;
+
+  if(a.includes("Inventory management software")){
+    let score=100;
+    if(a.includes("Paper records")) score-=8;
+    if(a.includes("Notes on phones")) score-=10;
+    if(a.includes("Team knowledge or memory")) score-=12;
+    return Math.max(65,score);
+  }
+
+  if(a.includes("Spreadsheet")){
+    let score=65;
+    if(a.includes("Photos or photo folders")) score-=8;
+    if(a.includes("Paper records")) score-=12;
+    if(a.includes("Notes on phones")) score-=12;
+    if(a.includes("Team knowledge or memory")) score-=15;
+    return Math.max(20,score);
+  }
+
+  if(a.includes("Accounting system")){
+    let score=52;
+    if(a.includes("Paper records")) score-=8;
+    if(a.includes("Team knowledge or memory")) score-=12;
+    return Math.max(20,score);
+  }
+
+  const scores=[];
+  if(a.includes("Photos or photo folders")) scores.push(38);
+  if(a.includes("Labels or handwritten tags")) scores.push(35);
+  if(a.includes("Paper records")) scores.push(28);
+  if(a.includes("Notes on phones")) scores.push(22);
+  if(a.includes("Team knowledge or memory")) scores.push(15);
+  if(a.includes("Other")) scores.push(35);
+
+  return scores.length?v7Avg(scores):25;
+};
+
+function v7MaintenanceScore(){
+  const a=A.maintenance||[];
+  if(a.includes("We do not have a consistent process")) return 5;
+  if(a.includes("Inventory software")) return 100;
+  if(a.includes("Task management system")) return 85;
+  if(a.includes("Spreadsheet")) return 60;
+  if(a.includes("Physical area or pile in the warehouse")) return 45;
+  if(a.includes("Paper notes")) return 35;
+  if(a.some(x=>["Text messages","Group chat","Email"].includes(x))) return 30;
+  if(a.includes("Team memory")) return 15;
+  return 35;
+}
+
+function v7InstallRecordingScore(){
+  const a=A.install||[];
+  if(a.includes("Nothing is formally recorded")) return 5;
+
+  const positives=[
+    "Inventory is scanned or digitally confirmed",
+    "Items are checked off a list",
+    "Photos are taken",
+    "Room assignments are recorded",
+    "Changes and substitutions are documented"
+  ];
+  const hits=positives.filter(x=>a.includes(x)).length;
+  let score=Math.round(hits/positives.length*100);
+
+  if(a.includes("The designer knows what was installed")) score=Math.min(score||25,60);
+  if(a.includes("It varies")) score=Math.min(score||30,60);
+
+  return score||25;
+}
+
+function v7HandoffCommunicationScore(){
+  const a=A.handoffcomm||[];
+  if(a.includes("There is no consistent handoff process")) return 5;
+
+  const map={
+    "Inventory or project management system":100,
+    "Digital checklist":90,
+    "Spreadsheet":65,
+    "Printed paperwork":55,
+    "Email":45,
+    "Text message":40,
+    "Team chat":45,
+    "Phone call":35,
+    "Verbal conversation":30,
+    "Photos":45,
+    "The next person generally knows what to do":25,
+    "Other":40
+  };
+
+  const vals=a.map(x=>map[x]).filter(Number.isFinite);
+  let score=vals.length?Math.max(...vals):35;
+
+  if(a.includes("It varies by project")) score=Math.min(score,55);
+  return score;
+}
+
+function v7HandoffProblemScore(){
+  const a=A.handoffproblems||[];
+  if(a.includes("We rarely experience handoff problems")) return 100;
+  const count=a.filter(x=>x!=="Other").length;
+  if(count<=1) return 75;
+  if(count<=3) return 55;
+  if(count<=6) return 35;
+  return 15;
+}
+
+function v7FinancialVisibilityScore(){
+  const a=A.financial||[];
+  if(a.includes("None of these consistently")) return 5;
+  const known=[
+    "Original purchase price","Purchase date","Replacement cost",
+    "Number of projects it has been used on","Total time it has spent staged",
+    "Cleaning costs","Repair costs","Current condition","Current location",
+    "Sale or disposal information"
+  ].filter(x=>a.includes(x)).length;
+
+  if(known>=9) return 100;
+  if(known>=6) return 82;
+  if(known>=3) return 60;
+  if(known>=1) return 38;
+  return 15;
+}
+
+function v7RetirementScore(){
+  const a=A.retire||[];
+  if(a.includes("We do not have a defined process")) return 5;
+
+  const substantive=[
+    "Condition","Age","Style trends","Repair cost","Lack of use",
+    "Storage constraints","Designer recommendation","Owner judgment","Financial data"
+  ].filter(x=>a.includes(x));
+
+  let score= substantive.length>=6 ? 90 :
+             substantive.length>=4 ? 80 :
+             substantive.length>=2 ? 65 :
+             substantive.length===1 ? 45 : 25;
+
+  if(a.includes("Repair cost")) score+=5;
+  if(a.includes("Financial data")) score+=5;
+  return Math.min(100,score);
+}
+
+function v7ProjectSelectionScore(){
+  const a=A.select||[];
+  if(a.includes("Inventory software")) return 100;
+
+  let score=25;
+  if(a.includes("Spreadsheet or list")) score=Math.max(score,58);
+  if(a.includes("Previous project references")) score=Math.max(score,48);
+  if(a.includes("Photos")) score=Math.max(score,45);
+  if(a.includes("Physical warehouse walkthrough")) score=Math.max(score,40);
+  if(a.includes("Paper notes")) score=Math.max(score,30);
+  if(a.includes("Designer memory")||a.includes("Warehouse team knowledge")) score=Math.min(Math.max(score,25),55);
+
+  return score;
+}
+
+function v7PullScore(){
+  return mscore("pull",{
+    "Automatically from our inventory system":100,
+    "Manually in a spreadsheet or document":55,
+    "Written or printed manually":45,
+    "Created from photos":35,
+    "Communicated verbally":15,
+    "We do not consistently use pull lists":0,
+    "Other":30
+  },30);
+}
+
+// ---------- Recalibrated category calculation ----------
+const __calculateScoresV7Base=calculateScores;
+calculateScores=function(){
+  const result=__calculateScoresV7Base();
+
+  result.categories["Inventory Control"]=v7Avg([
+    trackingScore(),
+    mscore("documented",{
+      "Nearly all of it":100,"Most of it":80,"About half":55,
+      "Some of it":30,"Very little":10,"I do not know":null
+    }),
+    mscore("ids",{
+      "Yes, almost everything":100,"Yes, but only certain items":65,
+      "No":10,"I am not sure":null
+    }),
+    processStepScore(
+      "fields",
+      ["Photo","Item name or description","Category","Dimensions","Purchase date","Purchase cost","Current location","Current project","Availability","Condition"],
+      ["None of these consistently"]
+    )
+  ]);
+
+  result.categories["Project Allocation"]=v7Avg([
+    v7ProjectSelectionScore(),
+    mscore("reserve",{
+      "Yes, in real time":100,"Usually":75,"Sometimes":45,
+      "No":10,"We do not formally reserve inventory":5
+    }),
+    mscore("conflicts",{
+      "Almost never":100,"A few times per year":78,"Monthly":40,
+      "Weekly":15,"Several times per week":5,"I do not know":null
+    }),
+    v7PullScore(),
+    A.pull==="We do not consistently use pull lists"
+      ? 0
+      : processStepScore("pulldata",["Item name","Item ID","Photo","Quantity","Warehouse location","Room assignment","Project information"])
+  ]);
+
+  result.categories["Install & Return Control"]=v7Avg([
+    v7InstallRecordingScore(),
+    mscore("changes",{
+      "Always":100,"Usually":75,"Sometimes":45,"Rarely":20,
+      "Never":5,"We do not currently track that level of detail":5
+    }),
+    mscore("retrieve",{
+      "Yes, generated from what was actually installed":100,
+      "Yes, but the list is manually maintained":68,
+      "Usually":62,"Sometimes":35,"No":5,
+      "We rely mostly on the crew or designer knowing what belongs to us":10
+    }),
+    mscore("missing",{
+      "Almost never":100,"A few times per year":80,"Monthly":40,
+      "Weekly":15,"Several times per week":5,"I do not know":null
+    }),
+    mscore("return",{
+      "Every item is inspected before becoming available again":100,
+      "Most items are inspected":75,
+      "Only obviously damaged items are inspected":40,
+      "Items are generally put away immediately":5,
+      "It depends on who handles the return":25
+    })
+  ]);
+
+  result.categories["Team & Handoffs"]=v7Avg([
+    mscore("responsibility",{
+      "Very clear. Each role has defined responsibilities.":100,
+      "Mostly clear, with some overlap.":78,
+      "Responsibilities depend on the project.":50,
+      "Several people handle the same work without defined ownership.":28,
+      "Most inventory knowledge and decisions depend on one or two people.":18,
+      "We do not have defined inventory responsibilities.":5
+    }),
+    mscore("coverage",{
+      "Easily. The process and information are documented.":100,
+      "Usually, with some questions.":75,"It depends on the task.":50,
+      "It is difficult without the usual person.":22,
+      "Certain inventory processes stop until that person is available.":5
+    }),
+    v7HandoffCommunicationScore(),
+    mscore("handoffconfirm",{
+      "The system records the handoff automatically":100,
+      "The receiving person digitally confirms it":90,
+      "Someone checks off a list":75,
+      "A manager or supervisor confirms it":65,
+      "The teams communicate verbally":35,
+      "Completion is assumed unless there is a problem":15,
+      "There is no formal confirmation":5,
+      "It varies":30
+    }),
+    mscore("handofffreq",{
+      "Almost never":100,"A few times per year":82,"Monthly":45,
+      "Weekly":20,"Several times per week":5,"I do not know":null
+    }),
+    v7HandoffProblemScore(),
+    mscore("handofftrace",{
+      "Very easy. We have a clear record of each step.":100,
+      "Usually easy":78,
+      "Possible, but requires checking several places or asking people":45,
+      "Difficult":20,"We mostly rely on people's memory":10,
+      "We usually cannot determine exactly what happened":5
+    })
+  ]);
+
+  result.categories["Condition Management"]=v7Avg([
+    receivingConditionScore(),
+    v7MaintenanceScore(),
+    mscore("history",{
+      "Yes":100,"For some items":60,
+      "Only if we search through records":35,
+      "No":10,"We do not currently track this":5
+    })
+  ]);
+
+  result.categories["Financial & Lifecycle"]=v7Avg([
+    mscore("entry",{
+      "When the order is placed":100,"When the item ships":90,
+      "When the item arrives":75,"When someone has time to enter it":35,
+      "It varies":25,"We do not formally enter new purchases into an inventory system":5
+    }),
+    mscore("trace",{
+      "Very easily":100,"Usually":78,"Sometimes":50,
+      "Rarely":22,"We generally cannot":5,"I am not sure":null
+    }),
+    v7FinancialVisibilityScore(),
+    v7RetirementScore()
+  ]);
+
+  const rawOverall=v7Avg(Object.values(result.categories));
+  const minimum=Math.min(...Object.values(result.categories));
+
+  // Critical-category cap: a very strong average cannot mask a materially weak core area.
+  let adjustedOverall=rawOverall;
+  if(rawOverall>=85 && minimum<50) adjustedOverall=Math.min(adjustedOverall,84);
+  if(rawOverall>=70 && minimum<40) adjustedOverall=Math.min(adjustedOverall,69);
+  if(rawOverall>=55 && minimum<25) adjustedOverall=Math.min(adjustedOverall,54);
+
+  result.rawOverall=rawOverall;
+  result.minimumCategory=minimum;
+  result.overall=adjustedOverall;
+  result.gated=adjustedOverall!==rawOverall;
+
+  if(adjustedOverall>=85 && minimum>=70){
+    result.level="Optimized";
+    result.summary="Your operation has strong control across all major areas. The focus shifts from fixing gaps to improving forecasting, utilization, capacity, and decision quality.";
+  }else if(adjustedOverall>=70){
+    result.level="Controlled";
+    result.summary=result.gated
+      ?"Most of your operation is highly controlled, but at least one material operating gap prevents the business from being considered fully optimized."
+      :"Your core processes are working, with specific areas where stronger control or automation can reduce manual work, errors, or revenue risk.";
+  }else if(adjustedOverall>=55){
+    result.level="Structured";
+    result.summary="You have useful processes in place, but important parts still depend on manual updates, separate records, or individual follow-up.";
+  }else if(adjustedOverall>=40){
+    // A low category floor at this stage indicates reactive exposure even if the average clears 40.
+    if(minimum<30){
+      result.level="Reactive";
+      result.summary="Several parts of the operation are functioning, but one or more major controls are weak enough that the business is still exposed to recurring manual work, errors, or missed revenue.";
+    }else{
+      result.level="Developing";
+      result.summary="Your operation has working practices, but gaps in tracking, handoffs, billing, or real-time visibility create avoidable labor, errors, or revenue risk.";
+    }
+  }else{
+    result.level="Reactive";
+    result.summary="Core operational control depends heavily on manual work, memory, or disconnected records. Establishing reliable tracking and ownership should come before advanced automation.";
+  }
+
+  return result;
+};
+
+// ---------- Recommendation reason alignment ----------
+categoryContext["Inventory Control"]=()=>`Tracking method: ${(A.tracking||[]).join(", ")||"not specified"}. Documentation: ${A.documented||"not specified"}. Unique identifiers: ${A.ids||"not specified"}.`;
+categoryContext["Warehouse Organization"]=()=>`Storage definition: ${A.defined||"not specified"}. Item location method: ${A.find||"not specified"}. Search frequency: ${A.searchfreq||"not specified"}.`;
+categoryContext["Project Allocation"]=()=>`Selection method: ${(A.select||[]).join(", ")||"not specified"}. Reservation visibility: ${A.reserve||"not specified"}. Conflicts: ${A.conflicts||"not specified"}. Pull lists: ${A.pull||"not specified"}.`;
+categoryContext["Picking & Loading"]=()=>`Pull confirmation: ${A.pick||"not specified"}. Vehicle visibility: ${A.vehicle||"not specified"}. Missing/incorrect arrival frequency: ${A.arrival||"not specified"}.`;
+categoryContext["Install & Return Control"]=()=>`Installation record: ${(A.install||[]).join(", ")||"not specified"}. Substitution tracking: ${A.changes||"not specified"}. Retrieval control: ${A.retrieve||"not specified"}. Return inspection: ${A.return||"not specified"}.`;
+categoryContext["Team & Handoffs"]=()=>`Responsibility clarity: ${A.responsibility||"not specified"}. Communication: ${(A.handoffcomm||[]).join(", ")||"not specified"}. Handoff problems: ${(A.handoffproblems||[]).join(", ")||"not specified"}. Traceability: ${A.handofftrace||"not specified"}.`;
+categoryContext["Condition Management"]=()=>`Receiving controls: ${(A.receiving||[]).join(", ")||"not specified"}. Maintenance tracking: ${(A.maintenance||[]).join(", ")||"not specified"}. Maintenance history: ${A.history||"not specified"}.`;
+categoryContext["Financial & Lifecycle"]=()=>`Purchase traceability: ${A.trace||"not specified"}. Financial/lifecycle fields visible: ${(A.financial||[]).join(", ")||"not specified"}. Retirement process: ${(A.retire||[]).join(", ")||"not specified"}.`;
+categoryContext["Billing & Revenue Control"]=()=>`Billing visibility: ${A.billing_status||"not specified"}. Reconciliation: ${A.payment_recon||"not specified"}. Missed/delayed billing: ${A.billing_misses||"not specified"}. Active properties: ${A.active_properties||"not specified"}. Typical extension: ${A.extension_amount||"not specified"}.`;
+categoryContext["Operational Visibility"]=()=>`Current-location confidence: ${A.confidence||"not specified"}/5. Current systems: ${(A.systems||[]).join(", ")||"not specified"}.`;
+
+// ---------- Exposure-aware prioritization ----------
+function v7ExposureBoost(category){
+  let boost=0;
+  const friction=A.friction||[];
+  const priority=(A.priority||"").toLowerCase();
+
+  const highInventory=/5,000|5000|10,000|10000/.test(A.inventory_size||"");
+  const highProjects=/30|31|40|50|60|\+/.test(A.projects||"");
+
+  if(["Inventory Control","Warehouse Organization","Project Allocation","Picking & Loading","Install & Return Control","Team & Handoffs"].includes(category)){
+    if(highInventory) boost+=3;
+    if(highProjects) boost+=3;
+  }
+
+  if(category==="Billing & Revenue Control"){
+    const miss={"A few times per year":2,"Monthly":7,"Weekly":11,"Several times per week":14}[A.billing_misses]||0;
+    boost+=miss;
+
+    const props={"21–30":3,"31–50":5,"51+":7}[A.active_properties]||0;
+    boost+=props;
+
+    const ext={"$1,500–$2,499":2,"$2,500+":3}[A.extension_amount]||0;
+    boost+=ext;
+
+    if(friction.some(x=>/billing|paid|payment|reconcil|charges/i.test(x))) boost+=3;
+    if(/billing|invoice|payment|revenue|zelle/.test(priority)) boost+=4;
+    if(/billing|payment/.test((A.outcome||"").toLowerCase())) boost+=3;
+  }
+
+  if(category==="Warehouse Organization" && friction.some(x=>/finding inventory|storage location/i.test(x))) boost+=3;
+  if(category==="Project Allocation" && friction.some(x=>/available|double-book|pull list/i.test(x))) boost+=3;
+  if(category==="Picking & Loading" && friction.some(x=>/pulling|loading|truck/i.test(x))) boost+=3;
+  if(category==="Install & Return Control" && friction.some(x=>/installed|de-staging|missing inventory/i.test(x))) boost+=3;
+  if(category==="Condition Management" && friction.some(x=>/damage|cleaning|repair/i.test(x))) boost+=3;
+  if(category==="Financial & Lifecycle" && friction.some(x=>/purchasing|retire|financial/i.test(x))) boost+=3;
+  if(category==="Operational Visibility" && friction.some(x=>/manual data|multiple places|reporting|memory/i.test(x))) boost+=3;
+
+  if(["Warehouse Organization","Picking & Loading","Team & Handoffs"].includes(category)){
+    if(["Weekly","Several times per week"].includes(A.extra_trips)) boost+=3;
+  }
+
+  if(["Condition Management","Financial & Lifecycle"].includes(category)){
+    if(/\$10,000|\$25,000/.test(A.replacement_spend||"")) boost+=3;
+  }
+
+  return Math.min(18,boost);
+}
+
+recommendations=function(scores){
+  return Object.entries(scores.categories)
+    .filter(([category,score])=>score<80)
+    .map(([category,score])=>({
+      category,
+      score,
+      exposureBoost:v7ExposureBoost(category),
+      priorityIndex:score-v7ExposureBoost(category),
+      recommendation:v4RecMap[category],
+      why:categoryContext[category]?.()||""
+    }))
+    .sort((a,b)=>a.priorityIndex-b.priorityIndex || a.score-b.score || a.category.localeCompare(b.category))
+    .slice(0,3);
+};
+
+// ---------- Results presentation adjustments ----------
+const __completeV7Base=complete;
+complete=function(){
+  __completeV7Base();
+
+  const scores=calculateScores();
+  const recs=recommendations(scores);
+
+  const priorityHeading=[...document.querySelectorAll("h3")].find(h=>h.textContent.trim()==="Recommended first priorities");
+  const priorityOrder=document.querySelector(".priority-order");
+  const priorityCards=document.querySelector(".priority-cards");
+
+  if(priorityOrder){
+    priorityOrder.textContent="Priorities are based primarily on control gaps, with business exposure and your stated concerns used to elevate higher-risk issues.";
+  }
+
+  if(recs.length===0 && priorityHeading && priorityCards){
+    priorityHeading.textContent="Operational outlook";
+    if(priorityOrder){
+      priorityOrder.textContent="No corrective priority scored below the action threshold. Your operation is in optimization territory rather than remediation territory.";
+    }
+    priorityCards.innerHTML=`<div class=priority-card><b>No urgent corrective action identified.</b><br><span class=small>Continue monitoring the lowest-scoring categories and focus future improvements on forecasting, utilization, capacity, and decision quality.</span></div>`;
+  }else if(recs.length<3 && priorityHeading){
+    priorityHeading.textContent="Recommended priority"+(recs.length===1?"":"ies");
+  }
+
+  // Explain a score cap when a critical category prevents an inflated maturity label.
+  if(scores.gated){
+    const hero=document.querySelector(".result-hero");
+    if(hero && !document.querySelector("#criticalGapNote")){
+      const weakest=Object.entries(scores.categories).sort((a,b)=>a[1]-b[1])[0];
+      hero.insertAdjacentHTML("afterend",`
+        <div id=criticalGapNote class=alignment-card>
+          <p><b>Critical control rule applied:</b> ${esc(weakest[0])} scored ${weakest[1]}/100. The overall Operations Score is capped so a serious weakness in one core area cannot be hidden by strong scores elsewhere.</p>
+        </div>`);
+    }
+  }
+
+  // Add context that was collected but previously easy to miss.
+  const contextGrid=document.querySelector(".context-grid");
+  if(contextGrid && !document.querySelector("#v7ExtraContext")){
+    contextGrid.insertAdjacentHTML("afterend",`
+      <div id=v7ExtraContext class=alignment-card>
+        <p><b>Storage locations:</b> ${esc(resultValue(A.locations))}</p>
+        <p><b>Team structure:</b> ${esc(resultValue(A.structure))}</p>
+        <p><b>Roles represented:</b> ${esc((A.roles||[]).join(", ")||"Not available")}</p>
+        <p><b>Current systems:</b> ${esc((A.systems||[]).join(", ")||"Not available")}</p>
+        <p><b>Primary friction:</b> ${esc((A.friction||[]).join(", ")||"Not available")}</p>
+      </div>`);
+  }
+};
+
+// Ensure a reopened result uses the calibrated v7 model.
+viewSavedResults=async function(){
+  if(await restoreLocalV5()){
+    V5_COMPLETED=true;
+    complete();
+  }
+};
+
+// Older-version state is left untouched. v7/v8 use versioned keys and do not import it.
+rebuild();
+setTimeout(()=>welcome(),30);
+</script>
+
+
+<script id="v8-final-diagnostic-calibration">
+const V8_STATE_KEY="home_staging_operations_assessment_v8_schema1";
+const V8_DB_NAME="home_staging_operations_assessment_voice_v8";
+
+// ---------- v8 browser recovery keys ----------
+saveLocal=function(){
+  try{
+    localStorage.setItem(V8_STATE_KEY,JSON.stringify({
+      answers:A,
+      idx,
+      completed:V5_COMPLETED,
+      submitted:V5_SUBMITTED,
+      submissionId:window.__submissionId||window.__lastSubmissionId||null,
+      lastResults:V5_LAST_RESULTS,
+      savedAt:new Date().toISOString()
+    }));
+  }catch(e){}
+};
+
+readLocal=function(){
+  try{
+    const raw=localStorage.getItem(V8_STATE_KEY);
+    return raw?JSON.parse(raw):null;
+  }catch(e){return null}
+};
+
+clearLocal=function(){
+  try{localStorage.removeItem(V8_STATE_KEY)}catch(e){}
+};
+
+openVoiceDB=function(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(V8_DB_NAME,1);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains(V5_DB_STORE)){
+        db.createObjectStore(V5_DB_STORE,{keyPath:"id"});
+      }
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+};
+
+// ---------- Financial & Lifecycle: current visibility vs true history ----------
+function v8FinancialVisibilityScore(){
+  const a=A.financial||[];
+  if(a.includes("None of these consistently")) return 5;
+
+  const currentFields=[
+    "Original purchase price",
+    "Purchase date",
+    "Replacement cost",
+    "Current condition",
+    "Current location"
+  ];
+
+  const lifecycleFields=[
+    "Number of projects it has been used on",
+    "Total time it has spent staged",
+    "Cleaning costs",
+    "Repair costs",
+    "Sale or disposal information"
+  ];
+
+  const currentCount=currentFields.filter(x=>a.includes(x)).length;
+  const lifecycleCount=lifecycleFields.filter(x=>a.includes(x)).length;
+
+  // Basic current item visibility is useful, but it is not lifecycle history.
+  let score=currentCount*5; // max 25 from current-state data
+
+  // True history drives maturity.
+  score+=lifecycleCount*15; // max 75 from usage/cost/disposal history
+
+  // Without any lifecycle history, this component cannot exceed 40.
+  if(lifecycleCount===0) score=Math.min(score,40);
+
+  // One lifecycle signal is still early-stage visibility.
+  if(lifecycleCount===1) score=Math.min(score,50);
+
+  return Math.max(10,Math.min(100,score));
+}
+
+function v8RetirementScore(){
+  const a=A.retire||[];
+  if(a.includes("We do not have a defined process")) return 5;
+
+  const evidenceBased=[
+    "Repair cost",
+    "Lack of use",
+    "Financial data"
+  ];
+
+  const structuredButNonfinancial=[
+    "Condition",
+    "Age",
+    "Storage constraints"
+  ];
+
+  const informal=[
+    "Style trends",
+    "Designer recommendation",
+    "Owner judgment"
+  ];
+
+  const evidenceCount=evidenceBased.filter(x=>a.includes(x)).length;
+  const structuredCount=structuredButNonfinancial.filter(x=>a.includes(x)).length;
+  const informalCount=informal.filter(x=>a.includes(x)).length;
+
+  let score=20;
+
+  // Structured physical criteria help, but cannot establish mature lifecycle management alone.
+  score += structuredCount*8;
+
+  // Informal judgment adds limited maturity credit.
+  score += informalCount*4;
+
+  // Evidence tied to usage/cost/economics drives the mature end of the scale.
+  score += evidenceCount*18;
+
+  if(evidenceCount===0) score=Math.min(score,45);
+  if(evidenceCount===1) score=Math.min(score,65);
+  if(evidenceCount===2) score=Math.min(score,85);
+
+  return Math.max(10,Math.min(100,score));
+}
+
+// ---------- Exact business-exposure model ----------
+function v8ExposureDetails(category){
+  let boost=0;
+  const reasons=[];
+  const friction=A.friction||[];
+  const priority=(A.priority||"").toLowerCase();
+  const outcome=(A.outcome||"").toLowerCase();
+
+  const highInventory=["2,500–4,999","5,000+"].includes(A.inventory_size);
+  const highProjects=["21–40","41–75","76+"].includes(A.projects);
+  const veryHighProjects=["41–75","76+"].includes(A.projects);
+
+  const add=(points,reason)=>{
+    if(points>0){
+      boost+=points;
+      if(reason) reasons.push(reason);
+    }
+  };
+
+  if(["Inventory Control","Warehouse Organization","Project Allocation","Picking & Loading","Install & Return Control","Team & Handoffs"].includes(category)){
+    if(highInventory) add(3,`inventory volume is ${A.inventory_size}`);
+    if(highProjects) add(veryHighProjects?4:3,`project volume is ${A.projects} per month`);
+  }
+
+  if(category==="Billing & Revenue Control"){
+    const miss={"A few times per year":2,"Monthly":7,"Weekly":11,"Several times per week":14}[A.billing_misses]||0;
+    if(miss) add(miss,`missed or delayed billing occurs ${String(A.billing_misses).toLowerCase()}`);
+
+    const props={"21–30":3,"31–50":5,"51+":7}[A.active_properties]||0;
+    if(props) add(props,`${A.active_properties} properties are actively staged`);
+
+    const ext={"$1,500–$2,499":2,"$2,500+":3}[A.extension_amount]||0;
+    if(ext) add(ext,`a typical extension is ${A.extension_amount}`);
+
+    if(friction.some(x=>/billing|paid|payment|reconcil|charges/i.test(x))){
+      add(3,"billing or payment tracking was selected as a friction point");
+    }
+    if(/billing|invoice|payment|revenue|zelle/.test(priority)){
+      add(4,"billing or payment control was named as the first priority");
+    }
+    if(/billing|payment/.test(outcome)){
+      add(3,"the desired outcome is billing or payment related");
+    }
+  }
+
+  if(category==="Warehouse Organization" && friction.some(x=>/finding inventory|storage location/i.test(x))){
+    add(3,"inventory location/search was selected as a friction point");
+  }
+  if(category==="Project Allocation" && friction.some(x=>/available|double-book|pull list/i.test(x))){
+    add(3,"availability or pull-list control was selected as a friction point");
+  }
+  if(category==="Picking & Loading" && friction.some(x=>/pulling|loading|truck/i.test(x))){
+    add(3,"pulling or loading was selected as a friction point");
+  }
+  if(category==="Install & Return Control" && friction.some(x=>/installed|de-staging|missing inventory/i.test(x))){
+    add(3,"installation, de-staging, or missing inventory was selected as a friction point");
+  }
+  if(category==="Condition Management" && friction.some(x=>/damage|cleaning|repair/i.test(x))){
+    add(3,"damage, cleaning, or repair was selected as a friction point");
+  }
+  if(category==="Financial & Lifecycle" && friction.some(x=>/purchasing|retire|financial/i.test(x))){
+    add(3,"purchasing, retirement, or financial visibility was selected as a friction point");
+  }
+  if(category==="Operational Visibility" && friction.some(x=>/manual data|multiple places|reporting|memory/i.test(x))){
+    add(3,"visibility or disconnected information was selected as a friction point");
+  }
+
+  if(["Warehouse Organization","Picking & Loading","Team & Handoffs"].includes(category) &&
+     ["Weekly","Several times per week"].includes(A.extra_trips)){
+    add(3,`extra trips occur ${String(A.extra_trips).toLowerCase()}`);
+  }
+
+  if(["Condition Management","Financial & Lifecycle"].includes(category) &&
+     ["$10,000–$24,999","$25,000+"].includes(A.replacement_spend)){
+    add(3,`replacement spending is ${A.replacement_spend} annually`);
+  }
+
+  return {boost:Math.min(18,boost),reasons:[...new Set(reasons)]};
+}
+
+// ---------- Recalibrated score model ----------
+const __calculateScoresV8Base=calculateScores;
+calculateScores=function(){
+  const result=__calculateScoresV8Base();
+
+  result.categories["Financial & Lifecycle"]=v7Avg([
+    mscore("entry",{
+      "When the order is placed":100,
+      "When the item ships":90,
+      "When the item arrives":75,
+      "When someone has time to enter it":35,
+      "It varies":25,
+      "We do not formally enter new purchases into an inventory system":5
+    }),
+    mscore("trace",{
+      "Very easily":100,
+      "Usually":78,
+      "Sometimes":50,
+      "Rarely":22,
+      "We generally cannot":5,
+      "I am not sure":null
+    }),
+    v8FinancialVisibilityScore(),
+    v8RetirementScore()
+  ]);
+
+  const categoryValues=Object.values(result.categories);
+  const preciseRaw=categoryValues.reduce((a,b)=>a+b,0)/categoryValues.length;
+  const rawOverall=Math.floor(preciseRaw); // prevents 99.5 from displaying as a perfect 100
+  const minimum=Math.min(...categoryValues);
+
+  let adjustedOverall=rawOverall;
+  if(rawOverall>=85 && minimum<50) adjustedOverall=Math.min(adjustedOverall,84);
+  if(rawOverall>=70 && minimum<40) adjustedOverall=Math.min(adjustedOverall,69);
+  if(rawOverall>=55 && minimum<25) adjustedOverall=Math.min(adjustedOverall,54);
+
+  result.preciseRawOverall=Math.round(preciseRaw*10)/10;
+  result.rawOverall=rawOverall;
+  result.minimumCategory=minimum;
+  result.overall=adjustedOverall;
+  result.gated=adjustedOverall!==rawOverall;
+  result.maturityFloorApplied=false;
+
+  if(adjustedOverall>=85 && minimum>=70){
+    result.level="Optimized";
+    result.summary="Your operation has strong control across all major areas. The focus shifts from fixing gaps to improving forecasting, utilization, capacity, and decision quality.";
+  }else if(adjustedOverall>=70){
+    result.level="Controlled";
+    result.summary=result.gated
+      ?"Most of your operation is highly controlled, but at least one material operating gap prevents the business from being considered fully optimized."
+      :"Your core processes are working, with specific areas where stronger control or automation can reduce manual work, errors, or revenue risk.";
+  }else if(adjustedOverall>=55){
+    result.level="Structured";
+    result.summary="You have useful processes in place, but important parts still depend on manual updates, separate records, or individual follow-up.";
+  }else if(adjustedOverall>=40){
+    if(minimum<30){
+      result.level="Reactive";
+      result.maturityFloorApplied=true;
+      result.summary="Several parts of the operation are functioning, but one or more major controls are weak enough that the business is still exposed to recurring manual work, errors, or missed revenue.";
+    }else{
+      result.level="Developing";
+      result.summary="Your operation has working practices, but gaps in tracking, handoffs, billing, or real-time visibility create avoidable labor, errors, or revenue risk.";
+    }
+  }else{
+    result.level="Reactive";
+    result.summary="Core operational control depends heavily on manual work, memory, or disconnected records. Establishing reliable tracking and ownership should come before advanced automation.";
+  }
+
+  return result;
+};
+
+// ---------- Exposure-aware recommendation order with explicit explanation ----------
+recommendations=function(scores){
+  return Object.entries(scores.categories)
+    .filter(([category,score])=>score<80)
+    .map(([category,score])=>{
+      const exposure=v8ExposureDetails(category);
+      return {
+        category,
+        score,
+        exposureBoost:exposure.boost,
+        exposureReasons:exposure.reasons,
+        priorityIndex:score-exposure.boost,
+        recommendation:v4RecMap[category],
+        why:categoryContext[category]?.()||""
+      };
+    })
+    .sort((a,b)=>a.priorityIndex-b.priorityIndex || a.score-b.score || a.category.localeCompare(b.category))
+    .slice(0,3);
+};
+
+// ---------- Results explanations ----------
+const __completeV8Base=complete;
+complete=function(){
+  __completeV8Base();
+
+  const scores=calculateScores();
+  const recs=recommendations(scores);
+  const cards=[...document.querySelectorAll(".priority-card")];
+
+  // Add a concrete exposure explanation only when exposure actually contributed.
+  cards.forEach((card,i)=>{
+    const rec=recs[i];
+    if(!rec || !rec.exposureBoost || !rec.exposureReasons?.length) return;
+
+    const line=document.createElement("span");
+    line.className="priority-reason";
+    line.innerHTML=`<b>Elevated by business exposure:</b> ${esc(rec.exposureReasons.slice(0,3).join("; "))}.`;
+    card.appendChild(line);
+  });
+
+  // Explain a maturity-floor rule even when the numeric score itself is not capped.
+  if(scores.maturityFloorApplied && !document.querySelector("#maturityFloorNote")){
+    const weakest=Object.entries(scores.categories).sort((a,b)=>a[1]-b[1])[0];
+    const hero=document.querySelector(".result-hero");
+    if(hero){
+      hero.insertAdjacentHTML("afterend",`
+        <div id=maturityFloorNote class=alignment-card>
+          <p><b>Control-floor rule applied:</b> ${esc(weakest[0])} scored ${weakest[1]}/100. Although the overall score is ${scores.overall}, a core category below 30 keeps the operation in the Reactive stage until that control gap is stabilized.</p>
+        </div>`);
+    }
+  }
+};
+
+// Keep the v8 build completely separate from older local state without deleting it.
+rebuild();
+setTimeout(()=>welcome(),40);
+</script>
+
+
+<script id="v9-priority-tiebreak">
+const V9_STATE_KEY="home_staging_operations_assessment_v9_schema1";
+const V9_DB_NAME="home_staging_operations_assessment_voice_v9";
+
+saveLocal=function(){
+  try{
+    localStorage.setItem(V9_STATE_KEY,JSON.stringify({
+      answers:A,
+      idx,
+      completed:V5_COMPLETED,
+      submitted:V5_SUBMITTED,
+      submissionId:window.__submissionId||window.__lastSubmissionId||null,
+      lastResults:V5_LAST_RESULTS,
+      savedAt:new Date().toISOString()
+    }));
+  }catch(e){}
+};
+
+readLocal=function(){
+  try{
+    const raw=localStorage.getItem(V9_STATE_KEY);
+    return raw?JSON.parse(raw):null;
+  }catch(e){return null}
+};
+
+clearLocal=function(){
+  try{localStorage.removeItem(V9_STATE_KEY)}catch(e){}
+};
+
+openVoiceDB=function(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(V9_DB_NAME,1);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains(V5_DB_STORE)){
+        db.createObjectStore(V5_DB_STORE,{keyPath:"id"});
+      }
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+};
+
+function v9OrderedExposureReasons(category, details){
+  const reasons=[...(details?.reasons||[])];
+
+  const priorityReasons=reasons.filter(r=>/first priority|desired outcome|friction point/i.test(r));
+  const riskReasons=reasons.filter(r=>/missed|delayed|extra trips|replacement spending/i.test(r));
+  const scaleReasons=reasons.filter(r=>/properties|project volume|inventory volume|extension/i.test(r));
+  const other=reasons.filter(r=>
+    !priorityReasons.includes(r) &&
+    !riskReasons.includes(r) &&
+    !scaleReasons.includes(r)
+  );
+
+  return [...new Set([...priorityReasons,...riskReasons,...scaleReasons,...other])];
+}
+
+recommendations=function(scores){
+  return Object.entries(scores.categories)
+    .filter(([category,score])=>score<80)
+    .map(([category,score])=>{
+      const exposure=v8ExposureDetails(category);
+      const orderedReasons=v9OrderedExposureReasons(category,exposure);
+
+      return {
+        category,
+        score,
+        exposureBoost:exposure.boost,
+        exposureReasons:orderedReasons,
+        priorityIndex:score-exposure.boost,
+        recommendation:v4RecMap[category],
+        why:categoryContext[category]?.()||""
+      };
+    })
+    .sort((a,b)=>
+      a.priorityIndex-b.priorityIndex ||
+      b.exposureBoost-a.exposureBoost ||
+      a.score-b.score ||
+      a.category.localeCompare(b.category)
+    )
+    .slice(0,3);
+};
+
+const __completeV9Base=complete;
+complete=function(){
+  __completeV9Base();
+
+  const scores=calculateScores();
+  const recs=recommendations(scores);
+  const cards=[...document.querySelectorAll(".priority-card")];
+
+  cards.forEach((card,i)=>{
+    const rec=recs[i];
+    if(!rec || !rec.exposureBoost || !rec.exposureReasons?.length) return;
+
+    [...card.querySelectorAll(".priority-reason")].forEach(node=>{
+      if(/Elevated by business exposure:/i.test(node.textContent||"")) node.remove();
+    });
+
+    const line=document.createElement("span");
+    line.className="priority-reason";
+    line.innerHTML=`<b>Business exposure considered:</b> ${esc(rec.exposureReasons.join("; "))}.`;
+    card.appendChild(line);
+  });
+};
+
+rebuild();
+setTimeout(()=>welcome(),50);
+</script>
+
+
+<script id="qa-exact-url-guard">
+const QA_ALLOWED_ORIGIN = "https://clairenhaus.github.io";
+const QA_ALLOWED_PATH = "/clairen-haus/qa-assessment";
+
+canSubmitToProduction = function(){
+  if(SUBMISSION_MODE !== "production") return false;
+  if(window.location.protocol !== "https:") return false;
+
+  const origin = window.location.origin;
+  const path = (window.location.pathname || "/").replace(/\/+$/,"");
+
+  return origin === QA_ALLOWED_ORIGIN && path === QA_ALLOWED_PATH;
+};
+</script>
+
+
+<script id="v10-insert-only-submission">
+const V10_STATE_KEY="home_staging_operations_assessment_v10_schema1";
+const V10_DB_NAME="home_staging_operations_assessment_voice_v10";
+
+// Keep v10 recovery isolated from prior QA builds.
+saveLocal=function(){
+  try{
+    localStorage.setItem(V10_STATE_KEY,JSON.stringify({
+      answers:A,
+      idx,
+      completed:V5_COMPLETED,
+      submitted:V5_SUBMITTED,
+      submissionId:window.__submissionId||window.__lastSubmissionId||null,
+      lastResults:V5_LAST_RESULTS,
+      savedAt:new Date().toISOString()
+    }));
+  }catch(e){}
+};
+
+readLocal=function(){
+  try{
+    const raw=localStorage.getItem(V10_STATE_KEY);
+    return raw?JSON.parse(raw):null;
+  }catch(e){return null}
+};
+
+clearLocal=function(){
+  try{localStorage.removeItem(V10_STATE_KEY)}catch(e){}
+};
+
+openVoiceDB=function(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(V10_DB_NAME,1);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains(V5_DB_STORE)){
+        db.createObjectStore(V5_DB_STORE,{keyPath:"id"});
+      }
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+};
+
+// Insert-only assessment submission.
+// We deliberately do not use PostgREST upsert because public assessment respondents
+// do not need anonymous SELECT or UPDATE access to stored assessment rows.
+saveAssessment=async function(scores,recs){
+  sanitizeBranches();
+
+  const submissionId=window.__submissionId||crypto.randomUUID();
+  window.__submissionId=submissionId;
+  saveLocal();
+
+  const voicePaths=await uploadVoiceNotes(submissionId);
+
+  const payload={
+    id:submissionId,
+    respondent_name:A.name,
+    company_name:A.company,
+    email:A.email,
+    phone:A.phone||null,
+    website:A.website||null,
+    overall_score:scores.overall,
+    maturity_level:scores.level,
+    category_scores:scores.categories,
+    recommendations:recs,
+    responses:{...A,_roi_inputs:estimateROIInputs()},
+    voice_note_paths:voicePaths,
+    completed_at:new Date().toISOString(),
+    user_agent:navigator.userAgent
+  };
+
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/staging_inventory_assessments`,{
+    method:"POST",
+    headers:{
+      "apikey":SUPABASE_ANON_KEY,
+      "Authorization":`Bearer ${SUPABASE_ANON_KEY}`,
+      "Content-Type":"application/json",
+      "Prefer":"return=minimal"
+    },
+    body:JSON.stringify(payload)
+  });
+
+  if(res.ok){
+    return submissionId;
+  }
+
+  const body=await res.text();
+
+  // A retry after an ambiguous network failure may encounter the row that was
+  // successfully inserted by the first attempt. Postgres uniqueness violation
+  // is code 23505 and PostgREST maps it to HTTP 409.
+  if(res.status===409){
+    let parsed=null;
+    try{parsed=JSON.parse(body)}catch(e){}
+
+    const duplicatePrimaryKey =
+      parsed?.code==="23505" ||
+      /duplicate key|unique constraint|staging_inventory_assessments_pkey/i.test(body);
+
+    if(duplicatePrimaryKey){
+      return submissionId;
+    }
+  }
+
+  throw new Error(`Assessment save failed (${res.status}): ${body.slice(0,220)}`);
+};
+
+// More accurate hosted microphone error copy.
+record=async function(id){
+  const b=document.querySelector("#recBtn");
+  if(recorder&&recorder.state==="recording"){recorder.stop();return}
+  if(!navigator.mediaDevices||!window.MediaRecorder){
+    err("Voice recording is not supported in this browser.");
+    return;
+  }
+
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    chunks=[];
+    recorder=new MediaRecorder(stream);
+
+    recorder.ondataavailable=e=>{
+      if(e.data.size)chunks.push(e.data);
+    };
+
+    recorder.onstart=()=>{
+      if(b){
+        b.classList.add("active");
+        b.textContent="■ Stop Recording";
+      }
+      const panel=document.querySelector("#voicePanel");
+      const status=document.querySelector("#vstatus");
+      if(panel)panel.classList.remove("hidden");
+      if(status)status.textContent="Recording…";
+      timer=setTimeout(()=>{
+        if(recorder?.state==="recording")recorder.stop();
+      },120000);
+    };
+
+    recorder.onstop=async()=>{
+      clearTimeout(timer);
+      stream.getTracks().forEach(t=>t.stop());
+
+      const blob=new Blob(chunks,{type:recorder.mimeType||"audio/webm"});
+      const url=URL.createObjectURL(blob);
+
+      if(notes[id]?.url)URL.revokeObjectURL(notes[id].url);
+
+      notes[id]={
+        blob,
+        url,
+        type:blob.type,
+        at:new Date().toISOString()
+      };
+
+      await saveVoiceNoteToDB(id,notes[id]);
+
+      const status=document.querySelector("#vstatus");
+      const audio=document.querySelector("#audio");
+      const btn=document.querySelector("#recBtn");
+
+      if(status)status.textContent="Recorded";
+      if(audio)audio.innerHTML=`<audio controls src="${url}"></audio>`;
+      if(btn){
+        btn.classList.remove("active");
+        btn.textContent="🎤 Record Again";
+      }
+
+      recorder=null;
+      saveLocal();
+    };
+
+    recorder.start();
+  }catch(e){
+    const name=e?.name||"";
+    if(name==="NotAllowedError"||name==="SecurityError"){
+      err("Microphone permission was denied. Allow microphone access for this site in your browser settings and try again.");
+    }else if(name==="NotFoundError"||name==="DevicesNotFoundError"){
+      err("No microphone or audio input device was available. Connect or enable a microphone and try again.");
+    }else{
+      err("Voice recording could not start. Check this site's microphone permission and your available audio input, then try again.");
+    }
+  }
+};
+
+rebuild();
+setTimeout(()=>welcome(),60);
+</script>
+
+</body>
+</html>

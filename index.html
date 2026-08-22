@@ -77,6 +77,15 @@ nav ul li a:hover{color:var(--white)}
 .btn-ghost{display:inline-flex;align-items:center;font-family:var(--display);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;border:1.5px solid rgba(247,242,236,0.22);color:var(--white);padding:1rem 2.25rem;text-decoration:none;border-radius:2px;min-height:44px;transition:all 0.2s}
 .btn-ghost:hover{border-color:rgba(247,242,236,0.5)}
 
+/* EVENT DIAGNOSTIC */
+main .event-diagnostic{padding:7.5rem 2.5rem 2rem;background:linear-gradient(135deg,rgba(255,107,43,0.16),rgba(168,126,255,0.12));border-bottom:1px solid rgba(247,242,236,0.12)}
+.event-diagnostic-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.event-diagnostic-copy{max-width:720px}
+.event-diagnostic-label{font-family:var(--display);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;color:var(--orange2);margin-bottom:0.65rem}
+.event-diagnostic h1{font-family:var(--display);font-size:clamp(1.65rem,3vw,2.65rem);font-weight:800;line-height:1.08;letter-spacing:-0.025em;color:var(--white);margin-bottom:0.75rem}
+.event-diagnostic p{font-size:0.95rem;color:var(--muted);line-height:1.65;max-width:660px}
+.event-diagnostic .btn-primary{flex-shrink:0;justify-content:center;text-align:center}
+
 /* SHARED */
 main section{padding:6rem 2.5rem}
 .container{max-width:1100px;margin:0 auto}
@@ -310,6 +319,12 @@ footer {
   .footer-top,.footer-bottom{flex-direction:column;align-items:center}
   .f-nav,.f-legal{justify-content:center}
   .hero-headline{font-size:clamp(2.2rem,9vw,3.5rem)}
+  main .event-diagnostic{padding:5.75rem 1.25rem 1.5rem}
+  .event-diagnostic-inner{display:block}
+  .event-diagnostic-label{font-size:0.6rem;margin-bottom:0.5rem}
+  .event-diagnostic h1{font-size:1.55rem;margin-bottom:0.65rem}
+  .event-diagnostic p{font-size:0.88rem;line-height:1.55;margin-bottom:1rem}
+  .event-diagnostic .btn-primary{width:100%;padding:0.9rem 1rem}
 }
 @media(max-width:400px){
   .stat-big{font-size:4rem}
@@ -360,6 +375,17 @@ footer {
 </div>
 
 <main id="main-content">
+
+  <section class="event-diagnostic" aria-labelledby="event-diagnostic-heading">
+    <div class="event-diagnostic-inner">
+      <div class="event-diagnostic-copy">
+        <p class="event-diagnostic-label">Free Ops Diagnostic</p>
+        <h1 id="event-diagnostic-heading">Find your biggest operational constraint</h1>
+        <p>Take the free Ops Diagnostic to see where your business is getting stuck, how it's showing up, and what to fix first.</p>
+      </div>
+      <a href="https://accelerator.clairenhaus.com/assessment" class="btn-primary">Take the Ops Diagnostic</a>
+    </div>
+  </section>
 
   <section id="home" class="hero" aria-labelledby="hero-heading">
     <div class="hero-glow" aria-hidden="true"></div>

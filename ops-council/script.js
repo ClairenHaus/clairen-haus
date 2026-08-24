@@ -1,4 +1,18 @@
-const IMAGE_MANIFEST = {"hero-desktop": ["./data/hero-desktop-1.txt", "./data/hero-desktop-2.txt", "./data/hero-desktop-3.txt", "./data/hero-desktop-4.txt", "./data/hero-desktop-5.txt"], "hero-mobile": ["./data/hero-mobile-1.txt", "./data/hero-mobile-2.txt", "./data/hero-mobile-3.txt", "./data/hero-mobile-4.txt"], "jordan-full": ["./data/jordan-full-1.txt"], "cameron-full": ["./data/cameron-full-1.txt"], "riley-full": ["./data/riley-full-1.txt"], "blake-full": ["./data/blake-full-1.txt"]};
+const IMAGE_MANIFEST = {
+  "hero-desktop": [
+    "./data/hero-desktop-1.txt",
+    "./data/hero-desktop-2.txt",
+    "./data/hero-desktop-3.txt"
+  ],
+  "hero-mobile": [
+    "./data/hero-mobile-1.txt",
+    "./data/hero-mobile-2.txt"
+  ],
+  "jordan-full": ["./data/jordan-full-1.txt"],
+  "cameron-full": ["./data/cameron-full-1.txt"],
+  "riley-full": ["./data/riley-full-1.txt"],
+  "blake-full": ["./data/blake-full-1.txt"]
+};
 
 async function loadImageData(key) {
   const parts = await Promise.all(IMAGE_MANIFEST[key].map(async (url) => {
@@ -6,7 +20,7 @@ async function loadImageData(key) {
     if (!response.ok) throw new Error(`Could not load ${url}`);
     return response.text();
   }));
-  return `data:image/jpeg;base64,${parts.join("")}`;
+  return `data:image/webp;base64,${parts.join("")}`;
 }
 
 async function hydrateImages() {

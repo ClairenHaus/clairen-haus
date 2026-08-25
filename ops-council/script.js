@@ -2,7 +2,7 @@ const IMAGE_MANIFEST = {
   "hero-desktop": [
     "./data/hero-desktop-1.txt",
     "./data/hero-desktop-2.txt",
-    "./data/hero-desktop-3.txt",
+    "./data/hero-desktop-3-fixed.txt",
     "./data/hero-desktop-4.txt",
     "./data/hero-desktop-5.txt",
     "./data/hero-desktop-6.txt",

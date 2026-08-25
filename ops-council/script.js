@@ -2,7 +2,19 @@ const IMAGE_MANIFEST = {
   "hero-desktop": [
     "./data/hero-desktop-1.txt",
     "./data/hero-desktop-2.txt",
-    "./data/hero-desktop-3.txt"
+    "./data/hero-desktop-3.txt",
+    "./data/hero-desktop-4.txt",
+    "./data/hero-desktop-5.txt",
+    "./data/hero-desktop-6.txt",
+    "./data/hero-desktop-7.txt",
+    "./data/hero-desktop-8.txt",
+    "./data/hero-desktop-9.txt",
+    "./data/hero-desktop-10.txt",
+    "./data/hero-desktop-11.txt",
+    "./data/hero-desktop-12.txt",
+    "./data/hero-desktop-13.txt",
+    "./data/hero-desktop-14.txt",
+    "./data/hero-desktop-15.txt"
   ],
   "hero-mobile": [
     "./data/hero-mobile-1.txt",

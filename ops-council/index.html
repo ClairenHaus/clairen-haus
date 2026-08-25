@@ -13,7 +13,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="./styles.css" />
-  <link rel="stylesheet" href="./coach-v2.css" />
+  <style>
+    .coach-visual { min-height: 520px; }
+    .coach-visual img { width: min(320px, 100%); }
+    @media (max-width: 720px) {
+      .coach-visual { min-height: 390px; }
+      .coach-visual img { width: min(260px, 72vw); }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header" id="top">
@@ -33,8 +40,8 @@
   <main>
     <section class="hero">
       <picture class="hero-media">
-        <source id="heroMobileSource" media="(max-width: 720px)" srcset="">
-        <img id="heroDesktopImage" src="" alt="Four operations coaches seated around a boardroom table with an empty founder chair centered between them." />
+        <source media="(max-width: 720px)" srcset="./assets/hero-mobile.webp">
+        <img src="./assets/hero-desktop.webp" alt="Four operations coaches seated around a boardroom table with an empty founder chair centered between them." />
       </picture>
       <div class="hero-shade"></div>
       <div class="hero-copy">
@@ -86,8 +93,7 @@
 
       <article class="coach-row coach-jordan">
         <div class="coach-visual">
-          <div class="orb"></div>
-          <img data-image-key="jordan-full" src="" alt="Jordan, Strategy and Alignment coach" />
+          <img src="./assets/jordan-cutout.webp" alt="Jordan, Strategy and Alignment coach" />
         </div>
         <div class="coach-copy">
           <p class="coach-number">01</p>
@@ -108,8 +114,7 @@
 
       <article class="coach-row reverse coach-cameron">
         <div class="coach-visual">
-          <div class="orb"></div>
-          <img data-image-key="cameron-full" src="" alt="Cameron, Systems and Operations coach" />
+          <img data-image-key="cameron" src="" alt="Cameron, Systems and Operations coach" />
         </div>
         <div class="coach-copy">
           <p class="coach-number">02</p>
@@ -130,8 +135,7 @@
 
       <article class="coach-row coach-riley">
         <div class="coach-visual">
-          <div class="orb"></div>
-          <img data-image-key="riley-full" src="" alt="Riley, People and Culture coach" />
+          <img data-image-key="riley" src="" alt="Riley, People and Culture coach" />
         </div>
         <div class="coach-copy">
           <p class="coach-number">03</p>
@@ -152,8 +156,7 @@
 
       <article class="coach-row reverse coach-blake">
         <div class="coach-visual">
-          <div class="orb"></div>
-          <img data-image-key="blake-full" src="" alt="Blake, Performance and Foresight coach" />
+          <img data-image-key="blake" src="" alt="Blake, Performance and Foresight coach" />
         </div>
         <div class="coach-copy">
           <p class="coach-number">04</p>
@@ -219,7 +222,6 @@
     </section>
 
     <section class="waitlist section-pad" id="waitlist">
-      <div class="waitlist-waves" aria-hidden="true"></div>
       <div class="waitlist-inner">
         <div class="section-kicker">YOUR SEAT IS WAITING</div>
         <h2>Be first in the room.</h2>

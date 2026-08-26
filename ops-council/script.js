@@ -37,7 +37,7 @@ async function hydrateCoachImages() {
 
 hydrateCoachImages();
 
-const WAITLIST_ENDPOINT = "/api/waitlist";
+const WAITLIST_ENDPOINT = "https://iyyatugcngmqplsyzjsq.supabase.co/functions/v1/ops-council-waitlist";
 const form = document.getElementById("waitlistForm");
 const emailInput = document.getElementById("email");
 const statusEl = document.getElementById("formStatus");
@@ -48,27 +48,40 @@ yearEl.textContent = new Date().getFullYear();
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   statusEl.textContent = "";
+
   const email = emailInput.value.trim();
   if (!email || !emailInput.checkValidity()) {
     statusEl.textContent = "Enter a valid email address.";
     emailInput.focus();
     return;
   }
+
   const button = form.querySelector("button");
   const original = button.innerHTML;
   button.disabled = true;
   button.textContent = "Saving your seat...";
+
   try {
     const response = await fetch(WAITLIST_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, source: "ops-council-waitlist" })
+      body: JSON.stringify({
+        email,
+        source: "ops-council-waitlist",
+        website: ""
+      })
     });
-    if (!response.ok) throw new Error("endpoint-not-connected");
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || "waitlist-save-failed");
+
     form.reset();
-    statusEl.textContent = "Your seat is saved. Watch your inbox for opening updates.";
+    statusEl.textContent = result.duplicate
+      ? "Your seat is already saved."
+      : "Your seat is saved. Watch your inbox for opening updates.";
   } catch (error) {
-    statusEl.textContent = "The waitlist is not connected yet.";
+    console.error("Waitlist signup failed", error);
+    statusEl.textContent = "We could not save your seat. Please try again.";
   } finally {
     button.disabled = false;
     button.innerHTML = original;

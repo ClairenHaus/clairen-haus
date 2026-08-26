@@ -1,4 +1,5 @@
 const IMAGE_MANIFEST = {
+  jordan: ["./data/jordan-cutout-fix-1.txt", "./data/jordan-cutout-fix-2.txt", "./data/jordan-cutout-fix-3.txt", "./data/jordan-cutout-fix-4.txt"],
   cameron: ["./data/cameron-cutout-1.txt", "./data/cameron-cutout-2.txt"],
   riley: ["./data/riley-cutout-1.txt", "./data/riley-cutout-2.txt"],
   blake: ["./data/blake-cutout-1.txt", "./data/blake-cutout-2.txt"]
@@ -6,7 +7,7 @@ const IMAGE_MANIFEST = {
 
 async function loadImageData(key) {
   const parts = await Promise.all(IMAGE_MANIFEST[key].map(async (url) => {
-    const response = await fetch(url);
+    const response = await fetch(`${url}?v=3`);
     if (!response.ok) throw new Error(`Could not load ${url}`);
     return response.text();
   }));
@@ -15,12 +16,13 @@ async function loadImageData(key) {
 
 async function hydrateCoachImages() {
   try {
-    const [cameron, riley, blake] = await Promise.all([
+    const [jordan, cameron, riley, blake] = await Promise.all([
+      loadImageData("jordan"),
       loadImageData("cameron"),
       loadImageData("riley"),
       loadImageData("blake")
     ]);
-    const map = { cameron, riley, blake };
+    const map = { jordan, cameron, riley, blake };
     document.querySelectorAll("[data-image-key]").forEach((img) => {
       img.src = map[img.dataset.imageKey];
     });

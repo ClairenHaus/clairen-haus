@@ -7,7 +7,7 @@ const IMAGE_MANIFEST = {
 
 async function loadImageData(key) {
   const parts = await Promise.all(IMAGE_MANIFEST[key].map(async (url) => {
-    const response = await fetch(`${url}?v=3`);
+    const response = await fetch(`${url}?v=4`);
     if (!response.ok) throw new Error(`Could not load ${url}`);
     return response.text();
   }));
@@ -23,6 +23,10 @@ async function hydrateCoachImages() {
       loadImageData("blake")
     ]);
     const map = { jordan, cameron, riley, blake };
+
+    const jordanImg = document.querySelector(".coach-jordan .coach-visual img");
+    if (jordanImg) jordanImg.src = jordan;
+
     document.querySelectorAll("[data-image-key]").forEach((img) => {
       img.src = map[img.dataset.imageKey];
     });

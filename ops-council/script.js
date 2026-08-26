@@ -1,4 +1,25 @@
 const IMAGE_MANIFEST = {
+  heroDesktop: [
+    "./data/hero-desktop-1.txt",
+    "./data/hero-desktop-2.txt",
+    "./data/hero-desktop-3.txt",
+    "./data/hero-desktop-4.txt",
+    "./data/hero-desktop-5.txt",
+    "./data/hero-desktop-6.txt",
+    "./data/hero-desktop-7.txt",
+    "./data/hero-desktop-8.txt",
+    "./data/hero-desktop-9.txt",
+    "./data/hero-desktop-10.txt",
+    "./data/hero-desktop-11.txt",
+    "./data/hero-desktop-12.txt",
+    "./data/hero-desktop-13.txt",
+    "./data/hero-desktop-14.txt",
+    "./data/hero-desktop-15.txt"
+  ],
+  heroMobile: [
+    "./data/hero-mobile-1.txt",
+    "./data/hero-mobile-2.txt"
+  ],
   jordan: ["./data/jordan-cutout-fix-1.txt", "./data/jordan-cutout-fix-2.txt", "./data/jordan-cutout-fix-3.txt", "./data/jordan-cutout-fix-4.txt"],
   cameron: ["./data/cameron-cutout-1.txt", "./data/cameron-cutout-2.txt"],
   riley: ["./data/riley-cutout-1.txt", "./data/riley-cutout-2.txt"],
@@ -7,11 +28,28 @@ const IMAGE_MANIFEST = {
 
 async function loadImageData(key) {
   const parts = await Promise.all(IMAGE_MANIFEST[key].map(async (url) => {
-    const response = await fetch(`${url}?v=4`);
+    const response = await fetch(`${url}?v=5`);
     if (!response.ok) throw new Error(`Could not load ${url}`);
     return response.text();
   }));
   return `data:image/webp;base64,${parts.join("")}`;
+}
+
+async function hydrateHeroImages() {
+  try {
+    const [desktop, mobile] = await Promise.all([
+      loadImageData("heroDesktop"),
+      loadImageData("heroMobile")
+    ]);
+
+    const heroImg = document.querySelector(".hero-media img");
+    const heroSource = document.querySelector(".hero-media source");
+
+    if (heroImg) heroImg.src = desktop;
+    if (heroSource) heroSource.srcset = mobile;
+  } catch (error) {
+    console.error("Hero image hydration failed", error);
+  }
 }
 
 async function hydrateCoachImages() {
@@ -35,6 +73,7 @@ async function hydrateCoachImages() {
   }
 }
 
+hydrateHeroImages();
 hydrateCoachImages();
 
 const WAITLIST_ENDPOINT = "https://iyyatugcngmqplsyzjsq.supabase.co/functions/v1/ops-council-waitlist";

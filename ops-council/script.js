@@ -28,27 +28,53 @@ const IMAGE_MANIFEST = {
 
 async function loadImageData(key) {
   const parts = await Promise.all(IMAGE_MANIFEST[key].map(async (url) => {
-    const response = await fetch(`${url}?v=5`);
+    const response = await fetch(`${url}?v=6`, { cache: "no-store" });
     if (!response.ok) throw new Error(`Could not load ${url}`);
     return response.text();
   }));
-  return `data:image/webp;base64,${parts.join("")}`;
+  const base64 = parts.join("").replace(/\s+/g, "");
+  return `data:image/webp;base64,${base64}`;
 }
 
 async function hydrateHeroImages() {
+  const heroMedia = document.querySelector(".hero-media");
+  const heroImg = document.querySelector(".hero-media img");
+  const heroSource = document.querySelector(".hero-media source");
+  const heroShade = document.querySelector(".hero-shade");
+  const heroCopy = document.querySelector(".hero-copy");
+  const scrollCue = document.querySelector(".scroll-cue");
+
+  // Keep the photography inside the hero stacking context instead of behind it.
+  if (heroMedia) heroMedia.style.zIndex = "0";
+  if (heroShade) heroShade.style.zIndex = "1";
+  if (heroCopy) {
+    heroCopy.style.position = "relative";
+    heroCopy.style.zIndex = "2";
+  }
+  if (scrollCue) scrollCue.style.zIndex = "2";
+
   try {
     const [desktop, mobile] = await Promise.all([
       loadImageData("heroDesktop"),
       loadImageData("heroMobile")
     ]);
 
-    const heroImg = document.querySelector(".hero-media img");
-    const heroSource = document.querySelector(".hero-media source");
+    if (!heroImg) return;
 
-    if (heroImg) heroImg.src = desktop;
-    if (heroSource) heroSource.srcset = mobile;
+    // Avoid <picture>/srcset selection races by assigning the chosen image directly.
+    if (heroSource) heroSource.remove();
+    heroImg.src = window.matchMedia("(max-width: 720px)").matches ? mobile : desktop;
+    heroImg.style.opacity = "1";
+    heroImg.style.visibility = "visible";
   } catch (error) {
     console.error("Hero image hydration failed", error);
+    if (heroImg) {
+      heroImg.src = window.matchMedia("(max-width: 720px)").matches
+        ? "./assets/hero-mobile.webp?v=20260827-2"
+        : "./assets/hero-desktop.webp?v=20260827-2";
+      heroImg.style.opacity = "1";
+      heroImg.style.visibility = "visible";
+    }
   }
 }
 

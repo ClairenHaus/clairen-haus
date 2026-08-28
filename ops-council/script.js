@@ -1,25 +1,4 @@
 const IMAGE_MANIFEST = {
-  heroDesktop: [
-    "./data/hero-desktop-1.txt",
-    "./data/hero-desktop-2.txt",
-    "./data/hero-desktop-3.txt",
-    "./data/hero-desktop-4.txt",
-    "./data/hero-desktop-5.txt",
-    "./data/hero-desktop-6.txt",
-    "./data/hero-desktop-7.txt",
-    "./data/hero-desktop-8.txt",
-    "./data/hero-desktop-9.txt",
-    "./data/hero-desktop-10.txt",
-    "./data/hero-desktop-11.txt",
-    "./data/hero-desktop-12.txt",
-    "./data/hero-desktop-13.txt",
-    "./data/hero-desktop-14.txt",
-    "./data/hero-desktop-15.txt"
-  ],
-  heroMobile: [
-    "./data/hero-mobile-1.txt",
-    "./data/hero-mobile-2.txt"
-  ],
   jordan: ["./data/jordan-cutout-fix-1.txt", "./data/jordan-cutout-fix-2.txt", "./data/jordan-cutout-fix-3.txt", "./data/jordan-cutout-fix-4.txt"],
   cameron: ["./data/cameron-cutout-1.txt", "./data/cameron-cutout-2.txt"],
   riley: ["./data/riley-cutout-1.txt", "./data/riley-cutout-2.txt"],
@@ -28,7 +7,7 @@ const IMAGE_MANIFEST = {
 
 async function loadImageData(key) {
   const parts = await Promise.all(IMAGE_MANIFEST[key].map(async (url) => {
-    const response = await fetch(`${url}?v=6`, { cache: "no-store" });
+    const response = await fetch(`${url}?v=7`, { cache: "no-store" });
     if (!response.ok) throw new Error(`Could not load ${url}`);
     return response.text();
   }));
@@ -36,7 +15,7 @@ async function loadImageData(key) {
   return `data:image/webp;base64,${base64}`;
 }
 
-async function hydrateHeroImages() {
+function hydrateHeroImage() {
   const heroMedia = document.querySelector(".hero-media");
   const heroImg = document.querySelector(".hero-media img");
   const heroSource = document.querySelector(".hero-media source");
@@ -44,38 +23,31 @@ async function hydrateHeroImages() {
   const heroCopy = document.querySelector(".hero-copy");
   const scrollCue = document.querySelector(".scroll-cue");
 
-  // Keep the photography inside the hero stacking context instead of behind it.
-  if (heroMedia) heroMedia.style.zIndex = "0";
+  if (!heroMedia) return;
+
+  const desktopUrl = "https://raw.githubusercontent.com/ClairenHaus/clairen-haus/main/ops-council/assets/hero-desktop.webp?v=20260827-3";
+  const mobileUrl = "https://raw.githubusercontent.com/ClairenHaus/clairen-haus/main/ops-council/assets/hero-mobile.webp?v=20260827-3";
+  const selectedUrl = window.matchMedia("(max-width: 720px)").matches ? mobileUrl : desktopUrl;
+
+  // Render the hero as a CSS background so it does not depend on picture/srcset,
+  // data-URI hydration, or the host serving binary assets correctly.
+  heroMedia.style.zIndex = "0";
+  heroMedia.style.backgroundImage = `url("${selectedUrl}")`;
+  heroMedia.style.backgroundSize = "cover";
+  heroMedia.style.backgroundPosition = "center center";
+  heroMedia.style.backgroundRepeat = "no-repeat";
+  heroMedia.style.opacity = "1";
+  heroMedia.style.visibility = "visible";
+
+  if (heroSource) heroSource.remove();
+  if (heroImg) heroImg.style.display = "none";
+
   if (heroShade) heroShade.style.zIndex = "1";
   if (heroCopy) {
     heroCopy.style.position = "relative";
     heroCopy.style.zIndex = "2";
   }
   if (scrollCue) scrollCue.style.zIndex = "2";
-
-  try {
-    const [desktop, mobile] = await Promise.all([
-      loadImageData("heroDesktop"),
-      loadImageData("heroMobile")
-    ]);
-
-    if (!heroImg) return;
-
-    // Avoid <picture>/srcset selection races by assigning the chosen image directly.
-    if (heroSource) heroSource.remove();
-    heroImg.src = window.matchMedia("(max-width: 720px)").matches ? mobile : desktop;
-    heroImg.style.opacity = "1";
-    heroImg.style.visibility = "visible";
-  } catch (error) {
-    console.error("Hero image hydration failed", error);
-    if (heroImg) {
-      heroImg.src = window.matchMedia("(max-width: 720px)").matches
-        ? "./assets/hero-mobile.webp?v=20260827-2"
-        : "./assets/hero-desktop.webp?v=20260827-2";
-      heroImg.style.opacity = "1";
-      heroImg.style.visibility = "visible";
-    }
-  }
 }
 
 async function hydrateCoachImages() {
@@ -99,7 +71,7 @@ async function hydrateCoachImages() {
   }
 }
 
-hydrateHeroImages();
+hydrateHeroImage();
 hydrateCoachImages();
 
 const WAITLIST_ENDPOINT = "https://iyyatugcngmqplsyzjsq.supabase.co/functions/v1/ops-council-waitlist";

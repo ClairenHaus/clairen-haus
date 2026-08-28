@@ -5,9 +5,34 @@ const IMAGE_MANIFEST = {
   blake: ["./data/blake-cutout-1.txt", "./data/blake-cutout-2.txt"]
 };
 
+const HERO_DESKTOP_PARTS = [
+  "hero-desktop-1.txt",
+  "hero-desktop-2.txt",
+  "hero-desktop-3.txt",
+  "hero-desktop-4.txt",
+  "hero-desktop-5.txt",
+  "hero-desktop-6.txt",
+  "hero-desktop-7.txt",
+  "hero-desktop-8.txt",
+  "hero-desktop-9.txt",
+  "hero-desktop-10.txt",
+  "hero-desktop-11.txt",
+  "hero-desktop-12.txt",
+  "hero-desktop-13.txt",
+  "hero-desktop-14.txt",
+  "hero-desktop-15.txt"
+];
+
+const HERO_MOBILE_PARTS = [
+  "hero-mobile-1.txt",
+  "hero-mobile-2.txt"
+];
+
+const RAW_DATA_ROOT = "https://raw.githubusercontent.com/ClairenHaus/clairen-haus/main/ops-council/data/";
+
 async function loadImageData(key) {
   const parts = await Promise.all(IMAGE_MANIFEST[key].map(async (url) => {
-    const response = await fetch(`${url}?v=7`, { cache: "no-store" });
+    const response = await fetch(`${url}?v=8`, { cache: "no-store" });
     if (!response.ok) throw new Error(`Could not load ${url}`);
     return response.text();
   }));
@@ -15,7 +40,20 @@ async function loadImageData(key) {
   return `data:image/webp;base64,${base64}`;
 }
 
-function hydrateHeroImage() {
+async function loadHeroData(partNames) {
+  const parts = await Promise.all(partNames.map(async (name) => {
+    const url = `${RAW_DATA_ROOT}${name}?v=8`;
+    const response = await fetch(url, { cache: "no-store", mode: "cors" });
+    if (!response.ok) throw new Error(`Could not load ${name}: ${response.status}`);
+    return response.text();
+  }));
+
+  const base64 = parts.join("").replace(/\s+/g, "");
+  if (!base64.startsWith("UklGR")) throw new Error("Hero payload is not a WebP base64 stream");
+  return `data:image/webp;base64,${base64}`;
+}
+
+async function hydrateHeroImage() {
   const heroMedia = document.querySelector(".hero-media");
   const heroImg = document.querySelector(".hero-media img");
   const heroSource = document.querySelector(".hero-media source");
@@ -23,31 +61,38 @@ function hydrateHeroImage() {
   const heroCopy = document.querySelector(".hero-copy");
   const scrollCue = document.querySelector(".scroll-cue");
 
-  if (!heroMedia) return;
+  if (!heroMedia || !heroImg) return;
 
-  const desktopUrl = "https://raw.githubusercontent.com/ClairenHaus/clairen-haus/main/ops-council/assets/hero-desktop.webp?v=20260827-3";
-  const mobileUrl = "https://raw.githubusercontent.com/ClairenHaus/clairen-haus/main/ops-council/assets/hero-mobile.webp?v=20260827-3";
-  const selectedUrl = window.matchMedia("(max-width: 720px)").matches ? mobileUrl : desktopUrl;
-
-  // Render the hero as a CSS background so it does not depend on picture/srcset,
-  // data-URI hydration, or the host serving binary assets correctly.
   heroMedia.style.zIndex = "0";
-  heroMedia.style.backgroundImage = `url("${selectedUrl}")`;
-  heroMedia.style.backgroundSize = "cover";
-  heroMedia.style.backgroundPosition = "center center";
-  heroMedia.style.backgroundRepeat = "no-repeat";
-  heroMedia.style.opacity = "1";
-  heroMedia.style.visibility = "visible";
-
-  if (heroSource) heroSource.remove();
-  if (heroImg) heroImg.style.display = "none";
-
   if (heroShade) heroShade.style.zIndex = "1";
   if (heroCopy) {
     heroCopy.style.position = "relative";
     heroCopy.style.zIndex = "2";
   }
   if (scrollCue) scrollCue.style.zIndex = "2";
+  if (heroSource) heroSource.remove();
+
+  try {
+    const parts = window.matchMedia("(max-width: 720px)").matches
+      ? HERO_MOBILE_PARTS
+      : HERO_DESKTOP_PARTS;
+    const dataUri = await loadHeroData(parts);
+
+    // Set both the image and the parent background. Either rendering path is sufficient.
+    heroImg.src = dataUri;
+    heroImg.style.display = "block";
+    heroImg.style.opacity = "1";
+    heroImg.style.visibility = "visible";
+    heroMedia.style.backgroundImage = `url("${dataUri}")`;
+    heroMedia.style.backgroundSize = "cover";
+    heroMedia.style.backgroundPosition = "center center";
+    heroMedia.style.backgroundRepeat = "no-repeat";
+    heroMedia.style.opacity = "1";
+    heroMedia.style.visibility = "visible";
+  } catch (error) {
+    console.error("Hero image hydration failed", error);
+    heroImg.style.display = "none";
+  }
 }
 
 async function hydrateCoachImages() {

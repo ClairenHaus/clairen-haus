@@ -29,6 +29,7 @@ jobs:
           def rebuild(output, parts):
               payload = ''.join(Path(p).read_text() for p in parts)
               clean = re.sub(r'[^A-Za-z0-9+/=]', '', payload)
+              clean += '=' * (-len(clean) % 4)
               data = base64.b64decode(clean, validate=False)
               Path(output).write_bytes(data)
               print(output, len(data), data[:12])

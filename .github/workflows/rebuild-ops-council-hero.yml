@@ -22,19 +22,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p ops-council/assets
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, re
 
-          : > /tmp/hero-desktop.b64
-          for i in $(seq 1 15); do
-            cat "ops-council/data/hero-desktop-${i}.txt" >> /tmp/hero-desktop.b64
-          done
-          tr -d '\r\n\t ' < /tmp/hero-desktop.b64 | base64 --decode > ops-council/assets/hero-desktop.webp
+          def rebuild(output, parts):
+              payload = ''.join(Path(p).read_text() for p in parts)
+              clean = re.sub(r'[^A-Za-z0-9+/=]', '', payload)
+              data = base64.b64decode(clean, validate=False)
+              Path(output).write_bytes(data)
+              print(output, len(data), data[:12])
 
-          : > /tmp/hero-mobile.b64
-          for i in 1 2; do
-            cat "ops-council/data/hero-mobile-${i}.txt" >> /tmp/hero-mobile.b64
-          done
-          tr -d '\r\n\t ' < /tmp/hero-mobile.b64 | base64 --decode > ops-council/assets/hero-mobile.webp
+          desktop = [f'ops-council/data/hero-desktop-{i}.txt' for i in range(1, 16)]
+          mobile = [f'ops-council/data/hero-mobile-{i}.txt' for i in range(1, 3)]
+          rebuild('ops-council/assets/hero-desktop.webp', desktop)
+          rebuild('ops-council/assets/hero-mobile.webp', mobile)
+          PY
 
           test "$(stat -c%s ops-council/assets/hero-desktop.webp)" -gt 50000
           test "$(stat -c%s ops-council/assets/hero-mobile.webp)" -gt 10000

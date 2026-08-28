@@ -1,0 +1,59 @@
+name: Rebuild Ops Council hero assets
+
+on:
+  push:
+    paths:
+      - ".github/workflows/rebuild-ops-council-hero.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Rebuild valid WebP hero assets from source chunks
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ops-council/assets
+
+          : > /tmp/hero-desktop.b64
+          for i in $(seq 1 15); do
+            cat "ops-council/data/hero-desktop-${i}.txt" >> /tmp/hero-desktop.b64
+          done
+          tr -d '\r\n\t ' < /tmp/hero-desktop.b64 | base64 --decode > ops-council/assets/hero-desktop.webp
+
+          : > /tmp/hero-mobile.b64
+          for i in 1 2; do
+            cat "ops-council/data/hero-mobile-${i}.txt" >> /tmp/hero-mobile.b64
+          done
+          tr -d '\r\n\t ' < /tmp/hero-mobile.b64 | base64 --decode > ops-council/assets/hero-mobile.webp
+
+          test "$(stat -c%s ops-council/assets/hero-desktop.webp)" -gt 50000
+          test "$(stat -c%s ops-council/assets/hero-mobile.webp)" -gt 10000
+          file ops-council/assets/hero-desktop.webp | grep -qi webp
+          file ops-council/assets/hero-mobile.webp | grep -qi webp
+
+          echo "Desktop: $(stat -c%s ops-council/assets/hero-desktop.webp) bytes"
+          echo "Mobile: $(stat -c%s ops-council/assets/hero-mobile.webp) bytes"
+
+      - name: Commit rebuilt hero assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ops-council/assets/hero-desktop.webp ops-council/assets/hero-mobile.webp
+          if git diff --cached --quiet; then
+            echo "Hero assets already match rebuilt source."
+            exit 0
+          fi
+          git commit -m "Replace Ops Council hero with valid binaries"
+          git push

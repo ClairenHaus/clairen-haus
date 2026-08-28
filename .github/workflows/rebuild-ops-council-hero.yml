@@ -1,16 +1,15 @@
-name: Rebuild Ops Council hero assets
+name: Finalize Ops Council hero source fix
 
 on:
   push:
     paths:
       - ".github/workflows/rebuild-ops-council-hero.yml"
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  rebuild:
+  finalize:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -18,46 +17,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Rebuild valid WebP hero assets from source chunks
+      - name: Cache-bust verified hero assets and remove obsolete rebuild workflow
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          import base64, re
-
-          def rebuild(output, parts):
-              payload = ''.join(Path(p).read_text() for p in parts)
-              clean = re.sub(r'[^A-Za-z0-9+/=]', '', payload)
-              clean += '=' * (-len(clean) % 4)
-              data = base64.b64decode(clean, validate=False)
-              Path(output).write_bytes(data)
-              print(output, len(data), data[:12])
-
-          desktop = [f'ops-council/data/hero-desktop-{i}.txt' for i in range(1, 16)]
-          mobile = [f'ops-council/data/hero-mobile-{i}.txt' for i in range(1, 3)]
-          rebuild('ops-council/assets/hero-desktop.webp', desktop)
-          rebuild('ops-council/assets/hero-mobile.webp', mobile)
+          p = Path('ops-council/index.html')
+          text = p.read_text()
+          text = text.replace('hero-mobile.webp?v=20260828-final', 'hero-mobile.webp?v=20260828-source')
+          text = text.replace('hero-desktop.webp?v=20260828-final', 'hero-desktop.webp?v=20260828-source')
+          p.write_text(text)
           PY
+          rm .github/workflows/rebuild-ops-council-hero.yml
 
-          test "$(stat -c%s ops-council/assets/hero-desktop.webp)" -gt 50000
-          test "$(stat -c%s ops-council/assets/hero-mobile.webp)" -gt 10000
-          file ops-council/assets/hero-desktop.webp | grep -qi webp
-          file ops-council/assets/hero-mobile.webp | grep -qi webp
-
-          echo "Desktop: $(stat -c%s ops-council/assets/hero-desktop.webp) bytes"
-          echo "Mobile: $(stat -c%s ops-council/assets/hero-mobile.webp) bytes"
-
-      - name: Commit rebuilt hero assets
-        shell: bash
-        run: |
-          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ops-council/assets/hero-desktop.webp ops-council/assets/hero-mobile.webp
-          if git diff --cached --quiet; then
-            echo "Hero assets already match rebuilt source."
-            exit 0
-          fi
-          git commit -m "Replace Ops Council hero with valid binaries"
+          git add ops-council/index.html .github/workflows/rebuild-ops-council-hero.yml
+          git commit -m "Finalize verified Ops Council hero assets"
           git push

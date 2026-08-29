@@ -23,6 +23,7 @@ The MVP for the $9/month 30-Day Content Builder.
 - Facebook, Instagram, and LinkedIn output model
 - Stripe subscription + metered usage data model
 - Demo mode when Supabase credentials are not present
+- GitHub CI that installs dependencies and verifies the production Next.js build
 
 ## Local setup
 
@@ -60,7 +61,7 @@ Do not run it against an existing production database without reviewing table/ty
 
 ## Dependency security
 
-Runtime dependencies are pinned to exact versions in `package.json`. Generate and commit a lockfile in an environment with npm registry access before production merge.
+Runtime dependencies are pinned to exact versions in `package.json`. The GitHub CI workflow currently validates installation and the production build with Node.js 22. Generate and commit a lockfile before production merge so dependency resolution is fully reproducible.
 
 ## Next build phase
 

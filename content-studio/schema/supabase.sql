@@ -1,5 +1,6 @@
--- Clairen Content Studio v0.2
--- Run in a dedicated Supabase project or schema after review.
+-- Clairen Content Studio v0.3
+-- Review before applying. Designed for a dedicated Supabase project.
+-- Supabase 2026 Data API defaults may require explicit grants, included below.
 
 create extension if not exists pgcrypto;
 
@@ -16,17 +17,19 @@ create table public.profiles (
 
 create table public.brand_profiles (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
+  user_id uuid not null unique references auth.users(id) on delete cascade,
   business_name text not null,
   website_url text,
   industry text,
-  business_description text,
-  ideal_customer text,
+  business_description text not null default '',
+  ideal_customer text not null default '',
   audience_problems text[] not null default '{}',
   desired_outcomes text[] not null default '{}',
   voice_traits text[] not null default '{}',
   avoid_language text[] not null default '{}',
   default_goals text[] not null default '{}',
+  primary_cta text not null default '',
+  default_platforms text[] not null default '{Facebook,Instagram,LinkedIn}',
   website_scan jsonb,
   scan_confirmed_at timestamptz,
   created_at timestamptz not null default now(),
@@ -35,7 +38,7 @@ create table public.brand_profiles (
 
 create table public.offers (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   brand_profile_id uuid not null references public.brand_profiles(id) on delete cascade,
   name text not null,
   description text,
@@ -47,7 +50,7 @@ create table public.offers (
 
 create table public.ctas (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   brand_profile_id uuid not null references public.brand_profiles(id) on delete cascade,
   label text not null,
   action_type text not null,
@@ -58,12 +61,14 @@ create table public.ctas (
 
 create table public.content_plans (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   brand_profile_id uuid not null references public.brand_profiles(id) on delete cascade,
   month_start date not null,
   monthly_focus text,
   goals text[] not null default '{}',
-  posting_frequency text not null default 'daily',
+  platforms text[] not null default '{}',
+  posting_frequency text not null default '5_per_week',
+  brief jsonb not null default '{}'::jsonb,
   strategy_summary text,
   status text not null default 'draft',
   created_at timestamptz not null default now(),
@@ -73,7 +78,7 @@ create table public.content_plans (
 
 create table public.content_items (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   content_plan_id uuid not null references public.content_plans(id) on delete cascade,
   day_number int not null check(day_number between 1 and 31),
   scheduled_for date,
@@ -98,7 +103,7 @@ create table public.content_items (
 
 create table public.content_versions (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   content_item_id uuid not null references public.content_items(id) on delete cascade,
   version_type text not null,
   platform text,
@@ -109,7 +114,7 @@ create table public.content_versions (
 
 create table public.generated_images (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   content_item_id uuid references public.content_items(id) on delete cascade,
   storage_path text,
   provider text not null default 'openai',
@@ -124,7 +129,7 @@ create table public.generated_images (
 
 create table public.subscriptions (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null unique references public.profiles(id) on delete cascade,
+  user_id uuid not null unique references auth.users(id) on delete cascade,
   stripe_customer_id text unique,
   stripe_subscription_id text unique,
   stripe_price_id text,
@@ -138,7 +143,7 @@ create table public.subscriptions (
 
 create table public.usage_events (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   content_item_id uuid references public.content_items(id) on delete set null,
   action text not null,
   provider text not null,
@@ -167,26 +172,35 @@ alter table public.generated_images enable row level security;
 alter table public.subscriptions enable row level security;
 alter table public.usage_events enable row level security;
 
-create policy "profiles own row" on public.profiles for all using (auth.uid() = id) with check (auth.uid() = id);
-create policy "brand profiles own rows" on public.brand_profiles for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "offers own rows" on public.offers for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "ctas own rows" on public.ctas for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "content plans own rows" on public.content_plans for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "content items own rows" on public.content_items for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "content versions own rows" on public.content_versions for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "generated images own rows" on public.generated_images for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "subscriptions read own row" on public.subscriptions for select using (auth.uid() = user_id);
-create policy "usage events read own rows" on public.usage_events for select using (auth.uid() = user_id);
+create policy "profiles_owner_all" on public.profiles for all to authenticated
+using ((select auth.uid()) = id) with check ((select auth.uid()) = id);
+create policy "brand_profiles_owner_all" on public.brand_profiles for all to authenticated
+using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy "offers_owner_all" on public.offers for all to authenticated
+using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy "ctas_owner_all" on public.ctas for all to authenticated
+using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy "content_plans_owner_all" on public.content_plans for all to authenticated
+using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy "content_items_owner_all" on public.content_items for all to authenticated
+using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy "content_versions_owner_all" on public.content_versions for all to authenticated
+using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy "generated_images_owner_all" on public.generated_images for all to authenticated
+using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy "subscriptions_owner_read" on public.subscriptions for select to authenticated
+using ((select auth.uid()) = user_id);
+create policy "usage_events_owner_read" on public.usage_events for select to authenticated
+using ((select auth.uid()) = user_id);
 
-create or replace function public.handle_new_user()
-returns trigger language plpgsql security definer set search_path = public as $$
-begin
-  insert into public.profiles (id, email, full_name)
-  values (new.id, new.email, coalesce(new.raw_user_meta_data ->> 'full_name', ''));
-  return new;
-end;
-$$;
-
-create trigger on_auth_user_created
-after insert on auth.users
-for each row execute procedure public.handle_new_user();
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on public.profiles to authenticated;
+grant select, insert, update, delete on public.brand_profiles to authenticated;
+grant select, insert, update, delete on public.offers to authenticated;
+grant select, insert, update, delete on public.ctas to authenticated;
+grant select, insert, update, delete on public.content_plans to authenticated;
+grant select, insert, update, delete on public.content_items to authenticated;
+grant select, insert, update, delete on public.content_versions to authenticated;
+grant select, insert, update, delete on public.generated_images to authenticated;
+grant select on public.subscriptions to authenticated;
+grant select on public.usage_events to authenticated;

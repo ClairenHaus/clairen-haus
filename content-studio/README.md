@@ -1,56 +1,71 @@
-# Clairen Content Studio v0.2
+# Clairen Content Studio v0.3
 
-A focused MVP for the $9/month 30-Day Content Builder.
+The MVP for the $9/month 30-Day Content Builder.
+
+## Current product loop
+
+1. Create an account or sign in.
+2. Complete the persistent Brand Profile.
+3. Start a month and complete the Monthly Brief.
+4. Generate/review the content strategy.
+5. Generate individual posts only when needed.
 
 ## Included now
 
-- Responsive Next.js 16.3.3 app shell
-- Dashboard and 30-day calendar
-- Individual post editor UI
-- Brand-profile + monthly-brief onboarding
+- Next.js 16.3.3 app shell
+- Supabase SSR email/password authentication
+- Session refresh through Next.js `proxy.ts`
+- Persistent personal Profile
+- Persistent Brand Profile with RLS ownership
+- Monthly Brief separated from permanent Brand Profile data
+- Dashboard, 30-day calendar, Content Library, content editor
+- AI Usage inside the account menu rather than the main workspace
 - Facebook, Instagram, and LinkedIn output model
-- Copy Image Prompt / Generate Image workflow separation
-- Repurpose controls
-- AI usage dashboard
-- OpenAI structured-output plan endpoint
-- Supabase client/server scaffolding
-- Full PostgreSQL schema with RLS
-- Subscription + usage-event data model for Stripe metered billing
-- 2x AI cost markup helper
-- Demo mode with 30 sample posts and no secrets required
+- Stripe subscription + metered usage data model
+- Demo mode when Supabase credentials are not present
 
-## Run locally
+## Local setup
+
+Use Node.js 22 or later.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
+Copy `.env.example` to `.env.local` and add the connected service credentials.
 
-## Connect services
+Supabase now recommends publishable keys for new apps. Do not place a secret or service-role key in any `NEXT_PUBLIC_` variable.
 
-Copy `.env.example` to `.env.local` and add credentials.
+## Supabase Auth configuration
 
-Do not run `schema/supabase.sql` against an existing production database without reviewing table/type name collisions. The preferred setup is a dedicated Supabase project for Content Studio.
+For SSR email confirmation, configure the Supabase Auth Confirm signup template so the confirmation link sends the token hash to the app endpoint:
 
-## Build order from here
+```html
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">Confirm email address</a>
+```
 
-1. Supabase Auth + persistent brand profiles
-2. Website scanner and confirmation screen
-3. Save generated plans/items to Supabase
-4. Caption rewrite + repurpose endpoints with per-action usage records
-5. Stripe $9 subscription checkout + webhook sync
-6. Stripe meter event reporting for marked-up AI usage
-7. Image generation endpoint + Supabase Storage
-8. Production deployment to Railway
+Also configure the project's Site URL and allowed redirect URLs for the production Content Studio domain.
 
-## Pricing logic
+## Database
 
-Base subscription: $9/month.
+`schema/supabase.sql` is designed for a dedicated Content Studio Supabase project and includes:
 
-AI actions are metered. `lib/usage.ts` currently computes the customer charge as provider cost x 2. Provider pricing must be stored/configured server-side before this becomes production billing logic.
+- RLS on all exposed application tables
+- authenticated owner policies
+- explicit Data API grants for 2026 Supabase exposure defaults
+- no public `SECURITY DEFINER` user-creation trigger
 
-## Important
+Do not run it against an existing production database without reviewing table/type name collisions.
 
-The first-pass generator uses `gpt-5.6-terra`, the balanced GPT-5.6 model. The usage helper includes current text-rate constants for Terra and Luna; re-check provider pricing before production billing is enabled.
+## Dependency security
+
+Runtime dependencies are pinned to exact versions in `package.json`. Generate and commit a lockfile in an environment with npm registry access before production merge.
+
+## Next build phase
+
+1. Connect a dedicated Supabase project and run/verify the schema.
+2. Persist the Monthly Brief and generated plan.
+3. Feed Brand Profile + Monthly Brief into generation.
+4. Save generated content items and versions.
+5. Add Stripe subscription checkout and usage metering.

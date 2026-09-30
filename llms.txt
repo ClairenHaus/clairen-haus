@@ -1,0 +1,13 @@
+# Clairen Haus
+
+> Operations consulting, business systems design, and AI implementation for coaches, consultants, and service businesses.
+
+## Main pages
+
+- [Home](https://www.clairenhaus.com/): Services, business systems, and contact information.
+- [About](https://www.clairenhaus.com/about): About Clairen Haus.
+
+## Policies
+
+- [Privacy policy](https://www.clairenhaus.com/privacy-policy): How the site handles personal information.
+- [Terms and conditions](https://www.clairenhaus.com/terms-and-conditions): Terms for using the site.

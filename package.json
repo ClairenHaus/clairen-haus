@@ -1,7 +1,7 @@
 {
   "name": "clairen-haus",
   "version": "1.0.0",
-  "description": "Clairen Haus website",
+  "description": "Clairen Haus operations consultancy website",
   "scripts": {
     "start": "serve . -p ${PORT:-3000} --no-clipboard"
   },

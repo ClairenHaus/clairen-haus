@@ -1,10 +1,10 @@
 # Clairen Haus
 
-> Operations consulting, business systems design, and AI implementation for coaches, consultants, and service businesses.
+> Clairen Haus is an operations consultancy. It works one-on-one with small businesses on recurring operational problems, and offers AI implementation, consultation-led SaaS development (including the Signature Delivery Suite™) and digital services (website creation, AEO / AI visibility).
 
 ## Main pages
 
-- [Home](https://www.clairenhaus.com/): Services, business systems, and contact information.
+- [Home](https://www.clairenhaus.com/): Operations consulting, AI implementation, SaaS development, digital services, and contact.
 - [About](https://www.clairenhaus.com/about): About Clairen Haus.
 
 ## Policies

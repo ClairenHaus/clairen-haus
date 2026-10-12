@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /previews/
 
 Sitemap: https://www.clairenhaus.com/sitemap.xml

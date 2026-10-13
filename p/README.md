@@ -16,6 +16,9 @@ Private, noindex pages, one per prospect: sales page -> agreement (sign) -> Stri
 
 1. Copy `/p/taylor-worden-em8oa6/` to `/p/<firm>-<6 random letters/digits>/` (unguessable slug).
 2. Edit `prospect.js`: firm name, attn, domain, preview URL, findings (only things you verified), agreement fields.
+   Set `checkedDate` (e.g. "October 13, 2026") to the day the findings were checked; without it the page says October 12, 2026.
+   Optional `currentSite`: how the sales page names the site you reviewed, when it differs from `currentDomain`
+   (e.g. "your current site" when the old site lives on another address); `currentDomain` stays the domain you launch on.
    Any value written "[LIKE THIS]" shows highlighted on the agreement page with a "Draft" notice listing it.
 3. Replace the images in `img/` with the same file names (or change the names in prospect.js).
    A finding without an `image` simply shows text.

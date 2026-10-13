@@ -131,41 +131,136 @@
     document.getElementById("sig-clear").addEventListener("click", function () { pad.clear(); sync(); });
     sync();
 
+    var sending = false;
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (sending) return;
       if (!valid()) { sync(); return; }
+      var now = new Date();
       var sig = { name: fields[1].value.trim(), title: fields[2].value.trim(), email: fields[3].value.trim(),
-        firm: P.firmName, slug: slug, signedAt: new Date().toISOString(), signaturePng: pad.dataUrl() };
+        firm: P.firmName, slug: slug, signedAt: now.toISOString(), signaturePng: pad.dataUrl() };
       try { sessionStorage.setItem("ch-signature", JSON.stringify(sig)); } catch (x) {}
       var sigLine = document.getElementById("signed-line");
       sigLine.textContent = "Signed electronically by " + sig.name + ", " + sig.title + ", " + P.agreement.firmLegalName +
-        " (" + sig.email + ") on " + new Date(sig.signedAt).toLocaleString("en-US") + ".";
+        " (" + sig.email + ") on " + stamp(now) + ".";
       sigLine.hidden = false;
       var sigImg = document.getElementById("client-sig-img");
       if (sigImg) { sigImg.src = sig.signaturePng; sigImg.hidden = false; }
       ["client-sig-name", "client-sig-title", "client-sig-date"].forEach(function (id, i) {
         var n = document.getElementById(id);
-        if (n) n.textContent = [sig.name, sig.title, new Date(sig.signedAt).toLocaleDateString("en-US")][i];
+        if (n) n.textContent = [sig.name, sig.title, now.toLocaleDateString("en-US")][i];
       });
 
-      if (live) {
-        var ref = (slug + "__" + sig.name).replace(/[^A-Za-z0-9_-]+/g, "_").slice(0, 200);
-        var url = link + (link.indexOf("?") >= 0 ? "&" : "?") + "client_reference_id=" + encodeURIComponent(ref) +
-          "&prefilled_email=" + encodeURIComponent(sig.email);
-        location.href = url;
-      } else {
-        var body = "I have read and agree to the Website Build and Care Plan Agreement at " + location.href.split("#")[0] + "\n\n" +
-          "Firm: " + P.agreement.firmLegalName + "\nName: " + sig.name + "\nTitle: " + sig.title + "\nEmail: " + sig.email +
-          "\nSigned: " + new Date(sig.signedAt).toLocaleString("en-US") + " (signature drawn on the page)\n\nPlease send me the deposit link.";
-        location.href = "mailto:" + C.contactEmail + "?subject=" + encodeURIComponent("Signed agreement – " + P.firmName) +
-          "&body=" + encodeURIComponent(body);
-      }
+      // Email the signed copy first, then go on. The client is never held longer than the timeout.
+      sending = true;
+      btn.disabled = true;
+      btn.textContent = "Saving your signed copy…";
+      btn.setAttribute("aria-busy", "true");
+      sendSignedCopy(sig, now, P, C).then(function (result) {
+        try { sessionStorage.setItem("ch-signed-copy", result); } catch (x) {}
+        btn.textContent = live ? "Opening secure payment…" : "Opening your email…";
+        if (live) {
+          var ref = (slug + "__" + sig.name).replace(/[^A-Za-z0-9_-]+/g, "_").slice(0, 200);
+          var url = link + (link.indexOf("?") >= 0 ? "&" : "?") + "client_reference_id=" + encodeURIComponent(ref) +
+            "&prefilled_email=" + encodeURIComponent(sig.email);
+          location.href = url;
+        } else {
+          var body = "I have read and agree to the Website Build and Care Plan Agreement at " + location.href.split("#")[0] + "\n\n" +
+            "Firm: " + P.agreement.firmLegalName + "\nName: " + sig.name + "\nTitle: " + sig.title + "\nEmail: " + sig.email +
+            "\nSigned: " + stamp(now) + " (signature drawn on the page)\n\nPlease send me the deposit link.";
+          location.href = "mailto:" + C.contactEmail + "?subject=" + encodeURIComponent("Signed agreement – " + P.firmName) +
+            "&body=" + encodeURIComponent(body);
+          setTimeout(function () { sending = false; btn.removeAttribute("aria-busy"); sync(); }, 1500);
+        }
+      });
     });
 
     var printBtn = document.getElementById("print-btn");
     if (printBtn) printBtn.addEventListener("click", function () { window.print(); });
   }
 
+
+  /* Date with time zone, e.g. "October 12, 2026 at 10:15 PM EDT". */
+  function stamp(d) {
+    try {
+      return d.toLocaleString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+    } catch (x) { return d.toString(); }
+  }
+
+  /* Signed copy by email (no backend): one multipart POST to the FormSubmit endpoint in config.js, carrying the
+     signing details, the drawn signature as a PNG and the full agreement as an HTML file. FormSubmit answers a
+     delivered submission with a redirect (seen here as an "opaqueredirect" response). Resolves "sent", "unconfirmed",
+     "failed", "timeout" or "off" and never rejects, so payment always opens. */
+  function sendSignedCopy(sig, when, P, C) {
+    var endpoint = String(C.SIGNED_COPY_ENDPOINT || "");
+    if (!/^https:\/\//.test(endpoint) || !window.fetch || !window.FormData || !window.Blob) return Promise.resolve("off");
+    var tz = "";
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (x) {}
+    var signedAt = stamp(when) + (tz ? " (" + tz + ")" : "") + " · " + when.toISOString().replace(/\.\d+Z$/, "Z") + " UTC";
+    var pageUrl = location.href.split("#")[0];
+    var fd = new FormData();
+    fd.append("_subject", "Signed agreement: " + (P.agreement.firmLegalName || P.firmName) + " (" + sig.name + ")");
+    fd.append("_template", "table");
+    fd.append("_captcha", "false");
+    fd.append("_next", location.origin + "/p/thanks/");
+    if (C.SIGNED_COPY_CC) fd.append("_cc", C.SIGNED_COPY_CC);
+    fd.append("Firm", P.agreement.firmLegalName || P.firmName);
+    fd.append("Signed by", sig.name);
+    fd.append("Title", sig.title);
+    fd.append("email", sig.email);            // FormSubmit sets Reply-To from a field named "email"
+    fd.append("Signed at", signedAt);
+    fd.append("Prospect page", sig.slug || "");
+    fd.append("Full agreement", "Attached: the signed agreement (opens in any browser, printable) and the signature image.");
+    fd.append("Next step", "Client was sent to the Stripe deposit checkout. Check Stripe for the payment.");
+    // Note: FormSubmit silently drops submissions whose text fields contain a link (it answers 200
+    // "submitted successfully" and sends nothing), so links and the agreement text travel only in the attachment.
+    var file = (sig.slug || "client") + "-" + when.toISOString().slice(0, 10);
+    try { fd.append("signature", dataUrlToBlob(sig.signaturePng), "signature-" + file + ".png"); } catch (x) {}
+    try { fd.append("signed_agreement", new Blob([signedCopyHtml(sig, signedAt, pageUrl, P)], { type: "text/html" }), "signed-agreement-" + file + ".html"); } catch (x) {}
+
+    var ms = Number(C.SIGNED_COPY_TIMEOUT_MS) || 7000;
+    var timer;
+    var timeout = new Promise(function (resolve) { timer = setTimeout(function () { resolve("timeout"); }, ms); });
+    var post = fetch(endpoint, { method: "POST", body: fd, redirect: "manual", mode: "cors", credentials: "omit" })
+      .then(function (r) {
+        // Only FormSubmit's redirect to _next means the email was accepted; its 200 pages are
+        // "needs activation" or a silently dropped submission.
+        if (r.type === "opaqueredirect" || (r.status >= 300 && r.status < 400)) return "sent";
+        return r.ok ? "unconfirmed" : "failed";
+      })
+      .catch(function () { return "failed"; });
+    return Promise.race([post, timeout]).then(function (v) { clearTimeout(timer); return v; });
+  }
+
+  function dataUrlToBlob(u) {
+    var parts = u.split(","), bin = atob(parts[1]), n = bin.length, a = new Uint8Array(n);
+    while (n--) a[n] = bin.charCodeAt(n);
+    return new Blob([a], { type: (parts[0].match(/:(.*?);/) || [0, "image/png"])[1] });
+  }
+
+  function escapeHtml(v) {
+    return String(v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; });
+  }
+
+  /* A standalone, printable HTML copy of the agreement exactly as shown, with the drawn signature inlined. */
+  function signedCopyHtml(sig, signedAt, pageUrl, P) {
+    var article = document.querySelector(".agreement");
+    var body = article ? article.cloneNode(true) : document.createElement("div");
+    var img = body.querySelector("#client-sig-img");
+    if (img) { img.removeAttribute("hidden"); img.setAttribute("src", sig.signaturePng); }
+    var css = "body{font:16px/1.6 Georgia,'Times New Roman',serif;color:#2A1F1A;max-width:760px;margin:32px auto;padding:0 20px}" +
+      "h1{font-size:26px;margin:0 0 8px}h3{font-size:18px;margin:26px 0 6px}a{color:#2A1F1A}" +
+      ".meta{font:14px/1.55 Arial,Helvetica,sans-serif;background:#F6EFE9;border-radius:8px;padding:12px 16px;margin:0 0 24px}" +
+      ".sig-table{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:12px}.sig-table strong{display:block;margin-bottom:6px}" +
+      ".client-sig-img{display:block;max-width:300px;width:100%;height:auto;margin:6px 0;border-bottom:1px solid #8a7f78}" +
+      "@media print{.meta{background:none;border:1px solid #ccc}}";
+    return "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">" +
+      "<title>Signed agreement – " + escapeHtml(P.agreement.firmLegalName || P.firmName) + "</title><style>" + css + "</style></head><body>" +
+      "<h1>Website Build and Care Plan Agreement</h1>" +
+      "<p class=\"meta\"><strong>Signed electronically</strong> by " + escapeHtml(sig.name) + ", " + escapeHtml(sig.title) + ", " +
+      escapeHtml(P.agreement.firmLegalName || P.firmName) + " (" + escapeHtml(sig.email) + ")<br>" + escapeHtml(signedAt) +
+      "<br>Signed at: " + escapeHtml(pageUrl) + "</p>" + body.outerHTML + "</body></html>";
+  }
 
   /* Draw-your-signature pad: finger, stylus or mouse (pointer events). */
   function signaturePad(canvas, onChange) {

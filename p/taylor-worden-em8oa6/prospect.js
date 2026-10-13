@@ -53,12 +53,12 @@ window.PROSPECT = {
     domain: "taylorwordenlaw.com",
     clientEmail: "info@taylorwordenlaw.com",
     pageLimit: "10",
-    paymentMethod: "[PAYMENT METHOD]",
-    hourlyRate: "[HOURLY RATE]",
+    paymentMethod: "card or bank payment through Stripe",
+    hourlyRate: "$125 per hour",
     pauseDays: "30",
     handoverDays: "14",
     liabilityMonths: "3",
-    governingState: "[STATE]",
-    clairenTitle: "[TITLE]"
+    governingState: "Georgia",
+    clairenTitle: "Founder"
   }
 };

@@ -1,0 +1,3 @@
+(function(){var b=document.querySelector('.menu-btn'),n=document.getElementById('nav');if(b&&n){b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'Close':'Menu';});}
+var c=document.querySelector('.mobile-call');if(c){var t=function(){c.classList.toggle('show',window.scrollY>520);};window.addEventListener('scroll',t,{passive:true});t();}
+var f=document.querySelector('form.form');if(f){f.addEventListener('submit',function(e){e.preventDefault();var m=f.querySelector('.form-msg');if(m){m.classList.add('show');m.focus();}});}})();

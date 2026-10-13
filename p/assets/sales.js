@@ -28,7 +28,9 @@
       balance: money(C.price.balance), care: money(C.price.care) } };
 
     document.querySelectorAll("[data-p]").forEach(function (n) {
-      var v = get(data, n.getAttribute("data-p"));
+      // "a|b": first non-empty value wins; no value keeps the HTML's own text.
+      var v = n.getAttribute("data-p").split("|").map(function (k) { return get(data, k); })
+        .filter(function (x) { return x != null && x !== ""; })[0];
       if (v == null || v === "") { if (n.hasAttribute("data-optional")) n.hidden = true; return; }
       n.textContent = v;
       if (isBlank(v)) n.classList.add("blank");

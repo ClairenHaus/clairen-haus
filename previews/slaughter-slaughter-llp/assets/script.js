@@ -1,0 +1,3 @@
+(function(){var b=document.querySelector('.menu-btn'),n=document.getElementById('site-nav');if(b&&n){b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&n.classList.contains('open')){n.classList.remove('open');b.setAttribute('aria-expanded','false');b.focus();}});}
+var f=document.querySelector('form.pf');if(f){f.addEventListener('submit',function(e){e.preventDefault();var m=document.querySelector('.form-msg');if(m){m.classList.add('show');m.focus();}});}
+var y=document.querySelectorAll('[data-year]');for(var i=0;i<y.length;i++){y[i].textContent=new Date().getFullYear();}})();

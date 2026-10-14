@@ -1,0 +1,3 @@
+(function(){var b=document.querySelector('.menu-btn'),n=document.getElementById('nav');
+if(b&&n){b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});}
+var f=document.getElementById('contact-form');if(f){f.addEventListener('submit',function(ev){ev.preventDefault();var s=f.querySelector('.form-status');if(s){s.textContent='Preview only: nothing was sent. On the live site this message would go to the office. To reach the firm now, call (714) 544-6622.';}});}})();

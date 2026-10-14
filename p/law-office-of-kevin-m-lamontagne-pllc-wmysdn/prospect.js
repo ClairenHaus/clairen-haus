@@ -21,8 +21,8 @@ window.PROSPECT = {
   // What we found on the current site (checked live Oct 14, 2026). First item may carry a screenshot.
   findings: [
     {
-      title: "Lists of search keywords print on every page",
-      body: "A line of keywords, \u201cwills trusts leases ladybird, deed, commercial, disputes, evictions, bankruptcy, estate planning probate attorney law firm\u201d, prints above your header on every page, and a second list sits under the footer. They look like keywords pasted into the site\u2019s settings in a spot that shows on the page. The dark type on a dark background makes them easy to miss, but screen readers read them aloud and search engines see them as page text. Your new site has none of it.",
+      title: "Keyword stuffing on every page",
+      body: "A line of keywords, \u201cwills trusts leases ladybird, deed, commercial, disputes, evictions, bankruptcy, estate planning probate attorney law firm\u201d, prints above your header on every page, and a second list sits under the footer. That is keyword stuffing: piling keywords onto a page to try to rank. Google\u2019s spam policies name it directly, and pages that break those policies can rank lower or drop out of results altogether. Text styled to be hard for visitors to see, like this dark type on a dark background, makes it worse. Your new site has none of it. Your keywords live in real headings and page descriptions, where Google expects them.",
       image: { name: "keyword-text", width: 980, height: 632, alt: "The top and bottom of klamontagnelaw.com, with the keyword lines highlighted and shown enlarged", caption: "The top and bottom of your homepage today, with the keyword lines highlighted and enlarged so they can be read." }
     },
     {

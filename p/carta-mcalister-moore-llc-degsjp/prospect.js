@@ -57,7 +57,7 @@ window.PROSPECT = {
     "firmLegalName": "Carta, McAlister & Moore, LLC",
     "firmAddress": "777 Post Road, 2nd Floor, Darien, CT 06820",
     "domain": "cmm-law.com",
-    "clientEmail": "info@cmm-law.com",
+    "clientEmail": "mcarta@cmm-law.com",
     "pageLimit": "20",
     "paymentMethod": "card or bank payment through Stripe",
     "hourlyRate": "$125 per hour",

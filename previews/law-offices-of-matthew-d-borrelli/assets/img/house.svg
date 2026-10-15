@@ -1,0 +1,14 @@
+<svg viewBox="0 0 480 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Line drawing of a New England two-family home">
+<g fill="none" stroke="#c9a66b" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
+<path d="M60 360h360"/><path d="M90 360V170l150-100 150 100v190"/><path d="M70 184 240 70l170 114"/>
+<path d="M300 92V48h30v64"/><path d="M216 150a24 24 0 0 1 48 0v28h-48z"/><path d="M240 126v52"/>
+<rect x="120" y="200" width="54" height="64"/><path d="M147 200v64M120 232h54"/>
+<rect x="306" y="200" width="54" height="64"/><path d="M333 200v64M306 232h54"/>
+<rect x="120" y="290" width="54" height="50"/><path d="M147 290v50"/>
+<rect x="306" y="290" width="54" height="50"/><path d="M333 290v50"/>
+<path d="M212 360v-86h56v86"/><path d="M200 274h80"/><circle cx="258" cy="320" r="3"/>
+<path d="M90 278h300" stroke-dasharray="2 8" stroke-opacity=".6"/>
+</g>
+<g stroke="#ffffff" stroke-opacity=".5" stroke-width="1.4" fill="none"><path d="M24 360h28M428 360h28"/><path d="M36 360c0-40 8-70 2-100M444 360c0-36-6-64 0-92"/></g>
+<g fill="#c9a66b"><circle cx="392" cy="96" r="4"/><circle cx="414" cy="112" r="2.5"/><circle cx="378" cy="122" r="2"/></g>
+</svg>

@@ -1,0 +1,2 @@
+(function(){var b=document.querySelector('.menu-btn'),n=document.getElementById('nav');if(b&&n){b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false')})}
+var f=document.getElementById('contact-form');if(f){f.addEventListener('submit',function(e){e.preventDefault();var m=document.getElementById('form-msg');if(m){m.classList.add('show');m.focus()}})}})();

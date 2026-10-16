@@ -1,0 +1,51 @@
+/* PRICING v2 (Oct 16 2026): Good/Better/Best tier cards and the agreement package box. Shared; loaded after sales.css. */
+.tier-urgency { background: var(--espresso); color: #EFE7E0; border-radius: 10px; padding: 1.5rem 1.75rem; margin: 0 0 1.75rem; display: grid; grid-template-columns: auto 1fr; gap: .25rem 1.1rem; align-items: start; }
+.tier-urgency::before { content: ""; grid-row: span 2; width: .55rem; height: 100%; min-height: 3rem; border-radius: 4px; background: var(--rose); }
+.tier-urgency h3 { color: var(--ivory); font-size: 1.25rem; }
+.tier-urgency p { font-size: 1.0625rem; }
+.tier-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; align-items: stretch; padding-top: .9rem; }
+.tier-card { position: relative; display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 2rem 1.6rem 1.75rem; }
+.tier-card.is-popular { background: var(--espresso); color: #EFE7E0; border: 2px solid var(--rose); box-shadow: 0 18px 40px -18px rgba(62, 47, 40, .55); }
+.tier-badge { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); background: var(--rose); color: var(--espresso); font-size: .8125rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .35rem .9rem; border-radius: 999px; white-space: nowrap; }
+.tier-rank { font-size: .875rem; font-weight: 500; color: var(--bronze); letter-spacing: .03em; margin-bottom: .4rem; }
+.tier-card.is-popular .tier-rank { color: var(--blush); }
+.tier-name { font-size: 1.55rem; margin-bottom: .6rem; }
+.tier-card.is-popular .tier-name, .tier-card.is-popular .tier-amount { color: var(--ivory); }
+.tier-pitch { font-size: 1rem; line-height: 1.55; min-height: 4.65em; }
+.tier-amount { font-size: clamp(2.3rem, 4.4vw, 2.9rem); font-weight: 500; line-height: 1; color: var(--espresso); margin-top: 1.25rem; }
+.tier-amount small { font-size: 1rem; font-weight: 400; margin-left: .35rem; }
+.tier-care { font-size: .9375rem; margin: .7rem 0 1.25rem; color: var(--text-soft); }
+.tier-card.is-popular .tier-care { color: #E4D8D0; }
+.tier-btn { width: 100%; }
+.tier-card.is-popular .btn-primary { background: var(--ivory); color: var(--espresso); border-color: var(--ivory); }
+.tier-card.is-popular .btn-primary:hover { background: var(--blush); border-color: var(--blush); }
+.tier-features { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); font-size: 1rem; }
+.tier-card.is-popular .tier-features { border-top-color: rgba(233, 212, 214, .25); }
+.tier-card.is-popular .check-list li::before { border-color: var(--rose); }
+.tier-busy { margin-top: auto; padding-top: 1rem; font-size: .9375rem; font-style: italic; color: var(--bronze); }
+.tier-card.is-popular .tier-busy { color: var(--blush); }
+.tier-care-band { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 1.5rem 2.5rem; align-items: start; background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 2rem 2.25rem; }
+.tier-care-band .check-list { margin-top: 0; columns: 2; column-gap: 2rem; }
+.tier-care-band .check-list li { break-inside: avoid; }
+.tier-chosen { background: var(--white); border: 2px solid var(--rose); border-radius: 12px; padding: 1.5rem 1.6rem; margin: 0 0 2rem; }
+.tier-chosen-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
+.tier-chosen-label { font-size: .875rem; font-weight: 500; color: var(--bronze); letter-spacing: .03em; }
+.tier-chosen-name { font-size: 1.5rem; font-weight: 500; color: var(--espresso); line-height: 1.2; }
+.tier-chosen-price { font-size: 2rem; font-weight: 500; color: var(--espresso); line-height: 1; text-align: right; }
+.tier-chosen-price small { display: block; font-size: .875rem; font-weight: 400; color: var(--text-soft); margin-top: .35rem; }
+.tier-chosen .tier-features { margin-top: 1rem; padding-top: 1rem; }
+.tier-switch { margin-top: .75rem; font-size: .9375rem; color: var(--text-soft); }
+.tier-package-line { background: var(--ivory-deep); border-radius: 8px; padding: .75rem 1rem; }
+@media (max-width: 960px) {
+  .tier-grid { grid-template-columns: 1fr; gap: 2rem; max-width: 34rem; margin: 0 auto; }
+  .tier-pitch { min-height: 0; }
+  .tier-care-band { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .tier-card { padding: 1.9rem 1.3rem 1.5rem; }
+  .tier-care-band { padding: 1.6rem 1.4rem; }
+  .tier-care-band .check-list { columns: 1; }
+  .tier-urgency { padding: 1.3rem 1.2rem; }
+  .tier-chosen-price { text-align: left; }
+}
+@media print { .tier-chosen, .tier-switch { display: none !important; } }

@@ -1,0 +1,2 @@
+(function(){var b=document.querySelector('.menu-btn'),n=document.getElementById('nav');if(b&&n){b.addEventListener('click',function(){var o=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!o));document.body.classList.toggle('nav-open',!o);});}
+var f=document.getElementById('contact-form');if(f){f.addEventListener('submit',function(e){e.preventDefault();var s=f.querySelector('.fstatus');if(s){s.textContent='This is a preview, so nothing was sent. Please call the office instead.';}});}})();

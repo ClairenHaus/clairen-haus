@@ -1,0 +1,3 @@
+(function(){var b=document.querySelector('.menu-btn'),n=document.getElementById('nav');if(b&&n){b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)})}
+if(/[?&]type=estimate/.test(location.search)){var r=document.querySelector('input[name=type][value=estimate]');if(r)r.checked=true}
+document.querySelectorAll('form[data-preview]').forEach(function(f){f.addEventListener('submit',function(e){e.preventDefault();var m=f.querySelector('.notice');if(m){m.classList.add('show');m.focus()}})})})();

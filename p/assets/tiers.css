@@ -36,6 +36,7 @@
 .tier-chosen .tier-features { margin-top: 1rem; padding-top: 1rem; }
 .tier-switch { margin-top: .75rem; font-size: .9375rem; color: var(--text-soft); }
 .tier-package-line { background: var(--ivory-deep); border-radius: 8px; padding: .75rem 1rem; }
+.tier-footnote { margin-top: 1rem; font-size: .875rem; line-height: 1.5; color: var(--text-soft); }
 @media (max-width: 960px) {
   .tier-grid { grid-template-columns: 1fr; gap: 2rem; max-width: 34rem; margin: 0 auto; }
   .tier-pitch { min-height: 0; }

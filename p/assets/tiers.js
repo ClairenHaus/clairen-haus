@@ -41,7 +41,7 @@
         var h = el("h3", "tier-name", t.name); h.id = "tier-" + t.id; card.append(h);
         card.append(el("p", "tier-pitch", t.pitch));
         var amt = el("p", "tier-amount", t.priceText); amt.append(el("small", null, "one-time")); card.append(amt);
-        card.append(el("p", "tier-care", "Paid in full when you sign, then " + T.careText + "/month care. First month free."));
+        card.append(el("p", "tier-care", "Paid in full* when you sign, then " + T.careText + "/month care. First month free."));
         var a = el("a", "btn btn-lg tier-btn " + (popular ? "btn-primary" : "btn-secondary"), "Choose " + t.name);
         a.href = base + t.agreementPath;
         a.setAttribute("data-tier", t.id);

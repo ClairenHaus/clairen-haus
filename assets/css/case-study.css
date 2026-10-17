@@ -1,0 +1,85 @@
+/* Clairen Haus — case study pages. Builds on home.css (tokens, header, footer, buttons) and portfolio.css (status pills, experience band). */
+
+.cs-hero { padding: 3.5rem 0 3rem; border-bottom: 1px solid var(--line); }
+.cs-back { display: inline-block; margin-bottom: 1.75rem; font-size: .975rem; }
+.cs-tag { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: 1.25rem; }
+.cs-tag .work-status { margin-bottom: 0; }
+.cs-number { font-size: 1rem; font-weight: 500; color: var(--bronze); margin-bottom: .6rem; }
+.cs-hero h1 { font-size: clamp(2.125rem, 4.2vw, 3.25rem); letter-spacing: -.01em; max-width: 46rem; overflow-wrap: break-word; }
+.cs-hero h1 .cs-sub { display: block; margin-top: .75rem; font-size: clamp(1.25rem, 2.2vw, 1.625rem); font-weight: 400; line-height: 1.35; color: var(--text-soft); }
+
+.cs-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 2.5rem 0 0; background: #fff; border: 1px solid var(--blush); border-radius: 8px; }
+.cs-meta div { padding: 1.1rem 1.4rem; min-width: 0; }
+.cs-meta div + div { border-left: 1px solid var(--blush); }
+.cs-meta dt { font-size: .8125rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--bronze); margin-bottom: .25rem; }
+.cs-meta dd { margin: 0; font-weight: 500; line-height: 1.45; color: var(--espresso); }
+
+.cs-section { padding: 4rem 0; }
+.cs-section + .cs-section { border-top: 1px solid var(--line); }
+.cs-section--alt { background: var(--blush-soft); }
+.cs-block { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); gap: 3rem; align-items: start; }
+.cs-block h2 { font-size: clamp(1.625rem, 2.6vw, 2.125rem); }
+.cs-block .cs-label { font-size: .8125rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--bronze); margin-bottom: .6rem; }
+.cs-copy > p { color: var(--text-soft); font-size: 1.125rem; }
+.cs-copy > p + p { margin-top: 1rem; }
+
+.cs-list { list-style: none; margin: 1.5rem 0 0; padding: 0; }
+.cs-list li { position: relative; padding-left: 1.4rem; line-height: 1.6; }
+.cs-list li + li { margin-top: .6rem; }
+.cs-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 7px; height: 7px; border-radius: 50%; background: var(--rose); }
+
+.cs-evidence { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+.cs-evidence figure { margin: 0; min-width: 0; }
+.cs-evidence img { width: 100%; border: 1px solid var(--blush); border-radius: 8px; background: #fff; }
+.cs-evidence figcaption { margin-top: .6rem; font-size: .9375rem; line-height: 1.5; color: var(--text-soft); }
+.cs-evidence--single { grid-template-columns: minmax(0, 1fr); }
+.cs-evidence figure.is-phone { max-width: 320px; }
+
+.cs-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-top: 2rem; }
+.cs-stats--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cs-stat { padding: 1.5rem 1.4rem; background: #fff; border: 1px solid var(--blush); border-radius: 8px; min-width: 0; }
+.cs-stat strong { display: block; font-size: clamp(2.25rem, 4vw, 3rem); font-weight: 500; line-height: 1; color: var(--espresso); margin-bottom: .6rem; }
+.cs-stat span { display: block; font-size: .975rem; line-height: 1.5; color: var(--text-soft); }
+.cs-note { margin-top: 1rem; font-size: .9375rem; color: var(--text-soft); }
+
+.cs-timeline { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.cs-phase { padding: 1.6rem 1.5rem; background: #fff; border: 1px solid var(--blush); border-radius: 8px; min-width: 0; }
+.cs-phase-num { display: block; font-size: .875rem; font-weight: 600; letter-spacing: .06em; color: var(--rose); margin-bottom: .25rem; }
+.cs-phase h3 { font-size: 1.25rem; margin-bottom: .2rem; }
+.cs-phase .cs-when { font-size: .9375rem; color: var(--bronze); margin-bottom: .25rem; }
+.cs-phase .cs-list { margin-top: .9rem; }
+.cs-phase .cs-list li { font-size: .975rem; }
+
+.cs-tags { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+.cs-tags li { padding: .35rem .9rem; font-size: .9375rem; font-weight: 500; color: var(--espresso); background: #fff; border: 1px solid var(--blush); border-radius: 999px; }
+.cs-live { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
+
+.cs-pager { padding: 2.25rem 0; border-top: 1px solid var(--line); }
+.cs-pager .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; }
+.cs-pager a { font-weight: 500; }
+.cs-pager .cs-pager-label { display: block; font-size: .8125rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--bronze); }
+
+
+@media (max-width: 960px) {
+  .cs-block { grid-template-columns: 1fr; gap: 1rem; }
+  .cs-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-stats--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .cs-meta { grid-template-columns: 1fr; }
+  .cs-meta div + div { border-left: 0; border-top: 1px solid var(--blush); }
+  .cs-timeline { grid-template-columns: 1fr; }
+  .cs-evidence { grid-template-columns: 1fr; }
+  .cs-stats--3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .cs-hero { padding: 2.25rem 0 2.5rem; }
+  .cs-hero h1 { font-size: 2.125rem; }
+  .cs-section { padding: 3rem 0; }
+  .cs-stats { grid-template-columns: 1fr 1fr; gap: .75rem; }
+  .cs-stats--3 { grid-template-columns: 1fr; }
+  .cs-stat { padding: 1.2rem 1rem; }
+  .cs-phase { padding: 1.35rem 1.2rem; }
+  .cs-evidence--phone { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .75rem; }
+  .cs-live .btn { width: 100%; }
+}

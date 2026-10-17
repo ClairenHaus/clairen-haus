@@ -6,6 +6,7 @@
 
 - [Home](https://www.clairenhaus.com/): Operations consulting, AI implementation, SaaS development, digital services, and contact.
 - [About](https://www.clairenhaus.com/about): About Clairen Haus.
+- [Portfolio](https://www.clairenhaus.com/portfolio): Community platforms, client portals, client delivery software and AI agent demos built by Clairen Haus.
 
 ## Policies
 

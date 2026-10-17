@@ -229,6 +229,14 @@ a:hover { color: var(--espresso); }
   .header-cta { display: none; }
   .nav-list-cta { display: list-item; margin-left: .5rem; }
 }
+/* Narrow desktop: room for six nav links plus the button */
+@media (min-width: 821px) and (max-width: 960px) {
+  .header-inner { gap: 1rem; }
+  .nav-list a:not(.btn) { padding: 0 .4rem; }
+  .brand img { width: 168px; }
+  .nav-list-cta { margin-left: .25rem; }
+  .nav-list-cta .btn { white-space: nowrap; padding: .7rem 1rem; }
+}
 @media (max-width: 960px) {
   .anchor-service, .digital-layout, .about-layout, .contact-layout { grid-template-columns: 1fr; }
   .hero { display: block; min-height: 0; padding: 0; }

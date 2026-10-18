@@ -80,24 +80,44 @@
   <section class="hero" aria-labelledby="hero-heading">
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow">Operations consultancy for small businesses</p>
-        <h1 id="hero-heading">Clearer operations. Better systems.</h1>
-        <p class="lead">Clairen Haus works one-on-one with small business owners on the operational problems that keep coming back. We find what is really causing them, then choose the right fix: a better process, practical AI, or software built for the job.</p>
-        <div class="hero-actions">
+        <p class="eyebrow hero-rise">Operations consultancy for small businesses</p>
+        <h1 id="hero-heading"><span class="hw">Clearer</span> <span class="hw">operations.</span> <span class="hero-mark"><span class="hw">Better</span> <span class="hw">systems.</span></span></h1>
+        <p class="lead hero-rise hero-rise-3">Clairen Haus works one-on-one with small business owners on the operational problems that keep coming back. We find what is really causing them, then choose the right fix: a better process, practical AI, or software built for the job.</p>
+        <div class="hero-actions hero-rise hero-rise-4">
           <a class="btn btn-primary btn-lg" href="#contact">Let’s Talk Through It</a>
           <a class="text-link" href="#approach">How we work</a>
         </div>
       </div>
-    </div>
-    <div class="hero-media">
-      <picture>
-        <source media="(max-width: 640px)" type="image/avif" srcset="/assets/img/hero-michelle-desk-mobile-480.avif 480w, /assets/img/hero-michelle-desk-mobile-800.avif 800w" sizes="100vw">
-        <source media="(max-width: 640px)" type="image/webp" srcset="/assets/img/hero-michelle-desk-mobile-480.webp 480w, /assets/img/hero-michelle-desk-mobile-800.webp 800w" sizes="100vw">
-        <source media="(max-width: 640px)" srcset="/assets/img/hero-michelle-desk-mobile-480.jpg 480w, /assets/img/hero-michelle-desk-mobile-800.jpg 800w" sizes="100vw">
-        <source type="image/avif" srcset="/assets/img/hero-michelle-desk-1280.avif 1280w, /assets/img/hero-michelle-desk-1920.avif 1920w" sizes="100vw">
-        <source type="image/webp" srcset="/assets/img/hero-michelle-desk-1280.webp 1280w, /assets/img/hero-michelle-desk-1920.webp 1920w" sizes="100vw">
-        <img class="hero-img" src="/assets/img/hero-michelle-desk-1920.jpg" srcset="/assets/img/hero-michelle-desk-1280.jpg 1280w, /assets/img/hero-michelle-desk-1920.jpg 1920w" sizes="100vw" width="1920" height="1080" alt="Michelle Robinson, founder of Clairen Haus, on a client call at her desk" fetchpriority="high" loading="eager">
-      </picture>
+      <div class="hero-ops" aria-hidden="true">
+        <div class="ops-stage">
+          <div class="ops-ghost"></div>
+          <div class="ops-panel is-caught">
+            <div class="ops-head">
+              <span class="ops-ring"><svg viewBox="0 0 36 36"><circle class="ops-ring-track" cx="18" cy="18" r="15"/><circle class="ops-ring-fill" cx="18" cy="18" r="15" pathLength="100"/></svg><span class="ops-ring-check"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.5 3 3 6-6.5"/></svg></span></span>
+              <span class="ops-head-text"><span class="ops-head-title">Today</span><span class="ops-head-status"><span class="ops-status-a">Handling it…</span><span class="ops-status-b">All caught up</span></span></span>
+              <span class="ops-live"><span class="ops-live-dot"></span>Live</span>
+            </div>
+            <ul class="ops-list">
+            <li class="op-card is-done">
+              <span class="op-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5l4 4L9 19H5v-4Z"/><path d="M12.5 7.5l4 4"/></svg></span>
+              <span class="op-text"><span class="op-title">Service agreement</span><span class="op-sub"><span class="op-sub-b">Signed and filed</span></span></span>
+              <span class="op-chip"><span class="op-chip-b"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.5 3 3 6-6.5"/></svg>Done</span></span>
+            </li>
+            <li class="op-card is-done">
+              <span class="op-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-8l-4.5 3v-3H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5Z"/></svg></span>
+              <span class="op-text"><span class="op-title">New inquiry</span><span class="op-sub"><span class="op-sub-b">Answered and tagged</span></span></span>
+              <span class="op-chip"><span class="op-chip-b"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.5 3 3 6-6.5"/></svg>Done</span></span>
+            </li>
+            <li class="op-card is-done">
+              <span class="op-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></span>
+              <span class="op-text"><span class="op-title">Appointment request</span><span class="op-sub"><span class="op-sub-b">Booked · Tue 10:00</span></span></span>
+              <span class="op-chip"><span class="op-chip-b"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.5 3 3 6-6.5"/></svg>Done</span></span>
+            </li>
+            </ul>
+          </div>
+          <div class="ops-toast"><span class="ops-toast-ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.5 3 3 6-6.5"/></svg></span><span class="ops-toast-text">Agreement signed</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -385,6 +405,7 @@
 </footer>
 
 <script src="/assets/js/home.js" defer></script>
+<script src="/assets/js/hero-ops.js" defer></script>
 <script src="/assets/js/pearl-cursor.js" defer></script>
 </body>
 </html>

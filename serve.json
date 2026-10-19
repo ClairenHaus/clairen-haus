@@ -1,4 +1,21 @@
 {
+  "redirects": [
+    {
+      "source": "/book",
+      "destination": "https://book.clairenhaus.com/book",
+      "type": 302
+    },
+    {
+      "source": "/book/",
+      "destination": "https://book.clairenhaus.com/book",
+      "type": 302
+    },
+    {
+      "source": "/book.html",
+      "destination": "https://book.clairenhaus.com/book",
+      "type": 302
+    }
+  ],
   "headers": [
     {
       "source": "**",

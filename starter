@@ -1220,7 +1220,7 @@ const PRIORITY_DATA = {
   },
 };
 
-const CALENDLY = 'https://calendly.com/clairenhaus/operations-diagnostic';
+const CALENDLY = 'https://book.clairenhaus.com/book';
 
 /* ═══════════════════════════════════════════════════════════
    STATE

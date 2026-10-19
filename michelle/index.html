@@ -2,200 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Michelle Robinson | Clairen Haus</title>
-  <meta name="description" content="Michelle Robinson — Systems, Strategy, Structure. Built to Run." />
+  <meta name="description" content="Michelle Robinson, founder of Clairen Haus. Systems, strategy, structure. Book a call, see the portfolio, or save my contact." />
+  <meta name="theme-color" content="#2A1F1A" />
+  <meta property="og:title" content="Michelle Robinson | Clairen Haus" />
+  <meta property="og:description" content="Systems · Strategy · Structure. Book a call, see the portfolio, or save my contact." />
+  <meta property="og:image" content="https://clairenhaus.com/michelle/michelle-photo.jpg" />
+  <meta property="og:url" content="https://clairenhaus.com/michelle" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0A0806;
-      --s1: #141009;
-      --orange: #FF6B2B;
-      --orange2: #FF9A5C;
-      --gold: #FFB830;
-      --white: #F7F2EC;
-      --muted: #A89F94;
-      --faint: rgba(247,242,236,0.08);
-      --display: 'Plus Jakarta Sans', sans-serif;
+      --espresso:#3E2F28; --espresso-deep:#2A1F1A; --night:#1F1713; --bronze:#7A5B3F; --taupe:#B39A86;
+      --rose:#C79AA1; --blush:#E9D4D6; --blush-soft:#F4E8E9; --ivory:#FAF8F5; --ivory-deep:#F3EEE8;
+      --line:#E4DAD0; --text-soft:#5E4D44; --gold:#D9B48F;
+      --sans:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
+      --serif:"Instrument Serif",Georgia,serif;
     }
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{margin:0;font-family:var(--sans);color:var(--espresso);background:var(--ivory);-webkit-font-smoothing:antialiased;line-height:1.5}
+    a{color:inherit}
+    :focus-visible{outline:none;box-shadow:0 0 0 3px var(--ivory),0 0 0 5px var(--bronze);border-radius:14px}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Top: dark espresso band, the portfolio hero's palette */
+    .top{position:relative;overflow:hidden;isolation:isolate;color:var(--ivory);
+      background:radial-gradient(120% 90% at 80% 0%,#4a372e 0%,var(--espresso-deep) 46%,var(--night) 100%);
+      padding:calc(14px + env(safe-area-inset-top)) 18px 40px;border-radius:0 0 28px 28px}
+    .glow{position:absolute;z-index:-1;border-radius:50%;pointer-events:none;filter:blur(10px)}
+    .glow-rose{width:420px;height:420px;top:-170px;right:-170px;opacity:.55;background:radial-gradient(circle,#C79AA1 0%,rgba(199,154,161,0) 70%)}
+    .glow-bronze{width:460px;height:460px;bottom:-280px;left:-220px;opacity:.45;background:radial-gradient(circle,#9b7350 0%,rgba(122,91,63,0) 70%)}
+    .col{width:100%;max-width:440px;margin:0 auto}
 
-    body {
-      background: var(--bg);
-      color: var(--white);
-      font-family: var(--display);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-    }
-
-    .page {
-      width: 100%;
-      max-width: 480px;
-      padding-bottom: 56px;
-    }
-
-    /* Photo */
-    .hero {
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .hero img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: top right;
-      display: block;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 50%;
-      background: linear-gradient(to bottom, transparent, var(--bg));
-      pointer-events: none;
-    }
+    /* Nav pill */
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 7px 7px 14px;border-radius:999px;
+      background:rgba(250,248,245,.06);border:1px solid rgba(233,212,214,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+    .brand{display:flex;align-items:center;gap:9px;text-decoration:none;font-weight:500;letter-spacing:.2em;text-transform:uppercase;font-size:12px;white-space:nowrap;color:var(--ivory)}
+    .brand img{width:26px;height:26px;display:block}
+    .pill-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:999px;font-size:13.5px;font-weight:500;text-decoration:none;
+      color:var(--blush);box-shadow:inset 0 0 0 1px rgba(233,212,214,.35);white-space:nowrap}
+    .pill-btn:hover{box-shadow:inset 0 0 0 1px rgba(233,212,214,.8)}
 
     /* Profile */
-    .profile {
-      padding: 0 24px 8px;
-      margin-top: -64px;
-      position: relative;
-      z-index: 1;
-      text-align: center;
+    .profile{text-align:center;padding-top:28px}
+    .photo{position:relative;width:min(264px,70vw);margin:0 auto}
+    .photo img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:22px;
+      border:1px solid rgba(233,212,214,.18);box-shadow:0 34px 60px -26px rgba(0,0,0,.75)}
+    .tag{position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+      padding:7px 14px;border-radius:999px;font-size:12.5px;font-weight:500;color:var(--espresso-deep);
+      background:linear-gradient(135deg,#F1DADD,var(--blush));box-shadow:0 10px 24px -12px rgba(0,0,0,.6)}
+    .tag i{width:7px;height:7px;border-radius:50%;background:var(--rose);display:block}
+    h1{margin:34px 0 0;font-weight:500;font-size:clamp(34px,9.6vw,42px);line-height:1.04;letter-spacing:-.03em}
+    h1 em{font-family:var(--serif);font-weight:400;font-style:italic;letter-spacing:-.01em;
+      background:linear-gradient(100deg,var(--blush) 0%,var(--rose) 45%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.04em}
+    .tagline{margin:12px 0 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:rgba(233,212,214,.78)}
+    .cta{display:flex;align-items:center;justify-content:center;gap:10px;margin:24px auto 0;min-height:56px;padding:0 28px;border-radius:999px;
+      background:linear-gradient(135deg,#E9C3C8,var(--rose) 55%,#B98790);color:var(--espresso-deep);font-weight:600;font-size:16.5px;text-decoration:none;letter-spacing:.01em;
+      box-shadow:0 12px 30px -10px rgba(199,154,161,.7),inset 0 1px 0 rgba(255,255,255,.5);transition:transform .25s ease,box-shadow .25s ease}
+    .cta:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(199,154,161,.85),inset 0 1px 0 rgba(255,255,255,.5)}
+    .cta svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    /* Links: cards like the site's chips and panes */
+    main{padding:26px 18px calc(44px + env(safe-area-inset-bottom))}
+    .links{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+    .link{min-width:0}
+    .link{display:flex;align-items:center;gap:14px;min-height:68px;padding:12px 14px 12px 12px;border-radius:16px;text-decoration:none;
+      background:#fff;border:1px solid var(--line);box-shadow:0 10px 22px -18px rgba(62,47,40,.45);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+    .link:hover{transform:translateY(-1px);border-color:var(--taupe);box-shadow:0 14px 28px -18px rgba(62,47,40,.5)}
+    .link .ic{flex:0 0 42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--blush-soft);color:var(--bronze)}
+    .link:first-child .ic{background:var(--espresso);color:var(--blush)}
+    .ic svg,.go{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+    .lt{flex:1;min-width:0}
+    .lt b{display:block;font-weight:500;font-size:16.5px;line-height:1.25;color:var(--espresso)}
+    .lt small{display:block;font-size:13.5px;line-height:1.35;color:var(--text-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .go{flex:none;color:var(--taupe);width:18px;height:18px}
+
+    .label{margin:30px 0 12px;text-align:center;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--bronze)}
+    .socials{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+    .socials a{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;background:#fff;border:1px solid var(--line);
+      font-size:15px;font-weight:500;text-decoration:none;color:var(--espresso);transition:border-color .2s ease,background-color .2s ease}
+    .socials a:hover{border-color:var(--rose);background:var(--blush-soft)}
+
+    .qr{margin:30px auto 0;max-width:260px;padding:18px 18px 16px;border-radius:22px;background:#fff;border:1px solid var(--line);text-align:center;
+      box-shadow:0 18px 40px -28px rgba(62,47,40,.45)}
+    .qr img{display:block;width:180px;height:180px;margin:0 auto;image-rendering:pixelated}
+    .qr p{margin:10px 0 0;font-size:13.5px;color:var(--text-soft)}
+    footer{margin-top:28px;text-align:center;font-size:13px;color:var(--taupe)}
+    footer a{color:var(--bronze);text-decoration:underline;text-decoration-color:var(--rose);text-decoration-thickness:2px;text-underline-offset:4px}
+
+    /* Gentle entrance */
+    @media (prefers-reduced-motion:no-preference){
+      .rise{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+      .r2{animation-delay:.08s} .r3{animation-delay:.16s} .r4{animation-delay:.24s} .r5{animation-delay:.32s}
+      @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
     }
 
-    .profile h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--white);
-      line-height: 1.1;
-    }
-
-    .profile .tagline {
-      margin-top: 8px;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--orange2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .profile .tagline::before,
-    .profile .tagline::after {
-      content: '';
-      width: 18px;
-      height: 1.5px;
-      background: var(--orange2);
-    }
-
-    /* Links */
-    .links {
-      padding: 28px 24px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .btn {
-      display: block;
-      padding: 15px 20px;
-      border-radius: 2px;
-      text-decoration: none;
-      text-align: center;
-      font-family: var(--display);
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-weight: 700;
-      transition: opacity 0.2s, border-color 0.2s;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--orange), var(--orange2));
-      color: #fff;
-      box-shadow: 0 0 28px rgba(255,107,43,0.22);
-    }
-
-    .btn-primary:hover { opacity: 0.88; }
-
-    .btn-ghost {
-      border: 1.5px solid var(--faint);
-      color: var(--white);
-      background: transparent;
-    }
-
-    .btn-ghost:hover { border-color: rgba(247,242,236,0.35); }
-
-    /* Divider */
-    .divider {
-      margin: 20px 24px 0;
-      height: 1px;
-      background: var(--faint);
-    }
-
-    /* Socials */
-    .socials {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      padding: 20px 24px 0;
-    }
-
-    .btn-social {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 13px 8px;
-      border: 1px solid var(--faint);
-      border-radius: 2px;
-      color: var(--muted);
-      text-decoration: none;
-      text-align: center;
-      font-family: var(--display);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 700;
-      background: var(--s1);
-      transition: color 0.2s, border-color 0.2s;
-    }
-
-    .btn-social:hover {
-      color: var(--white);
-      border-color: rgba(247,242,236,0.3);
-    }
-
-    /* QR */
-    .qr-section {
-      padding: 32px 24px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .qr-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    #qrcode img {
-      border-radius: 6px;
+    @media (min-width:720px){
+      body{background:linear-gradient(180deg,var(--blush-soft),var(--ivory) 520px)}
+      .top{max-width:520px;margin:28px auto 0;border-radius:30px;padding:16px 26px 44px;box-shadow:0 40px 80px -40px rgba(31,23,19,.6)}
+      main{max-width:520px;margin:0 auto;padding:28px 26px 56px}
     }
   </style>
 <!-- Meta Pixel Code -->
@@ -226,40 +135,49 @@ src="https://www.facebook.com/tr?id=1635435995043824&ev=PageView&noscript=1"
 </script>
 </head>
 <body>
-  <main class="page">
-
-    <div class="hero">
-      <img src="/michelle/michelle-photo.png" alt="Michelle Robinson" width="480" height="640" />
+  <header class="top">
+    <span class="glow glow-rose"></span><span class="glow glow-bronze"></span>
+    <div class="col">
+      <nav class="nav" aria-label="Clairen Haus">
+        <a class="brand" href="https://clairenhaus.com" target="_blank" rel="noopener"><img src="/assets/brand/clairen-haus_monogram_rose.svg" alt="" width="26" height="26">Clairen Haus</a>
+        <a class="pill-btn" href="/michelle/Michelle-Robinson.vcf" download="Michelle-Robinson.vcf">Save contact</a>
+      </nav>
+      <div class="profile">
+        <div class="photo rise">
+          <img src="/michelle/michelle-photo.jpg" alt="Michelle Robinson" width="720" height="900" fetchpriority="high" />
+          <span class="tag"><i></i>Founder, Clairen Haus</span>
+        </div>
+        <h1 class="rise r2">Michelle <em>Robinson</em></h1>
+        <p class="tagline rise r3">Systems · Strategy · Structure</p>
+        <a class="cta rise r4" href="https://book.clairenhaus.com/book" target="_blank" rel="noopener">Book a Call <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
     </div>
+  </header>
 
-    <div class="profile">
-      <h1>Michelle Robinson</h1>
-      <p class="tagline">Systems · Strategy · Structure</p>
+  <main>
+    <div class="col">
+      <nav class="links rise r5" aria-label="Links">
+      <a class="link" href="https://clairenhaus.com/portfolio" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></span><span class="lt"><b>Portfolio</b><small>Case studies of my work</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="link" href="https://clairenhaus.com" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="lt"><b>Clairen Haus</b><small>Clearer operations. Better systems.</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="link" href="/michelle/Michelle-Robinson.vcf" download="Michelle-Robinson.vcf"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M19 8v6M16 11h6"/></svg></span><span class="lt"><b>Add Me to Your Phone</b><small>Save my contact card</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="link" href="tel:+17708788966"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.3a11 11 0 0 0 6.2 6.2l1.3-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z"/></svg></span><span class="lt"><b>Call Michelle</b><small>(770) 878-8966</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="link" href="mailto:michelle@clairenhaus.com"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg></span><span class="lt"><b>Email Michelle</b><small>michelle@clairenhaus.com</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      </nav>
+
+      <p class="label">Follow along</p>
+      <div class="socials">
+        <a href="https://www.instagram.com/clairenhaus" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.threads.com/@clairenhaus?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener">Threads</a>
+        <a href="https://www.linkedin.com/in/michelle-clairenhaus/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+
+      <div class="qr">
+        <img src="/michelle/qr.png" alt="QR code for clairenhaus.com/michelle" width="180" height="180" />
+        <p>Scan to visit this page</p>
+      </div>
+
+      <footer><a href="https://clairenhaus.com" target="_blank" rel="noopener">clairenhaus.com</a></footer>
     </div>
-
-    <div class="links">
-      <a class="btn btn-primary" href="https://book.clairenhaus.com/book" target="_blank" rel="noopener">Book a Call</a>
-      <a class="btn btn-primary" href="https://clairenhaus.com/starter" target="_blank" rel="noopener">Free Resource</a>
-      <a class="btn btn-ghost" href="https://clairenhaus.com" target="_blank" rel="noopener">Clairen Haus</a>
-      <a class="btn btn-ghost" href="https://clockoutcashin.com" target="_blank" rel="noopener">Clock Out Cash In</a>
-      <a class="btn btn-ghost" href="/michelle/Michelle-Robinson.vcf" download="Michelle-Robinson.vcf">Add Me to Your Phone</a>
-      <a class="btn btn-ghost" href="tel:+17708788966">Call Michelle</a>
-      <a class="btn btn-ghost" href="mailto:michelle@clairenhaus.com">Email Michelle</a>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="socials">
-      <a class="btn-social" href="https://www.instagram.com/clairenhaus" target="_blank" rel="noopener">Instagram</a>
-      <a class="btn-social" href="https://www.threads.com/@clairenhaus?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener">Threads</a>
-      <a class="btn-social" href="https://www.linkedin.com/in/michelle-clairenhaus/" target="_blank" rel="noopener">LinkedIn</a>
-    </div>
-
-    <div class="qr-section">
-      <p class="qr-label">Scan to visit this page</p>
-      <img src="/michelle/qr.png" alt="QR code for clairenhaus.com/michelle" width="200" height="200" style="border-radius:6px;" />
-    </div>
-
   </main>
 </body>
 </html>

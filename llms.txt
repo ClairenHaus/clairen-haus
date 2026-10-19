@@ -8,6 +8,7 @@
 - [About](https://www.clairenhaus.com/about): About Clairen Haus.
 - [Portfolio](https://www.clairenhaus.com/portfolio): Community platforms, client portals, client delivery software and AI agent demos built by Clairen Haus.
 - [Commons by Clairen Haus](https://www.clairenhaus.com/commons): A private, branded community app (feed, messages, courses, events, member directory, levels, coins, badges, leaderboard, admin tools). Done for you: $2,497 setup + $149/month. DIY code: $997 one time.
+- [Layla by Clairen Haus](https://www.clairenhaus.com/layla): An AI after-hours receptionist for home-service businesses (HVAC, roofing, plumbing, garage doors, electrical). Answers the business line in the company's name when the office is closed, books the job into an open arrival window, emails the customer a confirmation and emails the owner the details. Pricing on a call.
 - [Case study: Sistahz In Systems](https://www.clairenhaus.com/case-studies/sistahz-in-systems): Designed, built and launched by Michelle: a private members’ community platform.
 - [Case study: Clairen Haus Client Portal](https://www.clairenhaus.com/case-studies/client-portal): A private portal where website clients follow their build from deposit to launch.
 - [Case study: Signature Delivery Suite](https://www.clairenhaus.com/case-studies/signature-delivery-suite): Client delivery software for executive and leadership coaches.

@@ -192,19 +192,13 @@ html:not(.js) .ly .st .more{max-height:none;opacity:1;margin-top:6px}
 @media(max-width:1024px){.ly .ly-hero{min-height:0;padding:48px 0 44px}}
 @media(max-width:760px){.ly .ly-hero{min-height:calc(100svh - 72px - 42px);padding:22px 0 22px}}
 
-/* ---- Call summaries by text (on /layla) ---- */
-.ly .sms{background:#fff;padding:80px 0}
-.ly .sms-grid{display:grid;grid-template-columns:1fr minmax(300px,420px);gap:56px;align-items:center}
-.ly .sms-copy p{margin-top:14px;max-width:52ch;color:var(--muted)}
-.ly .sms-copy .fine{font-size:14px;margin-top:18px}
-.ly .sms-copy .ly-btn{margin-top:24px}
+/* ---- Phone card (example text, used on /layla/text-alerts) ---- */
 .ly .phone-card{background:var(--navy);border-radius:22px;padding:22px 20px 26px;color:#fff;box-shadow:0 18px 40px rgba(11,37,69,.18)}
 .ly .phone-card .from{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#9FB3CC;text-align:center;margin-bottom:14px}
 .ly .bubble{background:#fff;color:var(--navy);border-radius:18px 18px 18px 4px;padding:12px 15px;font-size:15px;line-height:1.42}
 .ly .bubble + .bubble{margin-top:10px}
 .ly .bubble.me{background:var(--orange);color:var(--navy);border-radius:18px 18px 4px 18px;margin-left:auto;width:max-content;max-width:80%}
 .ly .phone-card .cap{font-size:12px;color:#9FB3CC;margin-top:12px;text-align:center}
-@media(max-width:900px){.ly .sms{padding:52px 0}.ly .sms-grid{grid-template-columns:1fr;gap:30px}}
 
 /* ---- Text sign-up page (/layla/text-alerts) ---- */
 .ly .su{padding:64px 0 80px}
@@ -246,3 +240,210 @@ html:not(.js) .ly .st .more{max-height:none;opacity:1;margin-top:6px}
 .ly .prog dd{margin:0;color:var(--slate)}
 @media(max-width:960px){.ly .su-grid{grid-template-columns:1fr;grid-template-areas:'intro' 'form' 'card';grid-template-rows:auto;row-gap:32px}.ly .su .su-card{margin-top:0}}
 @media(max-width:640px){.ly .su{padding:36px 0 56px}.ly .su-form{padding:22px 18px}.ly .row2{grid-template-columns:1fr;gap:0}.ly .prog dl{grid-template-columns:1fr;gap:2px}.ly .prog dd{margin-bottom:10px}}
+
+/* One Layla, every trade: a pinned scroll that swaps the trade, the giant word and the colour together.
+   Without JS, with reduced motion, or on a very short screen it stays as three static cards. */
+.ly .trades{--hdr:72px;background:#fff;color:var(--navy);padding:72px 0 80px}
+.ly .tr-head p{max-width:46ch;color:var(--muted);font-size:clamp(16px,1.55vw,20px);margin-top:12px}
+.ly .tr-tabs{display:none}
+.ly .tr-panels{width:100%;max-width:1340px;margin:34px auto 0;padding-inline:var(--m);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ly .tr-panel{container-type:inline-size;--bg:var(--navy);--fg:#fff;--wd:var(--orange);--acc:var(--orange);position:relative;display:flex;flex-direction:column;background:var(--bg);color:var(--fg);border-radius:14px;padding:22px 22px 24px;overflow:hidden}
+.ly .tr-hvac{--bg:var(--orange);--fg:var(--navy);--wd:var(--navy);--acc:var(--navy)}
+.ly .tr-electrical{--bg:var(--mist);--fg:var(--navy);--wd:var(--navy);--acc:var(--orange)}
+.ly .tr-word{font-weight:900;text-transform:uppercase;letter-spacing:-.05em;line-height:.8;color:var(--wd);white-space:nowrap;font-size:min(calc(132cqi / var(--n,8)),96px);order:-1;margin:-2px 0 18px}
+.ly .tr-word span{display:inline-block}
+.ly .tr-trade{font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.ly .tr-trade span{color:var(--acc);margin-right:6px;font-variant-numeric:tabular-nums}
+.ly .tr-hvac .tr-trade span{opacity:.6}
+.ly .tr-line{font-size:clamp(24px,2.2vw,32px);font-weight:900;letter-spacing:-.035em;margin-top:8px}
+.ly .tr-how{font-size:16px;line-height:1.45;margin-top:10px;opacity:.88;max-width:40ch}
+.ly .tr-card{margin-top:20px;background:#fff;color:var(--navy);border-radius:14px;padding:16px 18px 14px;box-shadow:0 22px 50px -26px rgba(11,37,69,.55)}
+.ly .tr-card-top{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700}
+.ly .tr-card-top b{display:inline-flex;align-items:center;gap:8px;font-weight:900;letter-spacing:-.02em;font-size:16px}
+.ly .tr-card-top b:before{content:"";width:9px;height:9px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 4px rgba(255,107,26,.2)}
+.ly .tr-card-top span{color:var(--muted);font-variant-numeric:tabular-nums}
+.ly .tr-quote{font-size:16px;font-weight:500;letter-spacing:-.01em;line-height:1.35;margin-top:10px}
+.ly .tr-ticks{list-style:none;padding:0;margin-top:12px;border-top:1px solid var(--mist)}
+.ly .tr-ticks li{position:relative;padding:8px 0 0 26px;font-size:14.5px;font-weight:700;line-height:1.3}
+.ly .tr-ticks li:before{content:"";position:absolute;left:0;top:8px;width:17px;height:17px;border-radius:50%;background:var(--orange) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.5L12 5.5' fill='none' stroke='%230B2545' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/13px no-repeat;transition:background-color .35s var(--ez),transform .35s var(--ez)}
+
+@media(max-width:1024px){.ly .tr-panels{grid-template-columns:1fr;max-width:560px}}
+@media(max-width:760px){.ly .trades{padding:52px 0 56px}.ly .tr-panels{margin-top:26px;gap:14px}}
+
+/* pinned mode, added by layla.js */
+.ly .trades.is-pinned{--t-bg:var(--navy);--t-fg:#fff;--t-acc:var(--orange);position:relative;padding:0;height:calc(100svh - var(--hdr) + 240svh);background:var(--t-bg)}
+.ly .trades.is-pinned[data-t="1"]{--t-bg:var(--orange);--t-fg:var(--navy);--t-acc:var(--navy)}
+.ly .trades.is-pinned[data-t="2"]{--t-bg:var(--mist);--t-fg:var(--navy);--t-acc:var(--orange)}
+.ly .is-pinned .tr-stage{position:sticky;top:var(--hdr);height:calc(100svh - var(--hdr));display:flex;flex-direction:column;overflow:hidden;background:var(--t-bg);color:var(--t-fg);transition:background-color .7s var(--ez),color .7s var(--ez)}
+.ly .is-pinned .tr-head{position:relative;z-index:3;display:grid;grid-template-columns:1fr auto;align-items:end;gap:6px 32px;padding-top:clamp(22px,4vh,44px)}
+.ly .is-pinned .tr-head p{color:inherit;opacity:.82;grid-column:1}
+.ly .is-pinned .tr-tabs{display:flex;grid-column:2;grid-row:1/span 2;gap:4px;padding:4px;border-radius:999px;background:color-mix(in srgb,var(--t-fg) 12%,transparent)}
+.ly .is-pinned .tr-tabs button{border:0;background:none;color:inherit;font-size:15px;font-weight:700;min-height:40px;padding:0 16px;border-radius:999px;cursor:pointer;transition:background-color .4s var(--ez),color .4s var(--ez)}
+.ly .is-pinned[data-t="0"] .tr-tabs [data-go="0"],.ly .is-pinned[data-t="1"] .tr-tabs [data-go="1"],.ly .is-pinned[data-t="2"] .tr-tabs [data-go="2"]{background:var(--t-fg);color:var(--t-bg)}
+.ly .is-pinned .tr-panels{position:relative;flex:1;min-height:0;margin:0;max-width:none;padding:0;display:block}
+.ly .is-pinned .tr-panel{container-type:normal;position:absolute;inset:0;display:grid;grid-template-rows:minmax(0,1fr) auto;background:none;color:inherit;border-radius:0;padding:0;overflow:visible;pointer-events:none;visibility:hidden;transition:visibility 0s .6s}
+.ly .is-pinned .tr-panel.on{pointer-events:auto;visibility:visible;transition:none}
+.ly .is-pinned .tr-word{position:absolute;left:0;right:0;top:44%;margin:0;text-align:center;font-size:var(--fs,18vw);line-height:.74;transform:translateY(-50%);opacity:0;transition:opacity .55s var(--ez)}
+.ly .is-pinned .tr-word span{transform:translate3d(var(--x,0),0,0);will-change:transform}
+.ly .is-pinned .tr-panel.on .tr-word{opacity:1}
+.ly .is-pinned .tr-card{grid-row:1;align-self:center;justify-self:center;position:relative;z-index:2;width:min(360px,80vw);margin:0;opacity:0;transform:translateY(18px) scale(.97);transition:opacity .45s var(--ez),transform .6s var(--ez)}
+.ly .is-pinned .tr-panel.on .tr-card{opacity:1;transform:none;transition-delay:.08s}
+.ly .is-pinned .tr-copy{grid-row:2;position:relative;z-index:2;width:100%;max-width:1340px;margin:0 auto;padding:0 var(--m) clamp(24px,5vh,48px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,34ch);grid-template-areas:'trade how' 'line how';column-gap:48px;align-items:end;opacity:0;transform:translateY(16px);transition:opacity .45s var(--ez),transform .6s var(--ez)}
+.ly .is-pinned .tr-panel.on .tr-copy{opacity:1;transform:none;transition-delay:.14s}
+.ly .is-pinned .tr-trade{grid-area:trade}
+.ly .is-pinned .tr-trade span{color:var(--t-acc)}
+.ly .is-pinned .tr-line{grid-area:line;font-size:clamp(30px,3.6vw,54px)}
+.ly .is-pinned .tr-how{grid-area:how;margin:0;font-size:clamp(16px,1.35vw,19px)}
+.ly .is-pinned .tr-ticks li:not(.lit):before{background-color:var(--mist);background-image:none;transform:scale(.82)}
+.ly .is-pinned .tr-ticks li:not(.lit){color:#66768C}
+.ly .is-pinned .tr-ticks li{transition:color .35s var(--ez)}
+@media(max-width:1024px){.ly .trades.is-pinned{--hdr:72px}}
+@media(max-width:760px){
+  .ly .is-pinned .tr-head{grid-template-columns:1fr;padding-top:18px}
+  .ly .is-pinned .tr-head h2{font-size:30px}
+  .ly .is-pinned .tr-head p{font-size:15px;margin-top:6px;line-height:1.4}
+  .ly .is-pinned .tr-tabs{grid-column:1;grid-row:auto;justify-self:start;margin-top:12px}
+  .ly .is-pinned .tr-tabs button{font-size:14px;min-height:36px;padding:0 13px}
+  .ly .is-pinned .tr-panel{grid-template-rows:minmax(8px,.8fr) auto auto minmax(0,1.2fr)}
+  .ly .is-pinned .tr-word{position:relative;top:auto;transform:none;grid-row:2;line-height:.8}
+  .ly .is-pinned .tr-card{grid-row:3;align-self:start;margin-top:-12px}
+  .ly .is-pinned .tr-copy{grid-row:4;align-self:end}
+  .ly .is-pinned .tr-card{width:min(318px,84vw);padding:13px 15px 11px}
+  .ly .is-pinned .tr-quote{font-size:15px;margin-top:7px}
+  .ly .is-pinned .tr-ticks{margin-top:9px}
+  .ly .is-pinned .tr-ticks li{font-size:13.5px;padding-top:6px}
+  .ly .is-pinned .tr-ticks li:before{top:6px;width:16px;height:16px}
+  .ly .is-pinned .tr-copy{grid-template-columns:1fr;grid-template-areas:'trade' 'line' 'how';padding-bottom:22px}
+  .ly .is-pinned .tr-line{font-size:27px;margin-top:4px}
+  .ly .is-pinned .tr-how{font-size:15px;margin-top:6px;line-height:1.4}
+}
+@media(max-width:760px) and (max-height:700px){.ly .is-pinned .tr-head p{display:none}}
+
+/* Pricing & how to start (added Oct 26). Hero price line + one compact section before the close. */
+.ly .ctas .hero-price{order:3;flex-basis:100%;font-size:15px;line-height:1.4;color:var(--muted)}
+.ly .hero-price b{color:var(--navy);font-weight:700}
+.ly .hero-price i{font-style:normal;margin:0 .1em;color:var(--orange);font-weight:700}
+.ly .price{background:var(--navy);color:#fff;padding:76px 0 80px}
+.ly .price h2{color:#fff}
+.ly .pr-grid{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:start;margin-top:34px}
+.ly .pr-card{background:#fff;color:var(--navy);border-radius:14px;padding:30px 30px 24px}
+.ly .pr-tag{font-size:14px;font-weight:700;color:#C24A0C}
+.ly .pr-amt{display:flex;align-items:baseline;gap:6px;margin-top:8px;line-height:1}
+.ly .pr-amt b{font-size:clamp(60px,6vw,80px);font-weight:900;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.ly .pr-amt span{font-size:20px;font-weight:700;color:var(--muted)}
+.ly .pr-terms{margin-top:14px;font-size:18px;line-height:1.4}
+.ly .pr-terms b{background:var(--orange);padding:0 .25em}
+.ly .pr-reg{margin-top:6px;font-size:15px;color:var(--muted)}
+.ly .pr-inc{list-style:none;padding:18px 0 0;margin:18px 0 0;border-top:1px solid var(--mist);display:grid;gap:9px}
+.ly .pr-inc li{position:relative;padding-left:26px;font-size:16px;line-height:1.35}
+.ly .pr-inc li:before{content:"";position:absolute;left:2px;top:.28em;width:7px;height:12px;border:solid var(--orange);border-width:0 3px 3px 0;transform:rotate(45deg)}
+.ly .pr-btn{display:flex;width:100%;margin-top:24px;font-size:18px;min-height:54px}
+.ly .pr-ask{margin-top:14px;font-size:15px;color:var(--muted);text-align:center}
+.ly .pr-ask a{color:var(--navy);font-weight:700;text-underline-offset:.2em}
+.ly .pr-steps{list-style:none;padding:0;display:grid;gap:4px;counter-reset:none}
+.ly .pr-steps li{display:grid;grid-template-columns:64px 1fr;column-gap:16px;align-items:start;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+.ly .pr-steps b{grid-row:span 2;font-size:clamp(44px,4vw,60px);font-weight:900;line-height:.85;color:var(--orange);letter-spacing:-.05em}
+.ly .pr-steps h3{color:#fff;padding-top:4px}
+.ly .pr-steps p{color:#C9D5E4;margin-top:4px;font-size:16px}
+.ly .pr-need{margin-top:26px}
+.ly .pr-need h3{font-size:18px;color:#fff;letter-spacing:-.01em}
+.ly .pr-need ul{list-style:none;padding:0;margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+.ly .pr-need li{font-size:15px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.1);color:#fff}
+@media(prefers-reduced-motion:no-preference){.js .ly .pr-steps li[data-reveal]{transform:translateX(-18px)}
+.js .ly .pr-steps li[data-reveal].is-in{transform:none}
+.js .ly .pr-steps li b{transition:color .6s var(--ez);transition-delay:calc(var(--d,0ms) + 250ms)}
+.js .ly .pr-steps li:not(.is-in) b{color:rgba(255,107,26,.25)}}
+@media(max-width:900px){.ly .pr-grid{grid-template-columns:1fr;gap:30px}.ly .pr-card{max-width:520px}}
+@media(max-width:760px){.ly .ctas .hero-price{order:2;font-size:14px;margin-top:-2px}
+.ly .ctas .link{order:3}
+.ly .price{padding:52px 0 56px}
+.ly .pr-grid{margin-top:22px}
+.ly .pr-card{padding:24px 20px 20px}
+.ly .pr-terms{font-size:17px}
+.ly .pr-steps li{grid-template-columns:44px 1fr;column-gap:12px;padding:13px 0}
+.ly .pr-steps h3{font-size:19px}}
+.ly .hero-price span,.ly .hero-price b,.ly .pr-ask a[href^=tel]{white-space:nowrap}
+
+/* ---- Site header + footer on the Layla pages only: Layla navy/orange instead of the Clairen Haus palette.
+   /layla carries body.ly-page; /layla/text-alerts matches body:has(>main.ly), so its HTML is unchanged.
+   This file loads only on /layla pages, so the rest of clairenhaus.com is untouched. ---- */
+:is(.ly-page,body:has(>main.ly)) .site-header{background:#0B2545;border-bottom:1px solid rgba(255,255,255,.12)}
+:is(.ly-page,body:has(>main.ly)) .site-header .brand img{filter:brightness(0) invert(1)}
+:is(.ly-page,body:has(>main.ly)) .site-header .nav-list a:not(.btn){color:#E3E9F1}
+:is(.ly-page,body:has(>main.ly)) .site-header .nav-list a:not(.btn):hover{color:#fff;text-decoration-color:#FF6B1A}
+:is(.ly-page,body:has(>main.ly)) .site-header .btn-primary{background:#FF6B1A;border-color:#FF6B1A;color:#0B2545;font-weight:600}
+:is(.ly-page,body:has(>main.ly)) .site-header .btn-primary:hover{background:#ff894b;border-color:#ff894b;color:#0B2545}
+:is(.ly-page,body:has(>main.ly)) .site-header :focus-visible,:is(.ly-page,body:has(>main.ly)) .site-footer :focus-visible{outline:3px solid #FF6B1A;outline-offset:3px;box-shadow:none}
+:is(.ly-page,body:has(>main.ly)) .site-header .nav-toggle{color:#fff;border-color:rgba(255,255,255,.55)}
+:is(.ly-page,body:has(>main.ly)) .site-header .nav-toggle:hover{border-color:#FF6B1A}
+:is(.ly-page,body:has(>main.ly)) .site-header .nav-toggle-bars,:is(.ly-page,body:has(>main.ly)) .site-header .nav-toggle-bars:before,:is(.ly-page,body:has(>main.ly)) .site-header .nav-toggle-bars:after{background:#fff}
+:is(.ly-page,body:has(>main.ly)) .site-header .nav-list{background:#0B2545;border-bottom-color:rgba(255,255,255,.12)}
+:is(.ly-page,body:has(>main.ly)) .site-header .nav-list a:not(.btn){border-bottom-color:rgba(255,255,255,.12)}
+:is(.ly-page,body:has(>main.ly)) .skip-link{background:#FF6B1A;color:#0B2545}
+:is(.ly-page,body:has(>main.ly)) .site-footer{background:#0B2545;color:#C9D4E2}
+:is(.ly-page,body:has(>main.ly)) .site-footer a{color:#fff}
+:is(.ly-page,body:has(>main.ly)) .site-footer a:hover{color:#FF6B1A}
+:is(.ly-page,body:has(>main.ly)) .site-footer .footer-top{border-bottom-color:rgba(255,255,255,.14)}
+:is(.ly-page,body:has(>main.ly)) .site-footer .footer-bottom{color:#AEBBCD}
+
+/* Welcome page after payment, /layla/welcome (added Oct 26). Scoped under .wl. */
+.ly.wl .wl-hero{background:var(--navy);color:#fff;padding:clamp(56px,8vw,112px) 0 clamp(56px,7vw,96px)}
+.ly .wl-hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(36px,6vw,110px);align-items:center}
+.ly.wl h1{white-space:nowrap;font-size:clamp(40px,4.7vw,74px);line-height:.98;color:#fff}
+.ly .wl-lede{margin-top:26px;font-size:clamp(18px,1.55vw,22px);line-height:1.45;max-width:36ch;color:#E3E9F1}
+.ly .wl-btn{margin-top:32px;min-height:68px;padding:0 40px;font-size:22px}
+.ly .wl-sent{margin-top:16px;font-size:15px;color:#AEBBCD}
+.ly .wl-next{list-style:none;padding:0;display:grid;gap:10px}
+.ly .wl-next li{display:grid;grid-template-columns:52px 1fr;column-gap:16px;padding:18px 20px;background:rgba(255,255,255,.06);border-radius:10px}
+.ly .wl-next b{grid-row:span 2;font-size:44px;font-weight:900;line-height:.9;letter-spacing:-.05em;color:rgba(255,255,255,.35)}
+.ly .wl-next h2{font-size:21px;letter-spacing:-.02em;color:#fff}
+.ly .wl-next p{margin-top:3px;font-size:16px;color:#C9D5E4}
+.ly .wl-next .done b{color:var(--orange)}
+.ly .wl-next .done h2{text-decoration:line-through;text-decoration-color:var(--orange);text-decoration-thickness:3px}
+.ly .wl-next .now{background:#fff}
+.ly .wl-next .now b{color:var(--orange)}
+.ly .wl-next .now h2{color:var(--navy)}
+.ly .wl-next .now p{color:var(--muted)}
+.ly .wl-list{padding:clamp(64px,9vw,128px) 0}
+.ly .wl-list-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.7fr);gap:24px 60px;align-items:end}
+.ly .wl-list-head h2{max-width:16ch}
+.ly .wl-list-head p{font-size:18px;line-height:1.45;max-width:38ch}
+.ly .wl-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:44px}
+.ly .wl-group{background:#fff;border-radius:12px;padding:26px 26px 18px}
+.ly .wl-group h3{font-size:22px}
+.ly .wl-group ul{list-style:none;padding:0;margin-top:12px}
+.ly .wl-group label{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start;padding:11px 0;cursor:pointer;font-size:17px;line-height:1.4}
+.ly .wl-group input{appearance:none;-webkit-appearance:none;margin:0;width:26px;height:26px;border-radius:6px;background:var(--mist);display:grid;place-items:center;cursor:pointer;transition:background .18s ease}
+.ly .wl-group input:after{content:"";width:7px;height:13px;border:solid var(--navy);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px) scale(0);transition:transform .2s var(--ez)}
+.ly .wl-group input:checked{background:var(--orange)}
+.ly .wl-group input:checked:after{transform:rotate(45deg) translate(-1px,-1px) scale(1)}
+.ly .wl-group input:checked+span{color:var(--muted)}
+.ly.wl .close-act a:not(.ly-btn){font-weight:700;text-underline-offset:.2em}
+.ly.wl .close-act a[href^=tel]{white-space:nowrap}
+@media(max-width:900px){.ly .wl-hero-grid{grid-template-columns:1fr}.ly .wl-groups{grid-template-columns:1fr}.ly .wl-list-head{grid-template-columns:1fr}}
+@media(max-width:760px){.ly.wl h1{font-size:clamp(30px,8.9vw,56px);white-space:normal}
+.ly .wl-btn{min-height:62px}
+.ly .wl-btn{display:flex;width:100%;font-size:19px}
+.ly .wl-next li{grid-template-columns:40px 1fr;padding:14px 16px}
+.ly .wl-next b{font-size:34px}
+.ly .wl-group{padding:20px 18px 10px}
+.ly .wl-groups{margin-top:28px}
+.ly.wl .close .ly-btn{display:flex;width:100%}}
+@media print{.ly.wl .wl-hero,.ly.wl .close,.site-header,.site-footer{display:none}.ly .wl-group{break-inside:avoid}}
+
+/* Layla pages: header without the Clairen Haus menu (Oct 26, 6:52 PM). Logo left, one orange button right. */
+.ly-head .header-inner{justify-content:space-between}
+.ly-head .ly-head-cta{display:inline-flex;margin-left:auto;white-space:nowrap}
+@media (max-width:640px){
+  .ly-head .header-inner{min-height:64px;gap:.75rem}
+  .ly-head .ly-head-cta{min-height:44px;padding:.55rem 1rem;font-size:.9375rem}
+}
+
+/* Layla wordmark replaces the Clairen Haus logo in the Layla header (Oct 26, 6:54 PM) */
+.ly-head .ly-mark{display:inline-flex;align-items:center;gap:.5rem;padding:.25rem 0;color:#fff;text-decoration:none;font-family:Epilogue,system-ui,sans-serif;font-weight:900;font-size:1.75rem;line-height:1;letter-spacing:-.04em}
+.ly-head .ly-mark-wave{flex:none;fill:#FF6B1A}
+.ly-head .ly-mark:hover span{color:#fff}
+.ly-head .ly-mark:hover .ly-mark-wave{fill:#ff894b}
+:is(.ly-page,body:has(>main.ly)) .site-footer .ly-by{margin:0 0 .6rem;font-size:.875rem;letter-spacing:.02em;color:#AEBBCD}
+:is(.ly-page,body:has(>main.ly)) .site-footer .ly-by b{font-family:Epilogue,system-ui,sans-serif;font-weight:900;color:#fff;letter-spacing:-.02em}
+@media (max-width:640px){.ly-head .ly-mark{font-size:1.5rem}}

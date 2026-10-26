@@ -1,0 +1,248 @@
+/* Layla pages on clairenhaus.com. Navy #0B2545 and orange #FF6B1A. All rules are scoped under .ly so the site's own styles stay as they are. */
+.ly{--ez:cubic-bezier(.2,.7,.2,1);--navy:#0B2545;--orange:#FF6B1A;--paper:#F4F6F9;--mist:#E3E9F1;--slate:#1E293B;--muted:#3D4C61;--m:clamp(20px,4vw,48px)}
+.ly *,.ly *:before,.ly *:after{box-sizing:border-box}
+.ly{-webkit-text-size-adjust:100%}
+.ly{margin:0;background:var(--paper);color:var(--navy);font-family:Epilogue,system-ui,sans-serif;font-size:17px;line-height:1.5;overflow-x:clip}
+.ly img,.ly video{display:block;max-width:100%;height:auto}
+.ly h1,.ly h2,.ly h3,.ly p,.ly figure,.ly ol,.ly ul{margin:0}
+.ly h1,.ly h2,.ly h3{letter-spacing:-.035em;line-height:1.08}
+.ly h1{font-size:clamp(46px,5.9vw,88px);white-space:nowrap;font-weight:900}
+.ly h2{font-size:clamp(32px,3vw,44px);font-weight:900}
+.ly h3{font-size:clamp(20px,1.8vw,26px);font-weight:700}
+.ly a{color:inherit}
+.ly button{font-family:inherit}
+.ly :focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+.ly ::selection{background:var(--orange);color:var(--navy)}
+.ly .ly-wrap{width:100%;max-width:1340px;margin:auto;padding-inline:var(--m)}
+.ly .ly-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;background:var(--orange);color:var(--navy);text-decoration:none;font-weight:700;white-space:nowrap;transition:background .18s ease,transform .14s ease}
+.ly .ly-btn:hover{background:#ff894b}
+.ly .ly-btn:active{transform:scale(.97)}
+.ly .btn-small{min-height:40px;padding:0 16px;font-size:14px}
+.ly .link{text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:.07em}
+.ly .link:hover{text-decoration-thickness:.13em}
+/* A single paper field, including the nav. Height is measured at the actual viewport widths. */
+.ly .ly-hero{position:relative;background:var(--paper);color:var(--navy);min-height:min(960px,calc(100svh - 44px));display:flex;align-items:center;padding:98px 0 42px}
+.ly .bar{position:absolute;top:0;left:0;right:0}
+.ly .bar-in{display:flex;justify-content:space-between;align-items:center;padding-block:18px}
+.ly .wordmark,.ly .foot-mark{font-weight:900;font-size:22px;letter-spacing:-.035em;text-decoration:none}
+.ly .hero-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,4.8vw,70px);align-items:center}
+.ly .ly-hero-copy{max-width:560px}
+.ly .lede{font-size:clamp(17px,1.55vw,23px);line-height:1.42;margin-top:24px;max-width:34ch}
+.ly .ctas{display:flex;align-items:center;flex-wrap:wrap;gap:15px 24px;margin-top:28px}
+.ly .player-video{position:relative;background:var(--navy);overflow:hidden;border-radius:8px}
+.ly .player-video video{width:100%;aspect-ratio:16/9;object-fit:cover;cursor:pointer}
+.ly .sound{position:absolute;bottom:10px;left:10px;border:0;background:var(--navy);color:white;min-height:42px;padding:0 14px;font-size:14px;cursor:pointer}
+.ly .sound[aria-pressed=true]{background:var(--orange);color:var(--navy)}
+/* A separate strip, not the beginning of the next section. */
+.ly .strip{background:var(--navy);color:#fff;height:44px;overflow:hidden;display:flex;align-items:center}
+.ly .track{display:flex;width:max-content}
+.ly .run{display:flex;flex:none;align-items:center;gap:17px;padding-right:17px;white-space:nowrap;font-size:16px;font-weight:700;letter-spacing:.01em;line-height:1}
+.ly .run .z{color:var(--orange)}
+.ly .run i{display:block;flex:none;width:5px;height:5px;border-radius:50%;background:#fff}
+@media (prefers-reduced-motion:no-preference){.ly .track{animation:marquee 38s linear infinite}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+/* Evidence is one restrained sentence and one large figure, not five decorative rows. */
+.ly .proof{background:#fff;color:var(--navy);padding:68px 0 76px}
+.ly .proof-grid{display:flex;align-items:center;justify-content:center;gap:clamp(40px,6vw,96px)}
+.ly .tally{font-size:clamp(67px,10vw,148px);font-weight:900;letter-spacing:-.05em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ly .tally b{color:var(--orange)}
+.ly .proof-copy{max-width:600px}
+.ly .proof-copy p{color:var(--muted);max-width:44ch;margin-top:14px;font-size:clamp(16px,1.55vw,21px)}
+/* The decision and its two outcomes: an interactive call path (motion language from clairenhaus.com/portfolio: cubic-bezier(.2,.7,.2,1), lift on hover, segmented control). */
+.ly .flow{padding:80px 0 84px;background:var(--paper)}
+.ly .flow-head{display:flex;justify-content:space-between;gap:36px;align-items:end}
+.ly .flow-head p{max-width:54ch;color:var(--muted);font-size:18px;margin-top:12px}
+.ly .seg{display:inline-flex;flex:none;background:#DCE5EF;padding:4px;border-radius:999px}
+.ly .seg button{border:0;background:none;color:var(--navy);font-size:16px;font-weight:700;min-height:44px;padding:0 20px;border-radius:999px;cursor:pointer;transition:background .3s var(--ez),color .3s var(--ez)}
+.ly .seg button[aria-pressed=true]{background:var(--navy);color:#fff}
+.ly .seg button[data-mode=urgent][aria-pressed=true]{background:var(--orange);color:var(--navy)}
+.ly .call{position:relative;margin-top:30px;background:#fff;border-radius:14px;padding:30px 34px 26px}
+.ly .quote{font-size:clamp(20px,1.9vw,26px);font-weight:500;letter-spacing:-.02em;line-height:1.3}
+.ly .call .m-routine,.ly .call .q-routine{display:none}
+.ly .call[data-mode=routine] .m-urgent,.ly .call[data-mode=routine] .q-urgent{display:none}
+.ly .call[data-mode=routine] .m-routine,.ly .call[data-mode=routine] .q-routine{display:inline}
+.ly .call[data-mode=routine] div.m-routine{display:block}
+.ly .rail{display:none;position:absolute;left:34px;right:34px;top:var(--rail-top,118px);height:3px;background:#E3E9F1;border-radius:3px;overflow:hidden}
+.ly .rail-fill{display:block;height:100%;width:100%;background:var(--orange);transform-origin:0 50%;transform:scaleX(var(--p,1));transition:transform .55s var(--ez)}
+.ly .path{list-style:none;padding:0;margin-top:30px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.ly .st{position:relative;padding:34px 16px 16px;margin:0 -16px 0 0;border-radius:10px;color:var(--navy);outline-offset:0;transition:color .4s var(--ez),transform .25s ease,background .25s ease}
+.ly .st:first-child{margin-left:-16px}
+.ly .st .dot{position:absolute;top:-1px;left:16px;width:15px;height:15px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 5px #fff;transition:background .4s var(--ez),transform .4s var(--ez)}
+/* taste-skill-ignore: line 31 is a white ring separating the step dot from the rail; line 44 shadows appear only on hover lift (portfolio motion), never at rest */
+.ly .st h3{font-size:18px;letter-spacing:-.02em;line-height:1.2}
+.ly .st p{font-size:16px;line-height:1.42;margin-top:6px;color:var(--muted);transition:color .4s var(--ez)}
+.ly .st .more{color:var(--navy);font-weight:500;max-height:4.5em;overflow:hidden;transition:max-height .45s var(--ez),opacity .35s ease,margin .35s ease}
+.ly .st-owner .dot{width:19px;height:19px;top:-3px}
+.ly .flow.armed .st:not(.lit){color:#66768C}
+.ly .flow.armed .st:not(.lit) p{color:#66768C}
+.ly .flow.armed .st:not(.lit) .dot{background:#D2DAE4;transform:scale(.8)}
+.ly .flow.armed .st:not(.lit) h3{color:#66768C}
+.ly .st.lit .dot{animation:pop .5s var(--ez)}
+@keyframes pop{50%{transform:scale(1.35)}}
+.ly .st{cursor:pointer}
+.ly .st .more{max-height:0;opacity:0;margin-top:0}
+.ly .st.cur,.ly .st:focus-visible{background:#F4F6F9;transform:translateY(-3px)}
+.ly .st.cur .more,.ly .st:focus-visible .more{max-height:4.5em;opacity:1;margin-top:6px}
+html:not(.js) .ly .st .more{max-height:none;opacity:1;margin-top:6px}
+@media (hover:hover) and (pointer:fine){.ly .st:hover{background:#F4F6F9;transform:translateY(-3px)}
+.ly .st:hover .more{max-height:4.5em;opacity:1;margin-top:6px}}
+.ly .call .aside{margin-top:14px;font-size:14px;color:var(--muted)}
+/* Audio is a secondary proof in one screen. Transcript opens only on demand. */
+.ly .hear{background:#E3E9F1;padding:70px 0 74px}
+.ly .hear-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;column-gap:clamp(30px,5vw,70px)}
+.ly .hear-copy p{margin-top:14px;max-width:45ch;color:var(--muted);font-size:18px}
+.ly .control{display:flex;align-items:center;gap:20px;padding:21px 24px;background:var(--navy);color:#fff}
+.ly .play{width:66px;height:66px;flex:none;border:0;border-radius:50%;background:var(--orange);cursor:pointer;display:grid;place-items:center}
+.ly .tri{width:0;height:0;border-left:18px solid var(--navy);border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:5px}
+.ly .play.on .tri{width:17px;height:21px;border:0;margin:0;border-left:6px solid var(--navy);border-right:6px solid var(--navy)}
+.ly .meta{flex:1;min-width:0}
+.ly .title{font-size:18px;font-weight:700}
+.ly .title span{display:block;color:#D7E1EF;font-size:14px;font-weight:400}
+.ly .bar-track{position:relative;margin-top:12px;height:7px;background:#49617F;cursor:pointer}
+.ly .bar-track i{display:block;height:100%;width:0;background:var(--orange)}
+.ly .clock{margin-top:7px;font-size:14px;font-variant-numeric:tabular-nums;color:#D7E1EF}
+.ly .read{grid-column:1 / -1;margin-top:22px}
+.ly .read summary{display:inline-block;text-decoration:underline;text-underline-offset:.22em;cursor:pointer;font-weight:700}
+.ly .read[open] summary{margin-bottom:18px}
+.ly .note{color:var(--muted);font-size:14px}
+.ly .tx{list-style:none;padding:0;max-width:70ch;margin-top:18px;display:grid;gap:12px}
+.ly .tx li{display:grid;grid-template-columns:62px 1fr;gap:12px;font-size:16px}
+.ly .who{font-weight:700}
+.ly .caller .who{color:var(--muted)}
+.ly .close{padding:76px 0;background:var(--orange)}
+.ly .close h2{font-size:clamp(34px,3.8vw,56px)}
+.ly .close-grid{display:flex;justify-content:space-between;align-items:center;gap:36px}
+.ly .close-act{max-width:400px}
+.ly .close-act p{font-size:18px;line-height:1.4}
+.ly .close-act .ly-btn{margin-top:19px}
+.ly .btn-navy{background:var(--navy);color:#fff}
+.ly .btn-navy:hover{background:#1D4E89}
+.ly .foot{padding:32px 0;background:var(--navy);color:#fff}
+.ly .foot-in{display:flex;align-items:center;gap:24px;justify-content:space-between;flex-wrap:wrap}
+.ly .foot-mark{font-size:19px}
+.ly .foot p{font-size:14px;max-width:37ch}
+.ly .foot .link,.ly .legal{font-size:14px}
+/* A reveal never hides content; JS only adds a subtle shift as elements arrive. */
+@media(prefers-reduced-motion:no-preference){.js .ly [data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .8s var(--ez),transform .8s var(--ez);transition-delay:var(--d,0ms)}
+.js .ly [data-reveal].is-in{opacity:1;transform:none}
+.ly .control,.ly .ly-btn{transition:transform .25s ease,box-shadow .25s ease,background .2s ease}
+.ly .control:hover{transform:translateY(-3px);box-shadow:0 18px 40px -18px rgba(11,37,69,.55)}
+.ly .ly-btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -14px rgba(11,37,69,.45)}}
+/* taste-skill-ignore: line 31 is a white ring separating the step dot from the rail; line 44 shadows appear only on hover lift (portfolio motion), never at rest */
+@media(prefers-reduced-motion:reduce){.ly .rail-fill,.ly .st,.ly .st .dot,.ly .st .more{transition:none!important;animation:none!important}}
+@media(max-width:1024px){.ly .ly-hero{min-height:0;padding-top:86px;padding-bottom:46px}
+.ly .hero-grid{gap:26px}
+.ly .ly-hero h1{font-size:clamp(40px,5vw,62px)}
+.ly .flow-head{display:block}
+.ly .flow-head p{margin-top:12px}
+.ly .proof-grid{gap:28px}}
+@media(max-width:760px){.ly{--m:20px}
+.ly .ly-hero{min-height:calc(100svh - 42px);padding:75px 0 24px}
+.ly .bar-in{padding-block:13px}
+.ly .wordmark{font-size:19px}
+.ly .btn-small{min-height:36px;padding:0 12px;font-size:13px}
+.ly .hero-grid{display:flex;flex-direction:column;align-items:stretch;gap:20px}
+.ly .ly-hero h1{font-size:clamp(41px,11.4vw,52px)}
+.ly .lede{font-size:16px;line-height:1.4;margin-top:12px;max-width:42ch}
+.ly .ctas{margin-top:17px;gap:10px 14px}
+.ly .ctas .ly-btn{min-height:44px;padding-inline:17px;font-size:16px}
+.ly .ctas .link{font-size:16px}
+.ly .player-video{width:100%;border-radius:5px}
+.ly .sound{min-height:34px;font-size:13px}
+.ly .strip{height:42px}
+.ly .run{font-size:14px;gap:13px;padding-right:13px}
+.ly .proof{padding:49px 0}
+.ly .proof-grid{display:block}
+.ly .tally{font-size:74px}
+.ly .proof-copy{margin-top:12px}
+.ly .proof-copy p{font-size:16px;margin-top:9px}
+.ly .flow{padding:50px 0 54px}
+.ly .flow-head{display:block}
+.ly .flow-head p{font-size:16px;margin-top:9px}
+.ly .seg{margin-top:18px;display:flex}
+.ly .seg button{flex:1;font-size:14px;padding:0 10px}
+.ly .call{margin-top:16px;padding:20px 18px 18px}
+.ly .quote{font-size:18px}
+.ly .rail{left:25px;right:auto;width:3px;height:auto;top:var(--rail-top,100px);bottom:var(--rail-bot,60px)}
+.ly .rail-fill{transform-origin:50% 0;transform:scaleY(var(--p,1))}
+.ly .path{grid-template-columns:1fr;gap:4px;margin-top:18px}
+.ly .st,.ly .st:first-child{margin:0;padding:6px 6px 10px 34px}
+.ly .st .dot{top:9px;left:0}
+.ly .st h3{font-size:18px}
+.ly .st p{font-size:16px}
+.ly .call .aside{margin-top:8px}
+.ly .hear{padding:52px 0}
+.ly .hear-grid{grid-template-columns:1fr;gap:20px}
+.ly .hear-copy p{font-size:16px}
+.ly .control{padding:16px 17px}
+.ly .read{margin:0}
+.ly .tx li{grid-template-columns:1fr;gap:0}
+.ly .close{padding:50px 0}
+.ly .close-grid{display:block}
+.ly .close-act{margin-top:13px}
+.ly .close-act p{font-size:16px}
+.ly .foot-in{display:block}
+.ly .foot-in>*{display:block;margin-bottom:12px}}
+.js .ly .rail{display:block}
+
+/* ---- Fitting the Layla content inside the main clairenhaus.com header and footer ---- */
+.ly h1,.ly h2,.ly h3{color:inherit}
+.ly :focus-visible{box-shadow:none}
+.ly .ly-hero{min-height:min(860px,calc(100svh - 84px - 44px));padding:40px 0}
+@media(max-width:1024px){.ly .ly-hero{min-height:0;padding:48px 0 44px}}
+@media(max-width:760px){.ly .ly-hero{min-height:calc(100svh - 72px - 42px);padding:22px 0 22px}}
+
+/* ---- Call summaries by text (on /layla) ---- */
+.ly .sms{background:#fff;padding:80px 0}
+.ly .sms-grid{display:grid;grid-template-columns:1fr minmax(300px,420px);gap:56px;align-items:center}
+.ly .sms-copy p{margin-top:14px;max-width:52ch;color:var(--muted)}
+.ly .sms-copy .fine{font-size:14px;margin-top:18px}
+.ly .sms-copy .ly-btn{margin-top:24px}
+.ly .phone-card{background:var(--navy);border-radius:22px;padding:22px 20px 26px;color:#fff;box-shadow:0 18px 40px rgba(11,37,69,.18)}
+.ly .phone-card .from{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#9FB3CC;text-align:center;margin-bottom:14px}
+.ly .bubble{background:#fff;color:var(--navy);border-radius:18px 18px 18px 4px;padding:12px 15px;font-size:15px;line-height:1.42}
+.ly .bubble + .bubble{margin-top:10px}
+.ly .bubble.me{background:var(--orange);color:var(--navy);border-radius:18px 18px 4px 18px;margin-left:auto;width:max-content;max-width:80%}
+.ly .phone-card .cap{font-size:12px;color:#9FB3CC;margin-top:12px;text-align:center}
+@media(max-width:900px){.ly .sms{padding:52px 0}.ly .sms-grid{grid-template-columns:1fr;gap:30px}}
+
+/* ---- Text sign-up page (/layla/text-alerts) ---- */
+.ly .su{padding:64px 0 80px}
+.ly .su-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,520px);grid-template-areas:'intro form' 'card form';grid-template-rows:auto 1fr;column-gap:64px;align-items:start}
+.ly .su-intro{grid-area:intro}.ly .su-form{grid-area:form}.ly .su .su-card{grid-area:card}
+.ly .su .eyebrow-ly{font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange)}
+.ly .su h1{font-size:clamp(36px,4vw,56px);white-space:normal;margin-top:10px}
+.ly .su .lede{max-width:44ch}
+.ly .su-list{list-style:none;padding:0;margin-top:26px;display:grid;gap:12px}
+.ly .su-list li{position:relative;padding-left:28px;color:var(--slate)}
+.ly .su-list li:before{content:"";position:absolute;left:0;top:.5em;width:12px;height:12px;background:var(--orange);border-radius:2px}
+.ly .su .phone-card{margin-top:32px;max-width:420px}
+.ly .su-form{background:#fff;border:1px solid var(--mist);border-radius:10px;padding:32px;box-shadow:0 10px 30px rgba(11,37,69,.07)}
+.ly .su-form h2{font-size:26px}
+.ly .su-form .intro{margin-top:8px;color:var(--muted);font-size:15px}
+.ly .fld{margin-top:18px}
+.ly .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ly .fld label{display:block;font-weight:700;font-size:15px;margin-bottom:6px}
+.ly .fld .req{color:#B4410A}
+.ly .fld input{width:100%;min-height:48px;padding:10px 12px;border:1.5px solid #B8C4D3;border-radius:6px;font:inherit;font-size:16px;color:var(--navy);background:#fff}
+.ly .fld input:focus{outline:3px solid var(--orange);outline-offset:1px;border-color:var(--navy)}
+.ly .fld input[aria-invalid="true"]{border-color:#B42318}
+.ly .fld .hint{font-size:13px;color:var(--muted);margin-top:5px}
+.ly .consent{margin-top:22px;display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:start;background:var(--paper);border:1.5px solid var(--mist);border-radius:8px;padding:14px}
+.ly .consent input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--navy)}
+.ly .consent label{font-size:14px;line-height:1.5;color:var(--slate)}
+.ly .consent label a{color:var(--navy);font-weight:700}
+.ly .consent.bad{border-color:#B42318}
+.ly .su-form .ly-btn{margin-top:22px;width:100%;min-height:52px;font-size:17px;border:0;cursor:pointer}
+.ly .su-form .ly-btn[disabled]{opacity:.6;cursor:default}
+.ly .status{margin-top:14px;font-size:15px;min-height:1px}
+.ly .status.ok{background:#E8F5EC;color:#14532D;padding:12px 14px;border-radius:6px}
+.ly .status.err{background:#FDECEC;color:#8A1C12;padding:12px 14px;border-radius:6px}
+.ly .su-fine{margin-top:16px;font-size:13px;color:var(--muted)}
+.ly .prog{margin-top:56px;border-top:1px solid var(--mist);padding-top:28px}
+.ly .prog h2{font-size:24px}
+.ly .prog dl{display:grid;grid-template-columns:200px 1fr;gap:10px 24px;margin:16px 0 0;font-size:15px}
+.ly .prog dt{font-weight:700}
+.ly .prog dd{margin:0;color:var(--slate)}
+@media(max-width:960px){.ly .su-grid{grid-template-columns:1fr;grid-template-areas:'intro' 'form' 'card';grid-template-rows:auto;row-gap:32px}.ly .su .su-card{margin-top:0}}
+@media(max-width:640px){.ly .su{padding:36px 0 56px}.ly .su-form{padding:22px 18px}.ly .row2{grid-template-columns:1fr;gap:0}.ly .prog dl{grid-template-columns:1fr;gap:2px}.ly .prog dd{margin-bottom:10px}}

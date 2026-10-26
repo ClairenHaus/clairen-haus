@@ -1,0 +1,6 @@
+/* Portfolio work cards: every card shows the same blush frame (laptop + phone, real screenshots).
+   The frame images are 1280x880, so the pane matches that shape; nothing is cropped. */
+.works .w{display:flex;flex-direction:column}
+.works .w .pane{aspect-ratio:16/11;background:var(--blush)}
+.works .w .pane img{display:block;object-position:center}
+.works .w .more{margin-top:auto;align-self:flex-start}

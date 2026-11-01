@@ -109,55 +109,85 @@
 })();
 
 // One Layla, every trade: pinned scroll swap (plumbing, HVAC, electrical). Static cards when motion is reduced.
+// Oct 28: each trade locks in place for a hold, then eases (in-out) into the next with a crossfade + short slide.
+// Electrical holds ~2x before the section releases. Scroll position is smoothed so wheel steps don't jump.
 (function(){
   var sec=document.getElementById('trades');if(!sec||!window.requestAnimationFrame)return;
   var panels=[].slice.call(sec.querySelectorAll('.tr-panel')),n=panels.length;
+  var wordEls=panels.map(function(p){return p.querySelector('.tr-word')});
   var words=panels.map(function(p){return p.querySelector('.tr-word span')});
   var ticks=panels.map(function(p){return [].slice.call(p.querySelectorAll('.tr-ticks li'))});
   var mq=window.matchMedia?window.matchMedia('(prefers-reduced-motion: reduce)'):{matches:false};
-  var hdr=document.querySelector('.site-header'),on=false,cur=-1,raf=0,stageW=0;
+  var hdr=document.querySelector('.site-header'),on=false,cur=-1,raf=0,stageW=0,pos=-1;
+  // Timeline in scroll units: hold H per trade, crossfade T between trades, last trade holds LAST x H.
+  var H=1,T=.7,LAST=2,segs=[],total=0;
+  (function(){var u=0;for(var i=0;i<n;i++){var h=H*(i===n-1?LAST:1);segs.push({a:u,b:u+h});u+=h;if(i<n-1)u+=T}total=u})();
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
   function short(){return window.innerHeight<540}
+  function hh(){return parseFloat(sec.style.getPropertyValue('--hdr'))||0}
   function fit(){
     stageW=sec.clientWidth;var h=sec.querySelector('.tr-panels').clientHeight||window.innerHeight*.6;
     words.forEach(function(w,i){
-      var el=panels[i].querySelector('.tr-word');el.style.setProperty('--fs','100px');
+      var el=wordEls[i];el.style.setProperty('--fs','100px');
       var ww=w.scrollWidth||1,fs=Math.min(100*stageW*(stageW<=760?.9:.94)/ww,h*(stageW<=760?.2:.62));
       el.style.setProperty('--fs',Math.round(fs)+'px');
     });
   }
   function setHdr(){
-    var hh=0;if(hdr){var cs=getComputedStyle(hdr);if(cs.position==='sticky'||cs.position==='fixed')hh=hdr.getBoundingClientRect().height}
-    sec.style.setProperty('--hdr',Math.round(hh)+'px');
+    var v=0;if(hdr){var cs=getComputedStyle(hdr);if(cs.position==='sticky'||cs.position==='fixed')v=hdr.getBoundingClientRect().height}
+    sec.style.setProperty('--hdr',Math.round(v)+'px');
   }
   function show(i){
     if(i===cur)return;cur=i;sec.setAttribute('data-t',i);
     panels.forEach(function(p,j){p.classList.toggle('on',j===i);p.setAttribute('aria-hidden',j===i?'false':'true')});
   }
-  function frame(){
-    raf=0;if(!on)return;
-    var r=sec.getBoundingClientRect(),span=r.height-(window.innerHeight-(parseFloat(sec.style.getPropertyValue('--hdr'))||0));
-    var p=span>0?Math.min(1,Math.max(0,-r.top/span)):0,f=p*n;
-    show(Math.min(n-1,Math.floor(f)));
-    for(var i=0;i<n;i++){
-      var d=f-i-.5;
-      words[i].style.setProperty('--x',(-d*stageW*(stageW<=760?.08:.2)).toFixed(1)+'px');
-      var k=Math.max(0,Math.min(4,1+Math.floor((d+.5)*4.6)));
+  function target(){
+    var r=sec.getBoundingClientRect(),span=r.height-(window.innerHeight-hh());
+    return span>0?Math.min(1,Math.max(0,-r.top/span))*total:0;
+  }
+  function render(u){
+    var slide=stageW*(stageW<=760?.12:.16),o=[],x=[],active=0;
+    for(var i=0;i<n;i++){o[i]=0;x[i]=0}
+    for(i=0;i<n;i++){
+      var s=segs[i];
+      if(u>=s.a&&u<=s.b){o[i]=1;x[i]=0;active=i}
+      if(i<n-1&&u>s.b&&u<segs[i+1].a){
+        var e=ease((u-s.b)/T);
+        o[i]=1-e;x[i]=-e*slide;o[i+1]=e;x[i+1]=(1-e)*slide;active=e<.5?i:i+1;
+      }
+    }
+    if(u<segs[0].a){o[0]=1;active=0}
+    show(active);
+    for(i=0;i<n;i++){
+      wordEls[i].style.setProperty('--o',o[i].toFixed(3));
+      words[i].style.setProperty('--x',x[i].toFixed(1)+'px');
+      // ticks fill across the first ~70% of a trade's own hold
+      var q=(u-segs[i].a+T*.5)/(H*.7+T*.5),k=Math.max(1,Math.min(4,1+Math.floor(q*3.2)));
       ticks[i].forEach(function(li,j){li.classList.toggle('lit',j<k)});
     }
+  }
+  function frame(){
+    raf=0;if(!on)return;
+    var t=target();
+    if(pos<0)pos=t;else pos+=(t-pos)*.16;
+    if(Math.abs(t-pos)<.0015)pos=t;
+    render(pos);
+    if(pos!==t)req();
   }
   function req(){if(!raf)raf=requestAnimationFrame(frame)}
   function arm(){
     var want=!mq.matches&&!short();
     if(want===on){if(on){setHdr();fit();req()}return}
     on=want;sec.classList.toggle('is-pinned',on);
-    if(on){setHdr();fit();cur=-1;req()}
+    if(on){setHdr();fit();cur=-1;pos=-1;req()}
     else{sec.removeAttribute('data-t');panels.forEach(function(p){p.classList.remove('on');p.removeAttribute('aria-hidden')});
+      wordEls.forEach(function(w){w.style.removeProperty('--o')});
       words.forEach(function(w){w.style.removeProperty('--x')});ticks.forEach(function(t){t.forEach(function(li){li.classList.add('lit')})})}
   }
   sec.querySelectorAll('[data-go]').forEach(function(b){
     b.addEventListener('click',function(){
-      var i=+b.getAttribute('data-go'),r=sec.getBoundingClientRect(),hh=parseFloat(sec.style.getPropertyValue('--hdr'))||0;
-      var span=r.height-(window.innerHeight-hh),y=window.pageYOffset+r.top+span*((i+.5)/n);
+      var i=+b.getAttribute('data-go'),r=sec.getBoundingClientRect();
+      var span=r.height-(window.innerHeight-hh()),mid=segs[i].a+H*.5,y=window.pageYOffset+r.top+span*(mid/total);
       window.scrollTo({top:y,behavior:'smooth'});
     });
   });

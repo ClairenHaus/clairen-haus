@@ -248,3 +248,24 @@
   .cm-plan { padding: 1.75rem 1.25rem; }
   .cm-close-actions .btn { width: 100%; }
 }
+
+/* "Your brand. Your community." strip (self-contained: delete the .cm-brands section in commons.html to drop it) */
+.cm-brands { background: linear-gradient(180deg, var(--ivory) 0%, var(--blush-soft) 100%); border-bottom: 1px solid var(--line); }
+.cm-brands-intro { margin-left: auto; margin-right: auto; text-align: center; margin-bottom: 2.5rem; }
+.cm-brands-fig { margin: 0 auto; max-width: 1040px; }
+.cm-brands-scroll { border-radius: 14px; }
+.cm-brands-scroll img { width: 100%; height: auto; border-radius: 14px; }
+.cm-brands-cap { margin-top: 1rem; text-align: center; font-size: .975rem; font-weight: 500; letter-spacing: .02em; color: var(--text-soft); }
+.cm-brands-actions { margin-top: 2.25rem; display: flex; flex-direction: column; align-items: center; gap: .85rem; text-align: center; }
+.cm-brands-note { font-size: .95rem; color: var(--text-soft); }
+.cm-brands-swipe { display: none; }
+@media (max-width: 640px) {
+  .cm-brands-intro { text-align: left; margin-bottom: 1.75rem; }
+  .cm-brands-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; margin: 0 -1.25rem; padding: 0 1.25rem .5rem; border-radius: 0; }
+  .cm-brands-scroll picture { display: block; width: 760px; }
+  .cm-brands-scroll img { width: 760px; max-width: none; }
+  .cm-brands-cap { text-align: left; font-size: .9rem; letter-spacing: 0; }
+  .cm-brands-swipe { display: block; margin-top: .25rem; font-size: .875rem; font-weight: 400; color: var(--bronze); }
+  .cm-brands-actions { align-items: stretch; text-align: left; }
+  .cm-brands-actions .btn { width: 100%; }
+}

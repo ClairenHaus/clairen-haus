@@ -1,4 +1,4 @@
-/* Clairen Haus — Commons product page (/commons). Builds on home.css (tokens, header, footer, buttons). */
+/* Clairen Haus — Commons product page (/commons). Builds on home.css (tokens, header, footer, buttons). Commons A2 brand layer at the end of this file. */
 
 .nav-list a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--rose); text-decoration-thickness: 2px; text-underline-offset: 6px; }
 
@@ -268,4 +268,142 @@
   .cm-brands-swipe { display: block; margin-top: .25rem; font-size: .875rem; font-weight: 400; color: var(--bronze); }
   .cm-brands-actions { align-items: stretch; text-align: left; }
   .cm-brands-actions .btn { width: 100%; }
+}
+
+
+/* ==========================================================================
+   Commons A2 brand ("Gathering Fire", refined) — Nov 2, 2026.
+   Scoped to <main id="main"> on this page only: the shared Clairen Haus header
+   and footer keep the espresso/cream brand. Palette: Terracotta #B4512E,
+   Ember Gold #E0A944, Clay Cream #F7EDE1, Night Ink #1D1A2C,
+   Ember Glow #F2895B, Fired Clay #7A3424. Type: Geist + Instrument Serif Italic.
+   ========================================================================== */
+#main {
+  --ivory: #F7EDE1; --ivory-deep: #F0E2D2; --rose: #B4512E; --blush: #EACDB8; --blush-soft: #F4E4D5;
+  --taupe: #A88672; --bronze: #9A4325; --espresso: #1D1A2C; --text: #1D1A2C; --text-soft: #4A4458; --line: #E6D2BF;
+  --font: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --ink: #1D1A2C; --terracotta: #B4512E; --gold: #E0A944; --glow: #F2895B; --fired: #7A3424; --cream: #F7EDE1;
+  --cm-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  font-family: var(--font); color: var(--text); background: var(--ivory); letter-spacing: -.005em;
+}
+#main h1, #main h2, #main h3 { font-family: var(--font); font-weight: 600; letter-spacing: -.03em; }
+#main h3 { letter-spacing: -.02em; }
+#main .cm-accent, #main h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: 0; }
+#main h2 .cm-accent { color: var(--terracotta); font-size: 1.12em; line-height: .9; }
+#main .eyebrow { color: var(--bronze); font-weight: 600; font-size: .8125rem; letter-spacing: .12em; text-transform: uppercase; }
+#main .btn { font-family: var(--font); font-weight: 600; border-radius: 10px; letter-spacing: -.005em; }
+#main .btn-primary { background: var(--terracotta); border-color: var(--terracotta); color: #FFF7EF; box-shadow: 0 10px 26px -12px rgba(180,81,46,.65), inset 0 1px 0 rgba(255,255,255,.16); }
+#main .btn-primary:hover { background: #9A4325; border-color: #9A4325; color: #FFF7EF; }
+#main .text-link { color: var(--ink); text-decoration-color: var(--terracotta); }
+#main .text-link:hover { text-decoration-color: var(--ink); }
+#main :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+/* Hero: night ink, warm glow, grain, clay + stone photo */
+.cm-hero { background: radial-gradient(900px 620px at 82% 108%, rgba(242,137,91,.5), rgba(180,81,46,.28) 40%, rgba(29,26,44,0) 72%),
+  radial-gradient(700px 520px at 76% 28%, rgba(180,81,46,.45), rgba(122,52,36,.2) 45%, rgba(29,26,44,0) 75%),
+  radial-gradient(520px 380px at 4% 0%, rgba(224,169,68,.10), rgba(29,26,44,0) 70%), #1D1A2C;
+  color: var(--cream); border-bottom: 0; padding: 5rem 0 4.5rem; isolation: isolate; }
+.cm-hero::after { content: ""; position: absolute; inset: 0; background-image: var(--cm-grain); opacity: .07; mix-blend-mode: overlay; pointer-events: none; z-index: 0; }
+.cm-hero-inner { position: relative; z-index: 1; }
+#main .cm-hero .cm-badge { display: inline-flex; align-items: center; gap: .6rem; margin-bottom: 1.6rem; padding: .35rem 1rem .35rem .4rem; border: 1px solid rgba(247,237,225,.2); background: rgba(247,237,225,.06); border-radius: 999px; color: rgba(247,237,225,.88); font-size: .875rem; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.cm-hero .cm-mark { width: 28px; height: 28px; padding: 3px; border-radius: 50%; background: var(--cream); flex: none; }
+.cm-hero h1 { color: var(--cream); font-size: clamp(2.6rem, 5vw, 4.25rem); line-height: 1; letter-spacing: -.045em; }
+#main .cm-hero h1 em { white-space: nowrap; color: var(--glow); font-size: 1.1em; line-height: .9; }
+.cm-hero .lead { color: rgba(247,237,225,.78); font-size: 1.1875rem; }
+#main .cm-hero .text-link { color: var(--cream); text-decoration-color: var(--glow); }
+#main .cm-hero .text-link:hover { text-decoration-color: var(--cream); }
+.cm-hero-note { color: rgba(247,237,225,.68); }
+.cm-hero-note strong { color: var(--cream); font-weight: 600; }
+.cm-art { --rose-deep: #F2895B; }
+.cm-art .cm-photo { position: absolute; z-index: 0; top: 50%; left: 50%; width: 330px; height: 470px; margin: -250px 0 0 -40px; border-radius: 200px 200px 22px 22px; background: #3a2a24 url("/assets/img/commons/a2/clay-stone-tall.webp") center / cover no-repeat; box-shadow: 0 40px 90px -30px rgba(8,6,16,.75), 0 0 0 1px rgba(247,237,225,.08); }
+.cm-art .cm-photo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(200deg, rgba(29,26,44,0) 45%, rgba(29,26,44,.45) 100%); }
+.cm-art .mock { margin-right: 150px; }
+.cm-art .o1 { background: radial-gradient(circle, rgba(242,137,91,.42) 0%, rgba(242,137,91,0) 68%); }
+.cm-art .o2 { background: radial-gradient(circle, rgba(180,81,46,.5) 0%, rgba(180,81,46,0) 70%); }
+.cm-art .o3 { background: radial-gradient(circle, rgba(224,169,68,.28) 0%, rgba(224,169,68,0) 70%); }
+.cm-art .mock { background: linear-gradient(145deg, #3B3550, #15131F); box-shadow: 0 1px 0 rgba(255,255,255,.16) inset, 0 50px 90px -30px rgba(8,6,16,.8), 0 18px 36px -18px rgba(8,6,16,.55); }
+.cm-art .mock::after { background: #0E0C16; }
+.cm-art .mock-screen { background: #FBF6F0; }
+.cm-art .m-lbl::before { background: #E0A944; box-shadow: 0 0 0 3px rgba(224,169,68,.22); }
+.cm-art .a1 { background: var(--terracotta); } .cm-art .a2 { background: var(--fired); } .cm-art .a3 { background: #C98A4B; } .cm-art .a5 { background: var(--glow); }
+.cm-art .coin { background: radial-gradient(circle at 35% 30%, #F6DFA6, #E0A944 70%); box-shadow: 0 0 0 1px rgba(122,52,36,.35) inset; }
+.cm-art .e-tile b { color: var(--gold); }
+
+/* Video band: fired clay */
+.cm-video { position: relative; isolation: isolate; background: radial-gradient(700px 500px at 15% 50%, rgba(242,137,91,.28), rgba(122,52,36,0) 70%), linear-gradient(160deg, #7A3424 0%, #4E2118 100%); color: var(--cream); }
+.cm-video::after { content: ""; position: absolute; inset: 0; background-image: var(--cm-grain); opacity: .06; mix-blend-mode: overlay; pointer-events: none; z-index: -1; }
+#main .cm-video .eyebrow { color: #F6C9A8; }
+.cm-video h2 { color: var(--cream); }
+#main .cm-video h2 .cm-accent { color: var(--gold); }
+.cm-video p { color: #F3DFD0; }
+.cm-video-frame video { background: #2A1712; border-radius: 20px; box-shadow: 0 40px 80px -30px rgba(8,6,16,.7); }
+#main .cm-video .btn-primary { background: var(--cream); color: var(--ink); border-color: var(--cream); box-shadow: none; }
+#main .cm-video .btn-primary:hover { background: #fff; border-color: #fff; color: var(--ink); }
+
+/* Cards, features */
+.cm-card { border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 18px 40px -32px rgba(29,26,44,.35); }
+.cm-card::before { width: 32px; height: 3px; border-radius: 3px; background: linear-gradient(90deg, var(--terracotta), var(--glow)); }
+.cm-features-sec { background: var(--ivory-deep); }
+.cm-features li { border-radius: 14px; }
+.cm-features li::before { background: var(--terracotta); box-shadow: 0 0 0 4px rgba(180,81,46,.14); }
+.cm-features strong { font-weight: 600; letter-spacing: -.01em; }
+
+/* Brand strip */
+.cm-brands { background: linear-gradient(180deg, var(--ivory) 0%, var(--blush-soft) 100%); }
+.cm-brands-scroll img { border-radius: 18px; box-shadow: 0 30px 60px -40px rgba(29,26,44,.45); }
+
+/* Pricing */
+.cm-plan { border-radius: 18px; border-color: var(--line); }
+.cm-plan--main { position: relative; overflow: hidden; isolation: isolate; background: radial-gradient(520px 360px at 100% 0%, rgba(180,81,46,.45), rgba(29,26,44,0) 70%), var(--ink); border-color: var(--ink); color: var(--cream); }
+.cm-plan--main::after { content: ""; position: absolute; inset: 0; background-image: var(--cm-grain); opacity: .06; mix-blend-mode: overlay; pointer-events: none; z-index: -1; }
+.cm-plan-tag { background: var(--blush-soft); border-color: var(--blush); color: var(--fired); letter-spacing: .08em; }
+.cm-plan--main .cm-plan-tag { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+.cm-plan--main h3, .cm-plan--main .cm-price-big { color: var(--cream); }
+.cm-plan--main .cm-plan-sub, .cm-plan--main .cm-price-unit, .cm-plan--main .cm-plan-fine { color: rgba(247,237,225,.76); }
+.cm-plan--main .cm-price-plus { color: var(--glow); }
+.cm-price-big { font-weight: 600; letter-spacing: -.04em; }
+.cm-plan--main .cm-plan-list { border-top-color: rgba(247,237,225,.16); }
+.cm-plan--main .cm-plan-list li::before { background: var(--gold); }
+#main .cm-plan--main .btn-primary { background: var(--terracotta); border-color: var(--terracotta); color: #FFF7EF; }
+#main .cm-plan--main .btn-primary:hover { background: var(--glow); border-color: var(--glow); color: var(--ink); }
+.cm-plan--main a:not(.btn) { color: #F6C9A8; }
+#main .cm-plan:not(.cm-plan--main) .btn-primary { background: var(--ink); border-color: var(--ink); box-shadow: none; }
+#main .cm-plan:not(.cm-plan--main) .btn-primary:hover { background: #33304A; border-color: #33304A; }
+
+/* Steps, FAQ */
+.cm-steps li::before { background: var(--terracotta); color: #FFF7EF; font-weight: 600; box-shadow: 0 8px 20px -10px rgba(180,81,46,.7); }
+.cm-faq summary { font-weight: 600; letter-spacing: -.01em; }
+.cm-faq summary::after { color: var(--terracotta); }
+
+/* Closing band: night ink + clay photo */
+.cm-close { position: relative; isolation: isolate; overflow: hidden; border-top: 0; color: var(--cream);
+  background: linear-gradient(180deg, rgba(29,26,44,.84) 0%, rgba(29,26,44,.94) 70%, #1D1A2C 100%), url("/assets/img/commons/a2/clay-stone-wide.webp") center 40% / cover no-repeat, #1D1A2C; }
+.cm-close::before { content: ""; position: absolute; inset: 0; background: radial-gradient(700px 360px at 50% 0%, rgba(180,81,46,.4), rgba(29,26,44,0) 70%); z-index: -1; }
+.cm-close::after { content: ""; position: absolute; inset: 0; background-image: var(--cm-grain); opacity: .07; mix-blend-mode: overlay; pointer-events: none; z-index: -1; }
+.cm-close h2 { color: var(--cream); font-size: clamp(2rem, 3.6vw, 3rem); }
+#main .cm-close h2 .cm-accent { color: var(--glow); }
+.cm-close p { color: rgba(247,237,225,.8); }
+#main .cm-close .text-link { color: var(--cream); text-decoration-color: var(--glow); }
+#main .cm-close .text-link:hover { text-decoration-color: var(--cream); }
+.cm-close .cm-sources { color: rgba(247,237,225,.62); border-top-color: rgba(247,237,225,.16); }
+.cm-close .cm-sources a { color: rgba(247,237,225,.85); }
+
+@media (max-width: 1080px) {
+  .cm-art .mock { margin-right: 110px; }
+  .cm-art .cm-photo { width: 290px; height: 420px; margin: -225px 0 0 -30px; }
+}
+@media (max-width: 960px) {
+  .cm-art { min-height: 640px; }
+  .cm-art .mock { margin-right: 0; margin-left: -160px; }
+  .cm-art .cm-photo { margin-left: -10px; }
+}
+@media (max-width: 640px) {
+  .cm-hero { padding: 2.75rem 0 2.5rem; }
+  .cm-hero h1 { font-size: 2.5rem; }
+  .cm-hero .cm-badge { font-size: .8125rem; }
+  .cm-art { min-height: 0; padding: 1.5rem 0 1rem; }
+  .cm-art .mock { margin: 0 0 0 -90px; }
+  .cm-art .cm-photo { width: 200px; height: 320px; margin: -175px 0 0 -21px; border-radius: 100px 100px 18px 18px; }
+  .cm-close h2 { font-size: 2rem; }
 }
